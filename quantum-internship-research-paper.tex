@@ -1,0 +1,105 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenx}
+\usepackage[style=apa,backend=biber,alldates=edtf,maxcitenames=3]{biblatex}
+\usepackage{hyperref}
+\usepackage[braket, qm]{qcircuit}
+\usepackage{a4wide}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{blochsphere}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{3d}
+\setlist{
+    listparindent=\parindent,
+    parsep=0pt,
+}
+\DeclareFieldFormat[article,unpublished,misc,online]{title}{\textit{#1}}
+
+\pagestyle{fancy}
+\lhead{}
+
+\addbibresource{quantum-internship-research-paper.bib}
+
+\title{Applications of Quantum Computers for Solving Machine Learning and Chemistry Problems}
+\author{Steven Oud (500776959) \\ \emph{SURFsara}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\vfill
+
+\begin{center}
+	\begin{blochsphere}[radius=5.1cm,tilt=15, rotation=-35, opacity=0.1]
+		\drawBallGrid[style={opacity=0.1}]{30}{30}
+		
+		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
+		\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
+		\drawStatePolar[axisarrow=true, statewidth=0.5]{z-axis}{0}{0}
+		\node[left] at (x-axis) {$x$};
+		\node[right] at (y-axis) {$y$};
+		\node[left] at (z-axis) {$z$};
+		
+		 \drawBallGrid[style={opacity=0.35, loosely dashed}]{180}{180}
+		
+		\drawStatePolar[statecolor=red, statewidth=0.5]{state}{50}{15}
+		\node[right] at (state) {$\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$};
+		
+		
+		\labelLatLon{up}{90}{0};
+		\labelLatLon{down}{-90}{90};
+		\node[above=2mm] at (up) {{\ket{0}}};
+		\node[below=2mm] at (down) {{\ket{1}}};
+	\end{blochsphere}
+\end{center}
+
+\vspace{4cm}
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Summary}
+
+\newpage
+
+\section{Introduction}
+Quantum computing is one of the most promising technology developments of the coming years.
+Big companies like IBM (\cite{ibm-quantum}), Google (\cite{google-quantum}), Intel (\cite{intel-quantum}), Microsoft (\cite{microsoft-quantum}), and countries like the USA and China are investing huge amounts of money into the development and building of meaningful working quantum computers.
+The development of practical quantum computers that can be used to solve real-world problems is driven by the expectation that for certain tasks, quantum computers can outperform classical computers (\cite{preskill-qc}).
+
+Already last year, SURFsara started a number of activities and collaborations in the field of quantum computing.
+The overall objective of SURFsara is to support Dutch researchers in taking an early and competitive advantage in quantum computing technologies and facilities while these become available.
+Like with any  emerging compute technology, it needs early adopters in the scientific computing community to identify problems of practical interest that are suitable as proof-of-concept applications.
+In the context of the SURF Open Innovation Lab SURFsara seeks to stimulate and support these advances in scientific research in close collaboration with research groups.
+Within this context SURFsara is interested in testing, benchmarking and creating good examples of quantum computing applications that can be used by the scientific community.
+
+SURFsara HPC center supports various research institutes and universities of the Netherlands.
+The chemistry community is currently one of the largest; the machine learning community is probably the fastest growing one.
+Both of these fields are large areas of research within the quantum computing field, expecting large improvements to be gained from them.
+As the main interest of SURFsara is to support the potential main use cases of quantum computers in the future, the tasks of this internship will be focused on quantum machine learning (QML) and quantum chemistry (QC) algorithms.
+This internship aims to:
+\begin{enumerate}
+	\item Research state-of-the-art quantum machine learning and quantum chemistry algorithms.
+	\item Research matching emulator/simulator frameworks with identified algorithms.
+	\item Create proof-of-concept of algorithms in simulator(s).
+	\item Benchmark quantum algorithms and compare with classical.
+	\item Define a sample workflow for end users.
+\end{enumerate}
+
+This report will try to give an answer to the main question ``\emph{What quantum algorithms can be demonstrated to help solve machine learning and chemistry problems?}".
+
+\newpage
+
+\section{Methods}
+
+\section{Results}
+
+\newpage
+
+\printbibliography
+
+\end{document}
