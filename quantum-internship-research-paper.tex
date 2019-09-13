@@ -8,6 +8,7 @@
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage{blochsphere}
+\usepackage{xcolor}
 \usepackage{tikz-3dplot}
 \usetikzlibrary{3d}
 \setlist{
@@ -21,7 +22,7 @@
 
 \addbibresource{quantum-internship-research-paper.bib}
 
-\title{Applications of Quantum Computers for Solving Machine Learning and Chemistry Problems}
+\title{Quantum Algorithms for Solving Machine Learning and Chemistry Problems}
 \author{Steven Oud (500776959) \\ \emph{SURFsara}}
 \date{\today}
 
@@ -32,7 +33,8 @@
 \vfill
 
 \begin{center}
-	\begin{blochsphere}[radius=5.1cm,tilt=15, rotation=-35, opacity=0.1]
+	\hspace{1.55cm}
+	\begin{blochsphere}[radius=5.1cm, tilt=15, rotation=-35, opacity=0.1, color=white]
 		\drawBallGrid[style={opacity=0.1}]{30}{30}
 		
 		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
@@ -42,16 +44,32 @@
 		\node[right] at (y-axis) {$y$};
 		\node[left] at (z-axis) {$z$};
 		
-		 \drawBallGrid[style={opacity=0.35, loosely dashed}]{180}{180}
+	    \drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
 		
-		\drawStatePolar[statecolor=red, statewidth=0.5]{state}{50}{15}
-		\node[right] at (state) {$\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$};
+		\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
+		\node[above right] at (start_state) {\large $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$};
 		
+		\drawStatePolar[statecolor=blue!90!red, statewidth=0.3]{a}{20}{14}
+		\drawStatePolar[statecolor=blue!80!red, statewidth=0.3]{a}{25}{14}
+		\drawStatePolar[statecolor=blue!70!red, statewidth=0.3]{a}{30}{14}
+		\drawStatePolar[statecolor=blue!60!red, statewidth=0.3]{a}{35}{14}
+		\drawStatePolar[statecolor=blue!50!red, statewidth=0.3]{rot}{40}{14}
+		\node[right=2mm] at (rot) {\large $Rx(\theta)Ry(\phi)Rz(\gamma)$};
+		
+		\drawStatePolar[statecolor=blue!40!red, statewidth=0.3]{a}{45}{14}
+		\drawStatePolar[statecolor=blue!30!red, statewidth=0.3]{a}{50}{14}
+		\drawStatePolar[statecolor=blue!20!red, statewidth=0.3]{a}{55}{14}
+		\drawStatePolar[statecolor=blue!10!red, statewidth=0.3]{a}{60}{14}
+		\drawStatePolar[statecolor=blue!5!red, statewidth=0.3]{a}{65}{14}
+		\drawStatePolar[statecolor=blue!2!red, statewidth=0.3]{a}{70}{14}
+		
+		\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{75}{14}
+		\node[right=1mm] at (end_state) {\large $\ket{\psi'} = \alpha'\ket{0} + \beta'\ket{1}$};
 		
 		\labelLatLon{up}{90}{0};
 		\labelLatLon{down}{-90}{90};
-		\node[above=2mm] at (up) {{\ket{0}}};
-		\node[below=2mm] at (down) {{\ket{1}}};
+		\node[above=2mm] at (up) {{\large \ket{0}}};
+		\node[below=2mm] at (down) {{\large \ket{1}}};
 	\end{blochsphere}
 \end{center}
 
@@ -90,7 +108,7 @@ This internship aims to:
 	\item Define a sample workflow for end users.
 \end{enumerate}
 
-This report will try to give an answer to the main question ``\emph{What quantum algorithms can be demonstrated to help solve machine learning and chemistry problems?}".
+This report will try to give an answer to the main question ``\emph{What quantum algorithms can be demonstrated to help solve machine learning and chemistry problems?}"
 
 \newpage
 
