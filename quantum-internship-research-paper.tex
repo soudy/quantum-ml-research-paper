@@ -1,7 +1,8 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,12pt]{article}
 
 \usepackage[utf8]{inputenx}
 \usepackage[style=apa,backend=biber,alldates=edtf,maxcitenames=3]{biblatex}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
 \usepackage{hyperref}
 \usepackage[braket, qm]{qcircuit}
 \usepackage{a4wide}
@@ -11,18 +12,17 @@
 \usepackage{xcolor}
 \usepackage{tikz-3dplot}
 \usetikzlibrary{3d}
-\setlist{
-    listparindent=\parindent,
-    parsep=0pt,
-}
+
 \DeclareFieldFormat[article,unpublished,misc,online]{title}{\textit{#1}}
+
+\renewcommand{\abstractname}{Summary}
 
 \pagestyle{fancy}
 \lhead{}
 
 \addbibresource{quantum-internship-research-paper.bib}
 
-\title{Quantum Algorithms for Solving Machine Learning and Chemistry Problems}
+\title{Simulation of Quantum Algorithms for Solving Machine Learning and Chemistry Problems}
 \author{Steven Oud (500776959) \\ \emph{SURFsara}}
 \date{\today}
 
@@ -30,63 +30,62 @@
 
 \maketitle
 
-\vfill
+\begin{abstract}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis erat eget erat euismod dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec pharetra, magna ac tincidunt varius, neque odio lobortis velit, eget tincidunt lectus sapien ac velit. Donec maximus euismod arcu, at efficitur urna. Praesent viverra elementum elementum. Cras lacinia nisi eleifend sodales posuere. Fusce ut blandit purus, quis ornare est. Aenean varius purus lorem, a lobortis orci mollis pretium. Nulla facilisi. Nulla in neque orci. Integer dolor massa, ullamcorper nec sagittis id, mattis a lectus. Vivamus efficitur mi a elit feugiat facilisis. Ut lorem tortor, dignissim nec quam et, dapibus vehicula nibh. Quisque mollis enim quis odio interdum, ac blandit mauris maximus. Aenean ac dolor in augue accumsan porta.
 
-\begin{center}
-	\hspace{1.55cm}
-	\begin{blochsphere}[radius=5.1cm, tilt=15, rotation=-35, opacity=0.1, color=white]
-		\drawBallGrid[style={opacity=0.1}]{30}{30}
-		
-		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
-		\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
-		\drawStatePolar[axisarrow=true, statewidth=0.5]{z-axis}{0}{0}
-		\node[left] at (x-axis) {$x$};
-		\node[right] at (y-axis) {$y$};
-		\node[left] at (z-axis) {$z$};
-		
-	    \drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
-		
-		\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
-		\node[above right] at (start_state) {\large $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$};
-		
-		\drawStatePolar[statecolor=blue!90!red, statewidth=0.3]{a}{20}{14}
-		\drawStatePolar[statecolor=blue!80!red, statewidth=0.3]{a}{25}{14}
-		\drawStatePolar[statecolor=blue!70!red, statewidth=0.3]{a}{30}{14}
-		\drawStatePolar[statecolor=blue!60!red, statewidth=0.3]{a}{35}{14}
-		\drawStatePolar[statecolor=blue!50!red, statewidth=0.3]{rot}{40}{14}
-		\node[right=2mm] at (rot) {\large $Rx(\theta)Ry(\phi)Rz(\gamma)$};
-		
-		\drawStatePolar[statecolor=blue!40!red, statewidth=0.3]{a}{45}{14}
-		\drawStatePolar[statecolor=blue!30!red, statewidth=0.3]{a}{50}{14}
-		\drawStatePolar[statecolor=blue!20!red, statewidth=0.3]{a}{55}{14}
-		\drawStatePolar[statecolor=blue!10!red, statewidth=0.3]{a}{60}{14}
-		\drawStatePolar[statecolor=blue!5!red, statewidth=0.3]{a}{65}{14}
-		\drawStatePolar[statecolor=blue!2!red, statewidth=0.3]{a}{70}{14}
-		
-		\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{75}{14}
-		\node[right=1mm] at (end_state) {\large $\ket{\psi'} = \alpha'\ket{0} + \beta'\ket{1}$};
-		
-		\labelLatLon{up}{90}{0};
-		\labelLatLon{down}{-90}{90};
-		\node[above=2mm] at (up) {{\large \ket{0}}};
-		\node[below=2mm] at (down) {{\large \ket{1}}};
-	\end{blochsphere}
-\end{center}
+Fusce at sodales turpis. Nullam pulvinar rhoncus diam eu consequat. Sed et ante ac augue rutrum cursus id id mi. Quisque aliquet at lectus eget condimentum. Quisque pharetra nulla vel vestibulum vulputate. Donec blandit lacus est, sed tempor nisi laoreet eget. Mauris maximus ultricies varius. Nullam id hendrerit ante, quis efficitur nibh. Pellentesque convallis dignissim dapibus. Nunc vehicula scelerisque posuere.
+\end{abstract}
 
-\vspace{4cm}
+%\begin{center}
+%	\hspace{2.1cm}
+%	\begin{blochsphere}[radius=5.1cm, tilt=15, rotation=-35, opacity=0.1, color=white]
+%		\drawBallGrid[style={opacity=0.1}]{30}{30}
+%		
+%		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
+%		\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
+%		\drawStatePolar[axisarrow=true, statewidth=0.5]{z-axis}{0}{0}
+%		\node[left] at (x-axis) {$x$};
+%		\node[right] at (y-axis) {$y$};
+%		\node[left] at (z-axis) {$z$};
+%		
+%	    \drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
+%		
+%		\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
+%		\node[above right] at (start_state) {\large $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$};
+%		
+%		\drawStatePolar[statecolor=blue!90!red, statewidth=0.3]{a}{20}{14}
+%		\drawStatePolar[statecolor=blue!80!red, statewidth=0.3]{a}{25}{14}
+%		\drawStatePolar[statecolor=blue!70!red, statewidth=0.3]{a}{30}{14}
+%		\drawStatePolar[statecolor=blue!60!red, statewidth=0.3]{a}{35}{14}
+%		\drawStatePolar[statecolor=blue!50!red, statewidth=0.3]{rot}{40}{14}
+%		\node[right=2mm] at (rot) {\large $Rx(\theta)Ry(\phi)Rz(\gamma)$};
+%		
+%		\drawStatePolar[statecolor=blue!40!red, statewidth=0.3]{a}{45}{14}
+%		\drawStatePolar[statecolor=blue!30!red, statewidth=0.3]{a}{50}{14}
+%		\drawStatePolar[statecolor=blue!20!red, statewidth=0.3]{a}{55}{14}
+%		\drawStatePolar[statecolor=blue!10!red, statewidth=0.3]{a}{60}{14}
+%		\drawStatePolar[statecolor=blue!5!red, statewidth=0.3]{a}{65}{14}
+%		\drawStatePolar[statecolor=blue!2!red, statewidth=0.3]{a}{70}{14}
+%		
+%		\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{75}{14}
+%		\node[right=1mm] at (end_state) {\large $\ket{\psi'} = \alpha'\ket{0} + \beta'\ket{1}$};
+%		
+%		\labelLatLon{up}{90}{0};
+%		\labelLatLon{down}{-90}{90};
+%		\node[above=2mm] at (up) {{\large \ket{0}}};
+%		\node[below=2mm] at (down) {{\large \ket{1}}};
+%	\end{blochsphere}
+%\end{center}
+
 \newpage
 
 \tableofcontents
 
 \newpage
 
-\section{Summary}
-
-\newpage
-
 \section{Introduction}
 Quantum computing is one of the most promising technology developments of the coming years.
-Big companies like IBM (\cite{ibm-quantum}), Google (\cite{google-quantum}), Intel (\cite{intel-quantum}), Microsoft (\cite{microsoft-quantum}), and countries like the USA and China are investing huge amounts of money into the development and building of meaningful working quantum computers.
+Big companies like IBM (\cite{ibm-quantum}), Google (\cite{google-quantum}), Intel (\cite{intel-quantum}), Microsoft (\cite{microsoft-quantum}), and countries like the USA and China are investing huge amounts of money into the development and building of meaningful working quantum computers (\cite{usa-quantum, china-quantum}).
 The development of practical quantum computers that can be used to solve real-world problems is driven by the expectation that for certain tasks, quantum computers can outperform classical computers (\cite{preskill-qc}).
 
 Already last year, SURFsara started a number of activities and collaborations in the field of quantum computing.
@@ -99,25 +98,33 @@ SURFsara HPC center supports various research institutes and universities of the
 The chemistry community is currently one of the largest; the machine learning community is probably the fastest growing one.
 Both of these fields are large areas of research within the quantum computing field, expecting large improvements to be gained from them.
 As the main interest of SURFsara is to support the potential main use cases of quantum computers in the future, the tasks of this internship will be focused on quantum machine learning (QML) and quantum chemistry (QC) algorithms.
-This internship aims to:
+This internship aims to research state-of-the-art QML and QC algorithms, run simulations of them and benchmark them.
+The final goal is to provide a platform for end users to experiment with QML and QC algorithms.
+
+This report will try to give an answer to the main question ``\emph{How can quantum algorithms be implemented using simulated quantum circuits to solve machine learning and chemistry problems?}"
+This is further expanded into the following sub questions:
 \begin{enumerate}
-	\item Research state-of-the-art quantum machine learning and quantum chemistry algorithms.
-	\item Research matching emulator/simulator frameworks with identified algorithms.
-	\item Create proof-of-concept of algorithms in simulator(s).
-	\item Benchmark quantum algorithms and compare with classical.
-	\item Define a sample workflow for end users.
+	\item What are current promising QML and QC algorithms?
+	\item What simulators are best suited for simulating QML and QC quantum circuits?
+	\item How can these quantum algorithms be integrated in current classical workflow of chemistry and machine learning applications?
+	\item How do these quantum algorithms perform (in regard to classical algorithms)?
 \end{enumerate}
 
-This report will try to give an answer to the main question ``\emph{What quantum algorithms can be demonstrated to help solve machine learning and chemistry problems?}"
+This report is structured as follows. First, in section \ref{sec:methods}, I describe how the research was conducted.
+Second, in section \ref{sec:quantum-algorithms} and \ref{sec:quantum-simulators}, research towards quantum algorithms and simulators is described.
+Finally, in section \ref{sec:implementation-and-results}, quantum algorithms are implemented and the results are discussed.
+The conclusion of the research is described in section \ref{sec:conclusion}.
 
-\newpage
+\section{Methods} \label{sec:methods}
 
-\section{Methods}
+\section{Quantum Algorithms} \label{sec:quantum-algorithms}
 
-\section{Results}
+\section{Quantum Simulators} \label{sec:quantum-simulators}
 
-\newpage
+\section{Implementation and Results} \label{sec:implementation-and-results}
 
-\printbibliography
+\section{Conclusion} \label{sec:conclusion}
+
+\printbibliography[heading=bibintoc]
 
 \end{document}
