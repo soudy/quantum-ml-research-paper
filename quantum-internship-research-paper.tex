@@ -88,7 +88,7 @@ This is further expanded into the following sub questions:
 \end{enumerate}
 
 This report is structured as follows. First, in Section \ref{sec:methods}, I describe how the research was conducted.
-Second, in Section \ref{sec:quantum-computation-information}, a short introduction to quantum computation and quantum information is given.
+Second, in Section \ref{sec:quantum-computation-information}, a short introduction to quantum computation and information is given.
 Third, in Section \ref{sec:quantum-ml} and Section \ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
 Finally, in Section \ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
 The conclusion of the research is described in Section \ref{sec:conclusion}.
@@ -112,9 +112,9 @@ For a more complete introduction to quantum computation and information, refer t
 
 \subsection{Quantum States}
 The basic and smallest unit of quantum information is the quantum bit, or \emph{qubit}.
-A qubit is a two-state quantum-mechanical system, which can be represented for example in the spin of an electron as spin up and spin down.
+A qubit is a two-state quantum-mechanical system, which can be represented for example in the spin of an electron.
 A qubit can be in a state of an orthonormal basis $\{\ket{0}, \ket{1}\}$ (corresponding to spin up and spin down for the electron example), but it can also be in a linear combination, or \emph{superposition}, of states.
-The state of a qubit (the so-called ``wave-function") can be described as following:
+The state of a qubit (the so-called \emph{wave function}) can be described as following:
 \begin{equation}
 \ket{\psi} = c_0\ket{0} + c_1\ket{1}.
 \end{equation}
@@ -127,7 +127,7 @@ As an example we have the arbitrary state:
 \begin{equation}
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
 \end{equation}
-When measuring this state, we have a $|i/2|^2 = 1/4$ chance of the particle being in the state \ket{0}, and a $|\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
+After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being in the state \ket{0}, and a $|-\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
 
 We define the computational basis states $\{\ket{0}, \ket{1}\}$ as following:
 \begin{equation}
@@ -153,13 +153,13 @@ Measuring a quantum state collapses the wave function and destroys state informa
 In classical computers, we manipulate bits through logical gates.
 Quantum computers use quantum gates, which transforms one quantum state to another through an operator $U$.
 These operators must be unitary.
-That is, they must preserve the norm of the vector and be reversible ($U^\dagger U = UU^\dagger = I$).
+That is, they must preserve the norm of the vector and be reversible: $U^\dagger U = UU^\dagger = I$ (where $^\dagger$ is the complex conjugate and $I$ the identity matrix).
 Single qubit states can be thought of as a vector on the surface of a sphere (the Bloch sphere).
 A unitary operation can then be thought of as rotations around the $x$, $y$ and $z$ axes of the sphere (Figure \ref{fig:bloch-sphere}).
 
 \begin{figure}[ht]
 	\centering
-	\hspace{1.3cm}
+	\hspace{1.175cm}
 	\begin{blochsphere}[radius=1.75cm, tilt=15, rotation=-20, opacity=0.1, color=white]
 		\drawBallGrid[style={opacity=0.1}]{30}{30}
 		
@@ -173,10 +173,10 @@ A unitary operation can then be thought of as rotations around the $x$, $y$ and 
 	    \drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
 		
 		\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
-		\node[above right] at (start_state) {\large \ket{\psi}};
+		\node[above right] at (start_state) {\ket{\psi}};
 		
 		\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{125}{14}
-		\node[right=1mm] at (end_state) {\large $\ket{\psi'} = U\ket{\psi}$};
+		\node[right=1mm] at (end_state) {$\ket{\psi'} = U\ket{\psi}$};
 		
 		\labelLatLon{up}{90}{0};
 		\labelLatLon{down}{-90}{90};
@@ -190,19 +190,19 @@ A unitary operation can then be thought of as rotations around the $x$, $y$ and 
 As an example, the $X$ gate is equivalent to the classical \textsc{not}: $X\ket{0} = \ket{1}$ and $X\ket{1} = \ket{0}$.
 It is known as one of the three Pauli matrices used in quantum mechanics:
 \begin{equation}
-\sigma_x =
+\sigma_1 = \sigma_x =
 \begin{pmatrix}
 0 & 1 \\
 1 & 0
 \end{pmatrix},
 \quad
-\sigma_y =
+\sigma_2 = \sigma_y =
 \begin{pmatrix}
 0 & -i \\
 i & \phantom{-}0
 \end{pmatrix},
 \quad
-\sigma_z =
+\sigma_3 = \sigma_z =
 \begin{pmatrix}
 1 & 0 \\
 0 & -1
@@ -238,13 +238,13 @@ H\dfrac{1}{\sqrt2}(\ket{0} + \ket{1}) &= \ket{0}, \\
 H\dfrac{1}{\sqrt2}(\ket{0} - \ket{1}) &= \ket{1}.
 \end{aligned}
 \end{equation}
-We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$ (where $^\dagger$ is the complex conjugate).
+We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$.
 
 There also exist multi-qubit gates, which are required for universal quantum computing.
 These gates introduce the phenomena entanglement.
 Consider the following state:
 \begin{equation}
-\ket{\Psi} = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
+\ket{\Phi^+} = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
 \end{equation}
 Measuring the first qubit gives state \ket{0} with probability $\frac{1}{2}$, and state \ket{1} with probability $\frac{1}{2}$.
 However, the measurement immediately collapsed the whole state to either \ket{00} or \ket{11}.
@@ -264,18 +264,19 @@ They usually offer a quadratic or exponential speedup over their classical count
 The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
 Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
 Shor showed that this can be done in polynomial time on a quantum computer (\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
-It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubts (\cite{shor-20mil}).
+It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}).
 
 \subsection{Current State of Quantum Computing}
 It is important to note that quantum computers are still at the experimental stage, and a lot of results are theoretical.
 For example, the highest number factored by using Shor's algorithm thus far is 21 (\cite{shor-21}).
 Furthermore, quantum supremacy, which is the potential ability of a quantum computer to solve problems that classical computers practically cannot (\cite{preskill-qc}), has not been achieved yet as of writing this.
-Current and near future quantum computers, often referred to as Noisy Intermediate-Scale Quantum (NISQ) devices, will have about 50-100 qubits and may be able to perform tasks which surpass the capabilities of classical computers (\cite{preskill-nisq}).
-They suffer from noise, which greatly limits their coherence time and thus usefulness.
+Current and near future quantum computers, often referred to as Noisy Intermediate-Scale Quantum (NISQ) devices, will have about 50-100 qubits and may be able to achieve quantum supremacy (\cite{preskill-nisq}).
+However, they suffer from noise, which greatly limits their coherence time and thus usefulness.
+Quantum error correcting codes exist which can be used to protect from noise, but these require a high amount of qubits per logical qubit.
 
-Research has adapted to these limited devices, and hybrid quantum/classical algorithms have become an important area of research.
+Research has adapted to the limitations of NISQ devices, and hybrid quantum/classical algorithms have become an important area of research.
 Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems (\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian (\cite{vqe}).
-These hybrid algorithms typically involves a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
+These hybrid algorithms typically involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
 
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
 
