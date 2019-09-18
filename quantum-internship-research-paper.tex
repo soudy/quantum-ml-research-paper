@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenx}
 \usepackage[style=apa,backend=biber,alldates=edtf,maxcitenames=3]{biblatex}
 \usepackage[nottoc,notlot,notlof]{tocbibind}
+\usepackage[font={it}, labelfont=bf]{caption}
 \usepackage{hyperref}
 \usepackage[braket, qm]{qcircuit}
 \usepackage{a4wide}
@@ -10,12 +11,33 @@
 \usepackage{fancyhdr}
 \usepackage{blochsphere}
 \usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{dirtytalk}
 \usepackage{tikz-3dplot}
 \usetikzlibrary{3d}
 
 \DeclareFieldFormat[article,unpublished,misc,online]{title}{\textit{#1}}
 
 \renewcommand{\abstractname}{Summary}
+
+\renewcommand*{\arraystretch}{1.1}
+
+\newcommand{\qstatezero}{
+	\begin{pmatrix}1 \\ 0\end{pmatrix}
+}
+\newcommand{\qstateone}{
+	\begin{pmatrix}0 \\ 1\end{pmatrix}
+}
+
+\newcommand{\hgate}{
+	\dfrac{1}{\sqrt2}
+	\begin{pmatrix}
+		1 & \phantom{-}1 \\
+		1 & -1
+	\end{pmatrix}
+}
 
 \addbibresource{quantum-internship-research-paper.bib}
 
@@ -32,47 +54,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis erat ege
 
 Fusce at sodales turpis. Nullam pulvinar rhoncus diam eu consequat. Sed et ante ac augue rutrum cursus id id mi. Quisque aliquet at lectus eget condimentum. Quisque pharetra nulla vel vestibulum vulputate. Donec blandit lacus est, sed tempor nisi laoreet eget. Mauris maximus ultricies varius. Nullam id hendrerit ante, quis efficitur nibh. Pellentesque convallis dignissim dapibus. Nunc vehicula scelerisque posuere.
 \end{abstract}
-
-%\begin{center}
-%	\hspace{2.1cm}
-%	\begin{blochsphere}[radius=5.1cm, tilt=15, rotation=-35, opacity=0.1, color=white]
-%		\drawBallGrid[style={opacity=0.1}]{30}{30}
-%		
-%		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
-%		\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
-%		\drawStatePolar[axisarrow=true, statewidth=0.5]{z-axis}{0}{0}
-%		\node[left] at (x-axis) {$x$};
-%		\node[right] at (y-axis) {$y$};
-%		\node[left] at (z-axis) {$z$};
-%		
-%	    \drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
-%		
-%		\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
-%		\node[above right] at (start_state) {\large $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$};
-%		
-%		\drawStatePolar[statecolor=blue!90!red, statewidth=0.3]{a}{20}{14}
-%		\drawStatePolar[statecolor=blue!80!red, statewidth=0.3]{a}{25}{14}
-%		\drawStatePolar[statecolor=blue!70!red, statewidth=0.3]{a}{30}{14}
-%		\drawStatePolar[statecolor=blue!60!red, statewidth=0.3]{a}{35}{14}
-%		\drawStatePolar[statecolor=blue!50!red, statewidth=0.3]{rot}{40}{14}
-%		\node[right=2mm] at (rot) {\large $Rx(\theta)Ry(\phi)Rz(\gamma)$};
-%		
-%		\drawStatePolar[statecolor=blue!40!red, statewidth=0.3]{a}{45}{14}
-%		\drawStatePolar[statecolor=blue!30!red, statewidth=0.3]{a}{50}{14}
-%		\drawStatePolar[statecolor=blue!20!red, statewidth=0.3]{a}{55}{14}
-%		\drawStatePolar[statecolor=blue!10!red, statewidth=0.3]{a}{60}{14}
-%		\drawStatePolar[statecolor=blue!5!red, statewidth=0.3]{a}{65}{14}
-%		\drawStatePolar[statecolor=blue!2!red, statewidth=0.3]{a}{70}{14}
-%		
-%		\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{75}{14}
-%		\node[right=1mm] at (end_state) {\large $\ket{\psi'} = \alpha'\ket{0} + \beta'\ket{1}$};
-%		
-%		\labelLatLon{up}{90}{0};
-%		\labelLatLon{down}{-90}{90};
-%		\node[above=2mm] at (up) {{\large \ket{0}}};
-%		\node[below=2mm] at (down) {{\large \ket{1}}};
-%	\end{blochsphere}
-%\end{center}
 
 \newpage
 
@@ -106,10 +87,11 @@ This is further expanded into the following sub questions:
 	\item How do these quantum algorithms perform (in regard to classical algorithms)?
 \end{enumerate}
 
-This report is structured as follows. First, in section \ref{sec:methods}, I describe how the research was conducted.
-Second, in section \ref{sec:quantum-algorithms} and \ref{sec:quantum-simulators}, research towards quantum algorithms and simulators is described.
-Finally, in section \ref{sec:implementation-and-results}, quantum algorithms are implemented and the results are discussed.
-The conclusion of the research is described in section \ref{sec:conclusion}.
+This report is structured as follows. First, in Section \ref{sec:methods}, I describe how the research was conducted.
+Second, in Section \ref{sec:quantum-computation-information}, a short introduction to quantum computation and quantum information is given.
+Third, in Section \ref{sec:quantum-ml} and Section \ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
+Finally, in Section \ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
+The conclusion of the research is described in Section \ref{sec:conclusion}.
 
 \section{Methods} \label{sec:methods}
 The research in this report was done mostly through desk research, with the help and advice of my colleagues.
@@ -118,9 +100,186 @@ To get started, several papers in promising areas of research were provided by m
 From there, databases such as Google Scholar and arXiv were used to find further information about these areas.
 Search terms used include \emph{quantum machine learning}, \emph{quantum neural network}, \emph{quantum support vector machine}, \emph{variational quantum eigensolver}, \emph{quantum phase estimation}, \emph{quantum perceptron}, \emph{quantum classifier}, \emph{quantum machine learning library}, \emph{quantum chemistry simulation} and \emph{hybrid quantum optimization}.
 
-\section{Quantum Algorithms} \label{sec:quantum-algorithms}
+\section{Quantum Computation and Information} \label{sec:quantum-computation-information}
+Quantum computers take advantage of quantum mechanical effects such as superposition and entanglement to solve certain problems faster than classical computers.
+The idea of a quantum computer was first proposed by Richard Feynman for simulating physics (\cite{feynman-simulating}).
+Since then the field has advanced a lot with algorithms such as Shor's algorithm for factoring integers (\cite{shor-factoring}) and Grover's search algorithm (\cite{grover-search}).
+These quantum algorithms show efficient solutions for problems that are considered hard for classical computers.
 
-\section{Quantum Simulators} \label{sec:quantum-simulators}
+This section summarizes basic concepts of quantum computation and information theory required to understand how quantum computers can be used to speedup certain computational problems.
+This is a very high level overview of quantum computation and is far from a complete introduction to the field.
+For a more complete introduction to quantum computation and information, refer to the book by \cite{nielsen-chuang}.
+
+\subsection{Quantum States}
+The basic and smallest unit of quantum information is the quantum bit, or \emph{qubit}.
+A qubit is a two-state quantum-mechanical system, which can be represented for example in the spin of an electron as spin up and spin down.
+A qubit can be in a state of an orthonormal basis $\{\ket{0}, \ket{1}\}$ (corresponding to spin up and spin down for the electron example), but it can also be in a linear combination, or \emph{superposition}, of states.
+The state of a qubit (the so-called ``wave-function") can be described as following:
+\begin{equation}
+\ket{\psi} = c_0\ket{0} + c_1\ket{1}.
+\end{equation}
+Quantum states are denoted using Dirac notation \ket{\cdotp}, which is a column vector in $\mathbb{C}^n$.
+Here the coefficients $\{c_0, c_1\}$ are complex valued numbers called \emph{probability amplitudes}.
+When we measure a quantum state, it collapses probabilistically to one of the basis states.
+The norm square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
+As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|c_i|^2 = 1$.
+As an example we have the arbitrary state:
+\begin{equation}
+\ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
+\end{equation}
+When measuring this state, we have a $|i/2|^2 = 1/4$ chance of the particle being in the state \ket{0}, and a $|\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
+
+We define the computational basis states $\{\ket{0}, \ket{1}\}$ as following:
+\begin{equation}
+\ket{0} = \qstatezero{}, \quad
+\ket{1} = \qstateone{}.
+\end{equation}
+This idea generalizes to multi-qubit systems.
+An $n$ qubit state can be described by a unit vector in a $2^n$-dimensional complex Hilbert space.
+A three qubit state lives in a  $N = 2^3$-dimensional Hilbert space with computational basis states $\{\ket{000}, \ket{001}, \ket{010}, \ldots, \ket{111}\}$ and amplitudes $\{c_0, c_1, c_2, \ldots, c_{N-1}\}$:
+\begin{equation}
+\begin{aligned}
+\ket{\psi} &= c_0\ket{000} + c_1\ket{001} + c_2\ket{010} + \dotsm + c_{N-1}\ket{111} \\
+&= c_0\begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_1\begin{pmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_2\begin{pmatrix}0 \\ 0 \\ 1 \\ \vdots \\ 0\end{pmatrix} + \dotsm + c_{N-1}\begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 1\end{pmatrix} = \begin{pmatrix}c_0 \\ c_1 \\ c_2 \\ \vdots \\ c_{N-1}\end{pmatrix}.
+\end{aligned}
+\end{equation}
+Note that we cannot observe the amplitudes of a quantum state.
+When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
+If we measure again immediately after the first measure, we get the same result 100\% of the time.
+So if we measure \ket{010} and measure again immediately after, we will see \ket{010} again.
+Measuring a quantum state collapses the wave function and destroys state information.
+
+\subsection{Quantum Evolution}
+In classical computers, we manipulate bits through logical gates.
+Quantum computers use quantum gates, which transforms one quantum state to another through an operator $U$.
+These operators must be unitary.
+That is, they must preserve the norm of the vector and be reversible ($U^\dagger U = UU^\dagger = I$).
+Single qubit states can be thought of as a vector on the surface of a sphere (the Bloch sphere).
+A unitary operation can then be thought of as rotations around the $x$, $y$ and $z$ axes of the sphere (Figure \ref{fig:bloch-sphere}).
+
+\begin{figure}[ht]
+	\centering
+	\hspace{1.3cm}
+	\begin{blochsphere}[radius=1.75cm, tilt=15, rotation=-20, opacity=0.1, color=white]
+		\drawBallGrid[style={opacity=0.1}]{30}{30}
+		
+		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
+		\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
+		\drawStatePolar[axisarrow=true, statewidth=0.5]{z-axis}{0}{0}
+		\node[left] at (x-axis) {$x$};
+		\node[right] at (y-axis) {$y$};
+		\node[left] at (z-axis) {$z$};
+		
+	    \drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
+		
+		\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
+		\node[above right] at (start_state) {\large \ket{\psi}};
+		
+		\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{125}{14}
+		\node[right=1mm] at (end_state) {\large $\ket{\psi'} = U\ket{\psi}$};
+		
+		\labelLatLon{up}{90}{0};
+		\labelLatLon{down}{-90}{90};
+		\node[above=1mm] at (up) {{\large \ket{0}}};
+		\node[below=1mm] at (down) {{\large \ket{1}}};
+	\end{blochsphere}
+	\caption{Arbitrary transformation of state \ket{\psi} by operator $U$ visualized on the Bloch sphere.}
+	\label{fig:bloch-sphere}
+\end{figure}
+
+As an example, the $X$ gate is equivalent to the classical \textsc{not}: $X\ket{0} = \ket{1}$ and $X\ket{1} = \ket{0}$.
+It is known as one of the three Pauli matrices used in quantum mechanics:
+\begin{equation}
+\sigma_x =
+\begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix},
+\quad
+\sigma_y =
+\begin{pmatrix}
+0 & -i \\
+i & \phantom{-}0
+\end{pmatrix},
+\quad
+\sigma_z =
+\begin{pmatrix}
+1 & 0 \\
+0 & -1
+\end{pmatrix}.
+\end{equation}
+Another frequently used gate is the Hadamard gate, which produces an equal superposition:
+\begin{equation}
+H = \hgate{}.
+\end{equation}
+Which acts on the computational basis states as following:
+\begin{equation}
+\begin{aligned}
+H\ket{0} &=
+\hgate{}
+\qstatezero{}
+=
+\dfrac{1}{\sqrt2}
+\begin{pmatrix}1 \\ 1\end{pmatrix} \\
+&= \dfrac{1}{\sqrt2}(\ket{0} + \ket{1}), \\
+H\ket{1} &=
+\hgate{}
+\qstateone{}
+=
+\dfrac{1}{\sqrt2}
+\begin{pmatrix}\phantom{-}1 \\ -1\end{pmatrix} \\
+&= \dfrac{1}{\sqrt2}(\ket{0} + \ket{1}).
+\end{aligned}
+\end{equation}
+Applying the Hadamard gate again on the equal superposition created above is an example of destructive interference:
+\begin{equation}
+\begin{aligned}
+H\dfrac{1}{\sqrt2}(\ket{0} + \ket{1}) &= \ket{0}, \\
+H\dfrac{1}{\sqrt2}(\ket{0} - \ket{1}) &= \ket{1}.
+\end{aligned}
+\end{equation}
+We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$ (where $^\dagger$ is the complex conjugate).
+
+There also exist multi-qubit gates, which are required for universal quantum computing.
+These gates introduce the phenomena entanglement.
+Consider the following state:
+\begin{equation}
+\ket{\Psi} = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
+\end{equation}
+Measuring the first qubit gives state \ket{0} with probability $\frac{1}{2}$, and state \ket{1} with probability $\frac{1}{2}$.
+However, the measurement immediately collapsed the whole state to either \ket{00} or \ket{11}.
+So by measuring the first qubit, we also know the state of the second qubit.
+The individual states are related to each other, and this relation is called entanglement.
+Quantum entanglement does not depend on distance.
+That is, qubit two could be at located in another galaxy while qubit one is located on earth.
+When we measure qubit one on earth, we know that the qubit in the other galaxy is in the same state as we measured.
+This does not allow for faster than light communication, as a classical channel is still required to communicate results between the observers.
+
+\subsection{Quantum Speedup}
+Quantum algorithms promise to provide a speedup over classical algorithms by ``abusing" quantum phenomena such as superposition, interference, exponential state space and entanglement.
+They usually offer a quadratic or exponential speedup over their classical counterpart.
+\cite{scott-aaronson-qc} probably described it best:
+\say{The goal in quantum computing is to choreograph a computation so that the amplitudes leading to wrong answers cancel each other out, while the amplitudes leading to right answers reinforce.}
+
+The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
+Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
+Shor showed that this can be done in polynomial time on a quantum computer (\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
+It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubts (\cite{shor-20mil}).
+
+\subsection{Current State of Quantum Computing}
+It is important to note that quantum computers are still at the experimental stage, and a lot of results are theoretical.
+For example, the highest number factored by using Shor's algorithm thus far is 21 (\cite{shor-21}).
+Furthermore, quantum supremacy, which is the potential ability of a quantum computer to solve problems that classical computers practically cannot (\cite{preskill-qc}), has not been achieved yet as of writing this.
+Current and near future quantum computers, often referred to as Noisy Intermediate-Scale Quantum (NISQ) devices, will have about 50-100 qubits and may be able to perform tasks which surpass the capabilities of classical computers (\cite{preskill-nisq}).
+They suffer from noise, which greatly limits their coherence time and thus usefulness.
+
+Research has adapted to these limited devices, and hybrid quantum/classical algorithms have become an important area of research.
+Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems (\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian (\cite{vqe}).
+These hybrid algorithms typically involves a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
+
+\section{Quantum Machine Learning} \label{sec:quantum-ml}
+
+\section{Quantum Chemistry} \label{sec:quantum-chemistry}
 
 \section{Implementation and Results} \label{sec:implementation-and-results}
 
