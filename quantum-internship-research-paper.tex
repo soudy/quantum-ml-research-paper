@@ -153,7 +153,7 @@ For example, a three qubit state lives in a  $2^3$-dimensional Hilbert space spa
 \end{aligned}
 \end{equation}
 
-\subsection{Quantum Evolution}
+\subsection{Quantum State Evolution}
 In classical computers, we manipulate bits through logical gates.
 Quantum computers use quantum gates, which transforms one quantum state to another through an operator $U$.
 These operators must be unitary.
@@ -244,6 +244,7 @@ H\dfrac{1}{\sqrt2}(\ket{0} - \ket{1}) &= \ket{1}.
 \end{equation}
 We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$.
 
+\subsection{Entanglement}
 There also exist multi-qubit gates, which are required for universal quantum computing.
 These gates introduce the phenomena entanglement.
 Consider the following state:
@@ -262,8 +263,8 @@ For the entangled state \ket{\Phi^+}, let's assume there exist amplitudes $\{c_0
 However, this would imply that $c_0c'_0 = c_1c'_1 = 1/\sqrt2$ and $c_0c'_1 = c_1c'_0 = 0$, which does not have a solution.
 
 The remarkable thing about entanglement is that it works over any distance.
-That is, qubit two could be at located in another galaxy while qubit one is located on earth.
-When we measure qubit one on earth, we know that the qubit in the other galaxy is in the same state as we measured.
+That is, given the state \ket{\Phi^+}, one qubit could be located in another galaxy while the other qubit is located on earth.
+When we measure the qubit on earth, we know that the qubit in the other galaxy is in the same state as we measured.
 This does not allow for faster than light communication, as a classical channel is still required to communicate results between the observers.
 
 \subsection{Quantum Speedup}
