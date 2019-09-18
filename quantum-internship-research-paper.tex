@@ -128,6 +128,11 @@ As an example we have the arbitrary state:
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
 \end{equation}
 After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being in the state \ket{0}, and a $|-\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
+Note that we cannot observe the amplitudes of a quantum state.
+When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
+If we measure again immediately after the first measure, we get the same result 100\% of the time.
+So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
+Measuring a quantum state collapses the wave function and destroys state information.
 
 We define the computational basis states $\{\ket{0}, \ket{1}\}$ as following:
 \begin{equation}
@@ -135,19 +140,18 @@ We define the computational basis states $\{\ket{0}, \ket{1}\}$ as following:
 \ket{1} = \qstateone{}.
 \end{equation}
 This idea generalizes to multi-qubit systems.
-An $n$ qubit state can be described by a unit vector in a $2^n$-dimensional complex Hilbert space.
-A three qubit state lives in a  $N = 2^3$-dimensional Hilbert space with computational basis states $\{\ket{000}, \ket{001}, \ket{010}, \ldots, \ket{111}\}$ and amplitudes $\{c_0, c_1, c_2, \ldots, c_{N-1}\}$:
+A multi-qubit state with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}:
+\begin{equation}
+\ket{\psi} = \ket{\psi_1} \otimes \ket{\psi_1} \otimes \dotsm \otimes \ket{\psi_n},
+\end{equation}
+resulting in a $N = 2^n$ dimensional state \ket{\psi}.
+For example, a three qubit state lives in a  $2^3$-dimensional Hilbert space spanned by computational basis states $\{\ket{000}, \ket{001}, \ket{010}, \ldots, \ket{111}\}$:
 \begin{equation}
 \begin{aligned}
 \ket{\psi} &= c_0\ket{000} + c_1\ket{001} + c_2\ket{010} + \dotsm + c_{N-1}\ket{111} \\
 &= c_0\begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_1\begin{pmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_2\begin{pmatrix}0 \\ 0 \\ 1 \\ \vdots \\ 0\end{pmatrix} + \dotsm + c_{N-1}\begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 1\end{pmatrix} = \begin{pmatrix}c_0 \\ c_1 \\ c_2 \\ \vdots \\ c_{N-1}\end{pmatrix}.
 \end{aligned}
 \end{equation}
-Note that we cannot observe the amplitudes of a quantum state.
-When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
-If we measure again immediately after the first measure, we get the same result 100\% of the time.
-So if we measure \ket{010} and measure again immediately after, we will see \ket{010} again.
-Measuring a quantum state collapses the wave function and destroys state information.
 
 \subsection{Quantum Evolution}
 In classical computers, we manipulate bits through logical gates.
@@ -246,11 +250,18 @@ Consider the following state:
 \begin{equation}
 \ket{\Phi^+} = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
 \end{equation}
-Measuring the first qubit gives state \ket{0} with probability $\frac{1}{2}$, and state \ket{1} with probability $\frac{1}{2}$.
+Measuring the first qubit gives state \ket{0} with probability $1/2$, and state \ket{1} with probability $1/2$.
 However, the measurement immediately collapsed the whole state to either \ket{00} or \ket{11}.
 So by measuring the first qubit, we also know the state of the second qubit.
 The individual states are related to each other, and this relation is called entanglement.
-Quantum entanglement does not depend on distance.
+More formally, two qubits are entangled if and only if the state of those two qubits cannot be expressed as two individual states.
+For the entangled state \ket{\Phi^+}, let's assume there exist amplitudes $\{c_0,c_1,c'_0, c'_1\}$ such that:
+\begin{equation}
+\ket{\Phi^+} = (c_0\ket{0} + c_1\ket{1}) \otimes (c'_0\ket{0} + c'_1\ket{1}) = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
+\end{equation}
+However, this would imply that $c_0c'_0 = c_1c'_1 = 1/\sqrt2$ and $c_0c'_1 = c_1c'_0 = 0$, which does not have a solution.
+
+The remarkable thing about entanglement is that it works over any distance.
 That is, qubit two could be at located in another galaxy while qubit one is located on earth.
 When we measure qubit one on earth, we know that the qubit in the other galaxy is in the same state as we measured.
 This does not allow for faster than light communication, as a classical channel is still required to communicate results between the observers.
