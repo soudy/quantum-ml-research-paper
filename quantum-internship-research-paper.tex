@@ -13,6 +13,7 @@
 \usepackage{xcolor}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{subcaption}
 \usepackage{multicol}
 \usepackage{dirtytalk}
 \usepackage{tikz-3dplot}
@@ -23,6 +24,8 @@
 \renewcommand{\abstractname}{Summary}
 
 \renewcommand*{\arraystretch}{1.1}
+
+\DeclareMathOperator{\sgn}{sgn}
 
 \newcommand{\qstatezero}{
 	\begin{pmatrix}1 \\ 0\end{pmatrix}
@@ -87,11 +90,11 @@ This is further expanded into the following sub questions:
 	\item How do these quantum algorithms perform (in regard to classical algorithms)?
 \end{enumerate}
 
-This report is structured as follows. First, in Section \ref{sec:methods}, I describe how the research was conducted.
-Second, in Section \ref{sec:quantum-computation-information}, a short introduction to quantum computation and information is given.
-Third, in Section \ref{sec:quantum-ml} and Section \ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
-Finally, in Section \ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
-The conclusion of the research is described in Section \ref{sec:conclusion}.
+This report is structured as follows. First, in Section~\ref{sec:methods}, I describe how the research was conducted.
+Second, in Section~\ref{sec:quantum-computation-information}, a short introduction to quantum computation and information is given.
+Third, in Section~\ref{sec:quantum-ml} and Section~\ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
+Finally, in Section~\ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
+The conclusion of the research is described in Section~\ref{sec:conclusion}.
 
 \section{Methods} \label{sec:methods}
 The research in this report was done mostly through desk research, with the help and advice of my colleagues.
@@ -108,7 +111,7 @@ These quantum algorithms show efficient solutions for problems that are consider
 
 This section summarizes basic concepts of quantum computation and information theory required to understand how quantum computers can be used to speedup certain computational problems.
 This is a very high level overview of quantum computation and is far from a complete introduction to the field.
-For a more complete introduction to quantum computation and information, refer to the book by \cite{nielsen-chuang}.
+For a more complete introduction to quantum computation and information, refer to the book by~\cite{nielsen-chuang}.
 
 \subsection{Quantum States}
 The basic and smallest unit of quantum information is the quantum bit, or \emph{qubit}.
@@ -140,9 +143,9 @@ We define the computational basis states $\{\ket{0}, \ket{1}\}$ as following:
 \ket{1} = \qstateone{}.
 \end{equation}
 This idea generalizes to multi-qubit systems.
-A multi-qubit state with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}:
+A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:entanglement}}:
 \begin{equation}
-\ket{\psi} = \ket{\psi_1} \otimes \ket{\psi_1} \otimes \dotsm \otimes \ket{\psi_n},
+\ket{\psi} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \dotsm \otimes \ket{\psi_n},
 \end{equation}
 resulting in a $N = 2^n$ dimensional state \ket{\psi}.
 For example, a three qubit state lives in a  $2^3$-dimensional Hilbert space spanned by computational basis states $\{\ket{000}, \ket{001}, \ket{010}, \ldots, \ket{111}\}$:
@@ -159,7 +162,7 @@ Quantum computers use quantum gates, which transforms one quantum state to anoth
 These operators must be unitary.
 That is, they must preserve the norm of the vector and be reversible: $U^\dagger U = UU^\dagger = I$ (where $^\dagger$ is the complex conjugate and $I$ the identity matrix).
 Single qubit states can be thought of as a vector on the surface of a sphere (the Bloch sphere).
-A unitary operation can then be thought of as rotations around the $x$, $y$ and $z$ axes of the sphere (Figure \ref{fig:bloch-sphere}).
+A unitary operation can then be thought of as rotations around the $x$, $y$ and $z$ axes of the sphere (Figure~\ref{fig:bloch-sphere}).
 
 \begin{figure}[ht]
 	\centering
@@ -208,7 +211,7 @@ i & \phantom{-}0
 \quad
 \sigma_3 = \sigma_z =
 \begin{pmatrix}
-1 & 0 \\
+1 & \phantom{-}0 \\
 0 & -1
 \end{pmatrix}.
 \end{equation}
@@ -244,7 +247,7 @@ H\dfrac{1}{\sqrt2}(\ket{0} - \ket{1}) &= \ket{1}.
 \end{equation}
 We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$.
 
-\subsection{Entanglement}
+\subsection{Entanglement} \label{sec:entanglement}
 There also exist multi-qubit gates, which are required for universal quantum computing.
 These gates introduce the phenomena entanglement.
 Consider the following state:
@@ -275,26 +278,102 @@ They usually offer a quadratic or exponential speedup over their classical count
 
 The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
 Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
-Shor showed that this can be done in polynomial time on a quantum computer (\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
+Shor showed that this can be done in polynomial time on a quantum computer~(\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
 It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}).
 
 \subsection{Current State of Quantum Computing}
 It is important to note that quantum computers are still at the experimental stage, and a lot of results are theoretical.
-For example, the highest number factored by using Shor's algorithm thus far is 21 (\cite{shor-21}).
-Furthermore, quantum supremacy, which is the potential ability of a quantum computer to solve problems that classical computers practically cannot (\cite{preskill-qc}), has not been achieved yet as of writing this.
-Current and near future quantum computers, often referred to as Noisy Intermediate-Scale Quantum (NISQ) devices, will have about 50-100 qubits and may be able to achieve quantum supremacy (\cite{preskill-nisq}).
+For example, the highest number factored by using Shor's algorithm on an actual quantum computer thus far is 21~(\cite{shor-21}).
+Furthermore, quantum supremacy, which is the potential ability of a quantum computer to solve problems that classical computers practically cannot~(\cite{preskill-qc}), has not been achieved yet as of writing this.
+Current and near future quantum computers, often referred to as Noisy Intermediate-Scale Quantum (NISQ) devices, will have about 50-100 qubits and may be able to achieve quantum supremacy~(\cite{preskill-nisq}).
 However, they suffer from noise, which greatly limits their coherence time and thus usefulness.
 Quantum error correcting codes exist which can be used to protect from noise, but these require a high amount of qubits per logical qubit.
 
 Research has adapted to the limitations of NISQ devices, and hybrid quantum/classical algorithms have become an important area of research.
-Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems (\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian (\cite{vqe}).
+Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems~(\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian~(\cite{vqe}).
 These hybrid algorithms typically involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
 
+This research is focused on universal gate model quantum computers.
+There exist special purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
+These quantum annealers are restricted to solving optimization problems, of which its usefulness has been doubted~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
+
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
+Quantum machine learning is still in its early days of development, and lacks a widely recognized definition.
+However, there have been promising developments in the recent years.
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
 
 \section{Implementation and Results} \label{sec:implementation-and-results}
+
+\subsection{Quantum Neural Network}
+A quantum neural network inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten images.
+The famous MNIST database of handwritten digits~(\cite{mnist-digits}) was used for this (Figure~\ref{fig:mnist}).
+For initial experiment, the images of the data set were downsampled to a lower dimension and limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
+After a successful initial experiment, the experiment is extended to multi-class classification of the original $28 \times 28$ data set.
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.85\linewidth]{figures/mnist_28x28.png}
+		\caption{Original data set of $28 \times 28$ images.}
+		\label{fig:mnist_28x28}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.85\linewidth]{figures/mnist_8x8}
+		\caption{Downsampled binary data set of $8 \times 8$ images.}
+		\label{fig:mnist_8x8}
+	\end{subfigure}
+	\caption{Samples of MNIST data set used for quantum neural network binary classification.}
+	\label{fig:mnist}
+\end{figure}
+
+\subsubsection{Binary Downsampled Classifier}
+The problem of supervised classification in machine learning is defined as following: given a training set of data whose category is known, train a model which is able to identify to which category new data belongs.
+A simple example that we will tackle in this section is recognizing if a handwritten digit is a 1 or an 8.
+
+We implement a quantum neural network to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
+It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit, often known as a variational algorithm.
+An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
+The variational quantum neural network works as following:
+\begin{enumerate}
+	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x} using for example qRAM~(\cite{qram}).
+	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
+	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)\ket{x, 1}$.
+	\item Measure expectation value $\expval{Z}$ of readout qubit.
+	\item Calculate and minimize the loss $L(\vec{\theta}, \expval{Z})$ through classical optimization algorithm.
+	\item Repeat until converges.
+\end{enumerate}
+\begin{figure}[ht]
+	\[
+	\Large
+	\Qcircuit @C=1em @R=0.3em @!R {
+		& & \multigate{5}{U(\vec{\theta}_1)} & \multigate{5}{U(\vec{\theta}_2)} & \qw & & \multigate{5}{U(\vec{\theta}_L)} & \qw & \qw \\
+		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
+		\lstick{\ket{x}~~} & & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
+		& ~~\vdots & & & ~~\hdots & & & \vdots \\
+		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
+		& \lstick{\ket{1}} & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
+		\gategroup{1}{1}{5}{1}{.7em}{\{}
+	}
+	\]
+	\caption{General circuit of the quantum neural network classifier. The network consist of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_i)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{Z})$.}
+	\label{fig:bdc-circuit}
+\end{figure}
+
+We trained a quantum neural network using a training set of 2014 images and a test set of 843 images.
+As optimizer, we used the stochastic mini-batch gradient descent with a learning rate of $0.4$ and a batch size of $32$.
+After training for 20 epochs, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
+The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi}).
+Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems.
+It shows the potential, given we solve the issues surrounding qRAM (\cite{aaronson2015read}), to exploit the exponential growth of quantum state spaces to do machine learning on big data.
+Quantum neural networks could also be used for learning about quantum data.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=.9\linewidth]{figures/downsampled_qnn.png}
+	\caption{Quantum neural network performance on binary classification.}
+	\label{fig:bdc-performance}
+\end{figure}
 
 \section{Conclusion} \label{sec:conclusion}
 
