@@ -1,7 +1,7 @@
 \documentclass[a4paper,10pt]{article}
 
 \usepackage[utf8]{inputenx}
-\usepackage[style=apa,backend=biber,alldates=edtf,maxcitenames=3]{biblatex}
+\usepackage[style=apa,backend=biber,alldates=iso8601,maxcitenames=3]{biblatex}
 \usepackage[nottoc,notlot,notlof]{tocbibind}
 \usepackage[font={it}, labelfont=bf]{caption}
 \usepackage{hyperref}
@@ -77,9 +77,8 @@ Within this context SURFsara is interested in testing, benchmarking and creating
 
 SURFsara HPC center supports various research institutes and universities of the Netherlands.
 The chemistry community is currently one of the largest; the machine learning community is probably the fastest growing one.
-Both of these fields are large areas of research within the quantum computing field, expecting large improvements to be gained from them.
-As the main interest of SURFsara is to support the potential main use cases of quantum computers in the future, the tasks of this internship will be focused on quantum machine learning (QML) and quantum chemistry (QC) algorithms.
-This internship aims to research state-of-the-art QML and QC algorithms, run simulations of them and benchmark them.
+Both of these fields are large areas of research within the quantum computing field, expecting improvements to be gained from them.
+As the main interest of SURFsara is to support the potential main use cases of quantum computers in the future, the tasks of this internship will be focused on quantum machine learning (QML) and quantum chemistry (QC).
 
 This report will try to give an answer to the main question ``\emph{How can quantum algorithms be implemented using simulated quantum circuits to solve machine learning and chemistry problems?}"
 This is further expanded into the following sub questions:
@@ -344,7 +343,7 @@ The variational quantum neural network works as following:
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
 	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta})\ket{x, 1}$, where $U(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
 	\item Measure expectation value $\expval{Z} = \bra{x, 1}U(\vec{\theta})^\dagger Z_n U(\vec{\theta})\ket{x, 1}$ of readout qubit.
-	\item Calculate and minimize the loss $L(\vec{\theta}, \expval{Z})$ through classical optimization algorithm.
+	\item Calculate and minimize the loss $L(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
@@ -396,7 +395,7 @@ It shows the potential, given we solve the issues surrounding qRAM~(\cite{aarons
 \subsubsection{One-vs-Rest Classifier}
 To make a step into the direction of multi-class classification using a QNN, we first consider the problem of one-vs-rest classification.
 We use the original $28 \times 28$ MNIST data set to train a QNN to detect if a handwritten digit is 0 or not 0 (Figure~\ref{fig:mnist_ova}).
-To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, so $11$ qubits total.
+To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.95\linewidth]{figures/mnist_28x28_ovr.png}
