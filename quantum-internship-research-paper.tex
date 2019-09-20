@@ -111,7 +111,7 @@ These quantum algorithms show efficient solutions for problems that are consider
 
 This section summarizes basic concepts of quantum computation and information theory required to understand how quantum computers can be used to speedup certain computational problems.
 This is a very high level overview of quantum computation and is far from a complete introduction to the field.
-For a more complete introduction to quantum computation and information, refer to the book by~\cite{nielsen-chuang}.
+For a more complete introduction to quantum computation and information, we refer to the book by~\cite{nielsen-chuang}.
 
 \subsection{Quantum States}
 The basic and smallest unit of quantum information is the quantum bit, or \emph{qubit}.
@@ -131,7 +131,8 @@ As an example we have the arbitrary state:
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
 \end{equation}
 After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being in the state \ket{0}, and a $|{-}\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
-Note that we cannot observe the amplitudes of a quantum state.
+The laws of quantum mechanics greatly restrict our access to information stored in quantum states.
+We cannot access the amplitudes of a state, other than by preparing and sampling a state many times to get an approximation. 
 When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
 If we measure again immediately after the first measure, we get the same result 100\% of the time.
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
@@ -298,12 +299,14 @@ There exist special purpose quantum computers called quantum annealers, which ha
 These quantum annealers are restricted to solving optimization problems, of which its usefulness has been doubted~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
 
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
-Quantum machine learning is still in its early days of development, and lacks a widely recognized definition.
+Quantum machine learning is still in its very first stage of development, and lacks a widely recognized definition.
 However, there have been promising developments in the recent years.
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
 
-\section{Implementation and Results} \label{sec:implementation-and-results}
+\section{Implementations and Results} \label{sec:implementation-and-results}
+This section describes how QML and QC algorithms were implemented, tested and benchmarked.
+The experimental results described were achieved by simulating quantum circuits using SURFsara's Lisa computing system~(\cite{surfsara-lisa}).
 
 \subsection{Quantum Neural Network}
 A quantum neural network inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten images.
@@ -382,7 +385,7 @@ As optimizer, we used the stochastic mini-batch gradient descent with a learning
 After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
 The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
 Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
-It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process.
+It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.9\linewidth]{figures/downsampled_qnn.png}
