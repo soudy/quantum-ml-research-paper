@@ -45,7 +45,7 @@
 \addbibresource{quantum-internship-research-paper.bib}
 
 \title{Simulation of Quantum Algorithms for Solving Machine Learning and Chemistry Problems}
-\author{Steven Oud (500776959) \\ \emph{SURFsara}}
+\author{Steven Oud \\ \emph{SURFsara}}
 \date{\today}
 
 \begin{document}
@@ -130,7 +130,7 @@ As an example we have the arbitrary state:
 \begin{equation}
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
 \end{equation}
-After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being in the state \ket{0}, and a $|-\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
+After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being in the state \ket{0}, and a $|{-}\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
 Note that we cannot observe the amplitudes of a quantum state.
 When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
 If we measure again immediately after the first measure, we get the same result 100\% of the time.
@@ -339,10 +339,10 @@ The variational quantum neural network works as following:
 \begin{enumerate}
 	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x} using for example qRAM~(\cite{qram}).
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
-	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)\ket{x, 1}$.
-	\item Measure expectation value $\expval{Z}$ of readout qubit.
+	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta})\ket{x, 1}$, where $U(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
+	\item Measure expectation value $\expval{Z} = \bra{x, 1}U(\vec{\theta})^\dagger Z_n U(\vec{\theta})\ket{x, 1}$ of readout qubit.
 	\item Calculate and minimize the loss $L(\vec{\theta}, \expval{Z})$ through classical optimization algorithm.
-	\item Repeat until converges.
+	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
 	\[
@@ -357,22 +357,48 @@ The variational quantum neural network works as following:
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the quantum neural network classifier. The network consist of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_i)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{Z})$.}
+	\caption{General circuit of the quantum neural network classifier. The network consist of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{Z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
+\end{figure}
+
+\begin{figure}[ht]
+	\[
+	\Large
+	\Qcircuit @C=0.7em @R=0.25em @!R {
+		& & \multigate{5}{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{1, 1})} & \gate{R_y(\vec{\theta}_{1, 2})} & \gate{R_z(\vec{\theta}_{1, 3})} & \ctrl{1} & \qw & \qw & \ctrl{5} & \qw \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{2, 1})} & \gate{R_y(\vec{\theta}_{2, 2})} & \gate{R_z(\vec{\theta}_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{3, 1})} & \gate{R_y(\vec{\theta}_{3, 2})} & \gate{R_z(\vec{\theta}_{3, 3})} & \qw & \targ & \qw & \qw & \qw  \\
+		& & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{n-1, 1})} & \gate{R_y(\vec{\theta}_{n-1, 2})} & \gate{R_z(\vec{\theta}_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{n, 1})} & \gate{R_y(\vec{\theta}_{n, 2})} & \gate{R_z(\vec{\theta}_{n, 3})} & \qw & \qw & \targ & \targ & \qw
+	}
+	\]
+	\caption{Decomposition of a layer $U(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
+	\label{fig:parametrized_unitary}
 \end{figure}
 
 We trained a quantum neural network using a training set of 2014 images and a test set of 843 images.
 As optimizer, we used the stochastic mini-batch gradient descent with a learning rate of $0.4$ and a batch size of $32$.
-After training for 20 epochs, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
-The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi}).
-Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems.
-It shows the potential, given we solve the issues surrounding qRAM (\cite{aaronson2015read}), to exploit the exponential growth of quantum state spaces to do machine learning on big data.
-Quantum neural networks could also be used for learning about quantum data.
+After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
+The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
+Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
+It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.9\linewidth]{figures/downsampled_qnn.png}
 	\caption{Quantum neural network performance on binary classification.}
 	\label{fig:bdc-performance}
+\end{figure}
+
+\subsubsection{One-vs-Rest Classifier}
+To make a step into the direction of multi-class classification using a QNN, we first consider the problem of one-vs-rest classification.
+We use the original $28 \times 28$ MNIST data set to train a QNN to detect if a handwritten digit is 0 or not 0 (Figure~\ref{fig:mnist_ova}).
+To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, so $11$ qubits total.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=.95\linewidth]{figures/mnist_28x28_ovr.png}
+	\caption{Sample of data set used for one-vs-rest classification. The classifier has to decide if a handwritten digit is 0 or not 0.}
+	\label{fig:mnist_ova}
 \end{figure}
 
 \section{Conclusion} \label{sec:conclusion}
