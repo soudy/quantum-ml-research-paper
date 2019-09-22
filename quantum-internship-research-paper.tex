@@ -272,7 +272,7 @@ When we measure the qubit on earth, we know that the qubit in the other galaxy i
 This does not allow for faster than light communication, as a classical channel is still required to communicate results between the observers.
 
 \subsection{Quantum Speedup}
-Quantum algorithms promise to provide a speedup over classical algorithms by ``abusing" quantum phenomena such as superposition, interference, exponential state space and entanglement.
+Quantum algorithms promise to provide a speedup over classical algorithms by ``abusing" quantum phenomena such as superposition, interference and entanglement.
 They usually offer a quadratic or exponential speedup over their classical counterpart.
 \cite{scott-aaronson-qc} probably described it best:
 \say{The goal in quantum computing is to choreograph a computation so that the amplitudes leading to wrong answers cancel each other out, while the amplitudes leading to right answers reinforce.}
@@ -282,7 +282,7 @@ Its implications are huge for modern cryptography algorithms such as RSA, which 
 Shor showed that this can be done in polynomial time on a quantum computer~(\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
 It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}), which we are very far away from achieving (companies are currently struggling to have 50 coherent qubits).
 
-To conclude, there is some very convincing theoretical evidence that quantum computers can speed up certain computations by a large factor.
+There is some very convincing theoretical evidence that quantum computers can speed up certain computations by a large factor.
 Till we have reached quantum supremacy though, it is just that: theoretical.
 We should however keep working with the resources we currently have available to advance the field of quantum computing and push the limitations of computation.
 
@@ -371,16 +371,16 @@ The variational quantum neural network works as following:
 \begin{figure}[ht]
 	\[
 	\Large
-	\Qcircuit @C=0.7em @R=0.25em @!R {
-		& & \multigate{5}{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{1, 1})} & \gate{R_y(\vec{\theta}_{1, 2})} & \gate{R_z(\vec{\theta}_{1, 3})} & \ctrl{1} & \qw & \qw & \ctrl{5} & \qw \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{2, 1})} & \gate{R_y(\vec{\theta}_{2, 2})} & \gate{R_z(\vec{\theta}_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{3, 1})} & \gate{R_y(\vec{\theta}_{3, 2})} & \gate{R_z(\vec{\theta}_{3, 3})} & \qw & \targ & \qw & \qw & \qw  \\
+	\Qcircuit @C=0.7em @R=0.4em @!R {
+		& & \multigate{5}{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \ctrl{5} & \qw \\
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw  \\
 		& & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{n-1, 1})} & \gate{R_y(\vec{\theta}_{n-1, 2})} & \gate{R_z(\vec{\theta}_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\vec{\theta}_{n, 1})} & \gate{R_y(\vec{\theta}_{n, 2})} & \gate{R_z(\vec{\theta}_{n, 3})} & \qw & \qw & \targ & \targ & \qw
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw \\
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \targ & \qw
 	}
 	\]
-	\caption{Decomposition of a layer $U(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
+	\caption{Decomposition of a layer $U(\vec{\theta}_l)$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
 	\label{fig:parametrized_unitary}
 \end{figure}
 
