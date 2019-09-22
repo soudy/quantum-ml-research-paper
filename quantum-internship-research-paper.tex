@@ -67,17 +67,17 @@ Fusce at sodales turpis. Nullam pulvinar rhoncus diam eu consequat. Sed et ante 
 
 \section{Introduction}
 Quantum computing is one of the most promising technology developments of the coming years.
-Big companies like IBM (\cite{ibm-quantum}), Google (\cite{google-quantum}), Intel (\cite{intel-quantum}), Microsoft (\cite{microsoft-quantum}), and countries like the USA and China are investing huge amounts of money into the development and building of meaningful working quantum computers (\cite{usa-quantum, china-quantum}).
-The development of practical quantum computers that can be used to solve real-world problems is driven by the expectation that for certain tasks, quantum computers can outperform classical computers (\cite{preskill-qc}).
+Big companies like IBM (\cite{ibm-quantum}), Google (\cite{google-quantum}), Intel (\cite{intel-quantum}), Microsoft (\cite{microsoft-quantum}), and countries like the USA and China are investing huge amounts of money into the development of quantum computers (\cite{usa-quantum, china-quantum}).
+The development of practical quantum computers that can be used to solve real-world problems is driven by the expectation that for certain tasks, quantum computers can dramatically outperform classical computers (\cite{preskill-qc}).
 
 Already last year, SURFsara started a number of activities and collaborations in the field of quantum computing.
 The overall objective of SURFsara is to support Dutch researchers in taking an early and competitive advantage in quantum computing technologies and facilities while these become available.
-Like with any  emerging compute technology, it needs early adopters in the scientific computing community to identify problems of practical interest that are suitable as proof-of-concept applications.
+Like with any emerging compute technology, it needs early adopters in the scientific computing community to identify problems of practical interest that are suitable as proof-of-concept applications.
 In the context of the SURF Open Innovation Lab, SURFsara seeks to stimulate and support these advances in scientific research in close collaboration with research groups.
 Within this context SURFsara is interested in testing, benchmarking and creating good examples of quantum computing applications that can be used by the scientific community.
 
 SURFsara HPC center supports various research institutes and universities of the Netherlands.
-The chemistry community is currently one of the largest; the machine learning community is probably the fastest growing one.
+The chemistry community is currently one of the largest; the machine learning community probably the fastest growing one.
 Both of these fields are large areas of research within the quantum computing field, expecting improvements to be gained from them.
 As the main interest of SURFsara is to support the potential main use cases of quantum computers in the future, the tasks of this internship will be focused on quantum machine learning (QML) and quantum chemistry (QC).
 
@@ -90,7 +90,7 @@ This is further expanded into the following sub questions:
 	\item How do these quantum algorithms perform (in regard to classical algorithms)?
 \end{enumerate}
 
-This report is structured as follows. First, in Section~\ref{sec:methods}, I describe how the research was conducted.
+This report is structured as follows. First, in Section~\ref{sec:methods}, we describe how the research was conducted.
 Second, in Section~\ref{sec:quantum-computation-information}, a short introduction to quantum computation and information is given.
 Third, in Section~\ref{sec:quantum-ml} and Section~\ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
 Finally, in Section~\ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
@@ -105,7 +105,7 @@ Search terms used include \emph{quantum machine learning}, \emph{quantum neural 
 
 \section{Quantum Computation and Information} \label{sec:quantum-computation-information}
 Quantum computers take advantage of quantum mechanical effects such as superposition and entanglement to solve certain problems faster than classical computers.
-The idea of a quantum computer was first proposed by Richard Feynman for simulating physics (\cite{feynman-simulating}).
+The idea of a quantum computer was first proposed by Richard Feynman for solving problems in physics and chemistry (\cite{feynman-simulating}).
 Since then the field has advanced a lot with algorithms such as Shor's algorithm for factoring integers (\cite{shor-factoring}) and Grover's search algorithm (\cite{grover-search}).
 These quantum algorithms show efficient solutions for problems that are considered hard for classical computers.
 
@@ -115,7 +115,7 @@ For a more complete introduction to quantum computation and information, we refe
 
 \subsection{Quantum States}
 The basic and smallest unit of quantum information is the quantum bit, or \emph{qubit}.
-A qubit is a two-state quantum-mechanical system, which can be represented for example in the spin of an electron.
+A qubit is a two-state quantum-mechanical system, which can be represented for example in the spin of an electron (but any quantized physical property can be used).
 A qubit can be in a state of an orthonormal basis $\{\ket{0}, \ket{1}\}$ (corresponding to spin up and spin down for the electron example), but it can also be in a linear combination, or \emph{superposition}, of states.
 The state of a qubit (the so-called \emph{wave function}) can be described as following:
 \begin{equation}
@@ -126,7 +126,7 @@ Here the coefficients $\{c_0, c_1\}$ are complex valued numbers called \emph{pro
 When we measure a quantum state, it collapses probabilistically to one of the basis states.
 The norm square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
 As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|c_i|^2 = 1$.
-As an example we have the arbitrary state:
+As an example we have an arbitrary state:
 \begin{equation}
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
 \end{equation}
@@ -303,7 +303,7 @@ There exist special purpose quantum computers called quantum annealers, which ha
 These quantum annealers are restricted to solving optimization problems, of which its usefulness has been doubted~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
 
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
-Quantum machine learning is still in its very first stage of development, and lacks a widely recognized definition.
+Quantum machine learning is still in its very first stage of development, and lacks a widely agreed upon definition.
 However, there have been promising developments in the recent years.
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
@@ -313,10 +313,10 @@ This section describes how QML and QC algorithms were implemented, tested and be
 The experimental results described were achieved by simulating quantum circuits using SURFsara's Lisa computing system~(\cite{surfsara-lisa}).
 
 \subsection{Quantum Neural Network}
-A quantum neural network inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten images.
+A quantum neural network inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten digits.
 The famous MNIST database of handwritten digits~(\cite{mnist-digits}) was used for this (Figure~\ref{fig:mnist}).
-For initial experiment, the images of the data set were downsampled to a lower dimension and limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
-After a successful initial experiment, the experiment is extended to multi-class classification of the original $28 \times 28$ data set.
+For initial experiment, the images of the data set were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
+After a successful initial experiment, the experiment was extended to multi-class classification of the original $28 \times 28$ data set.
 \begin{figure}[ht]
 	\centering
 	\begin{subfigure}{.5\textwidth}
@@ -340,9 +340,9 @@ The problem of supervised classification in machine learning is defined as follo
 A simple example that we will tackle in this section is recognizing if a handwritten digit is a 1 or an 8.
 
 We implement a quantum neural network to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
-It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit, often known as a variational algorithm.
+It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit, known as a variational algorithm.
 An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
-The variational quantum neural network works as following:
+The variational quantum neural network classifier works as following:
 \begin{enumerate}
 	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x} using for example qRAM~(\cite{qram}).
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
@@ -364,7 +364,7 @@ The variational quantum neural network works as following:
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the quantum neural network classifier. The network consist of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{Z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the quantum neural network classifier. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{Z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 
