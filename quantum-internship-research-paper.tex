@@ -236,7 +236,7 @@ H\ket{1} &=
 =
 \dfrac{1}{\sqrt2}
 \begin{pmatrix}\phantom{-}1 \\ -1\end{pmatrix} \\
-&= \dfrac{1}{\sqrt2}(\ket{0} + \ket{1}).
+&= \dfrac{1}{\sqrt2}(\ket{0} - \ket{1}).
 \end{aligned}
 \end{equation}
 Applying the Hadamard gate again on the equal superposition created above is an example of destructive interference:
@@ -282,7 +282,7 @@ Its implications are huge for modern cryptography algorithms such as RSA, which 
 Shor showed that this can be done in polynomial time on a quantum computer~(\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
 It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}), which we are very far away from achieving (companies are currently struggling to have 50 coherent qubits).
 
-To conclude, there is some very convincing theoretical evidence that quantum computers can speedup certain computations by a large factor.
+To conclude, there is some very convincing theoretical evidence that quantum computers can speed up certain computations by a large factor.
 Till we have reached quantum supremacy though, it is just that: theoretical.
 We should however keep working with the resources we currently have available to advance the field of quantum computing and push the limitations of computation.
 
@@ -385,7 +385,7 @@ The variational quantum neural network works as following:
 \end{figure}
 
 We trained a quantum neural network using a training set of 2014 images and a test set of 843 images.
-As optimizer, we used the stochastic mini-batch gradient descent with a learning rate of $0.4$ and a batch size of $32$.
+As optimizer, we used stochastic mini-batch gradient descent with a learning rate of $0.4$ and a batch size of $32$.
 After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
 The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
 Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
