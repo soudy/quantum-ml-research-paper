@@ -159,7 +159,7 @@ For example, a three qubit state lives in a  $2^3$-dimensional Hilbert space spa
 
 \subsection{Quantum State Evolution}
 In classical computers, we manipulate bits through logical gates.
-Quantum computers use quantum gates, which transforms one quantum state to another through an operator $U$.
+Equivalently, quantum computers use quantum gates, which transforms one quantum state to another through an operator $U$.
 These operators must be unitary.
 That is, they must preserve the norm of the vector and be reversible: $U^\dagger U = UU^\dagger = I$ (where $^\dagger$ is the complex conjugate and $I$ the identity matrix).
 Single qubit states can be thought of as a vector on the surface of a sphere (the Bloch sphere).
@@ -290,13 +290,14 @@ We should however keep working with the resources we currently have available to
 It is important to note that quantum computers are still at the experimental stage, and a lot of results are theoretical.
 For example, the highest number factored by using Shor's algorithm on an actual quantum computer thus far is 21~(\cite{shor-21}).
 Furthermore, quantum supremacy, which is the potential ability of a quantum computer to solve problems that classical computers practically cannot~(\cite{preskill-qc}), has not been achieved yet as of writing this.
-Current and near future quantum computers, often referred to as Noisy Intermediate-Scale Quantum (NISQ) devices, will have about 50-100 qubits and may be able to achieve quantum supremacy~(\cite{preskill-nisq}).
+Current and near future quantum computers, often referred to as noisy intermediate-scale quantum (NISQ) devices, will have about 50-100 qubits and may be able to achieve quantum supremacy~(\cite{preskill-nisq}).
 However, they suffer from noise, which greatly limits their coherence time and thus usefulness.
 Quantum error correcting codes exist which can be used to protect from noise, but these require a high amount of qubits per logical qubit.
 
 Research has adapted to the limitations of NISQ devices, and hybrid quantum/classical algorithms have become an important area of research.
+These hybrid algorithms are often referred to as \emph{variational quantum algorithms}.
 Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems~(\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian~(\cite{vqe}).
-These hybrid algorithms typically involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
+These variational algorithms typically involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
 
 This research is focused on universal gate model quantum computers.
 There exist special purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
@@ -307,6 +308,7 @@ Quantum machine learning is still in its very first stage of development, and la
 However, there have been promising developments in the recent years.
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
+
 
 \section{Implementations and Results} \label{sec:implementation-and-results}
 This section describes how QML and QC algorithms were implemented, tested and benchmarked.
@@ -321,13 +323,13 @@ After a successful initial experiment, the experiment was extended to multi-clas
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=.85\linewidth]{figures/mnist_28x28.png}
+		\includegraphics[width=.925\linewidth]{figures/mnist_28x28.png}
 		\caption{Original data set of $28 \times 28$ images.}
 		\label{fig:mnist_28x28}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=.85\linewidth]{figures/mnist_8x8}
+		\includegraphics[width=.925\linewidth]{figures/mnist_8x8}
 		\caption{Downsampled binary data set of $8 \times 8$ images.}
 		\label{fig:mnist_8x8}
 	\end{subfigure}
@@ -388,7 +390,7 @@ We trained a quantum neural network using a training set of 2014 images and a te
 As optimizer, we used stochastic mini-batch gradient descent with a learning rate of $0.4$ and a batch size of $32$.
 After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
 The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
-Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
+Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
 It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
 \begin{figure}[ht]
 	\centering
@@ -404,7 +406,7 @@ To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28)
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.95\linewidth]{figures/mnist_28x28_ovr.png}
-	\caption{Sample of data set used for one-vs-rest classification. The classifier has to decide if a handwritten digit is 0 or not 0.}
+	\caption{Sample of data set used for one-vs-rest classification. The classifier has to decide if a handwritten digit is 0 or not 0. Note that the image vectors had to be padded with zeros to fit into a $2^{10}$-dimensional Hilbert space as $9 < \log_2(28 \cdot 28) < 10$.}
 	\label{fig:mnist_ova}
 \end{figure}
 
