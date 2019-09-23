@@ -27,6 +27,7 @@
 \renewcommand*{\arraystretch}{1.1}
 
 \DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\loss}{loss}
 
 \newcommand{\qstatezero}{
 	\begin{pmatrix}1 \\ 0\end{pmatrix}
@@ -348,7 +349,7 @@ The variational quantum neural network classifier works as following:
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
 	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta})\ket{x, 1}$, where $U(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
 	\item Measure expectation value $\expval{Z} = \bra{x, 1}U(\vec{\theta})^\dagger Z_n U(\vec{\theta})\ket{x, 1}$ of readout qubit.
-	\item Calculate and minimize the loss $L(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
+	\item Calculate and minimize $\loss(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
