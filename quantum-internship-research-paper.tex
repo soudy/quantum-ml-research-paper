@@ -89,7 +89,7 @@ This is further expanded into the following sub questions:
 
 This report is structured as follows. First, in Section~\ref{sec:methods}, we describe how the research was conducted.
 Second, in Section~\ref{sec:quantum-computation-information}, a short introduction to quantum computation and information is given.
-Third, in Section~\ref{sec:quantum-ml} and Section~\ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
+Third, in Sections~\ref{sec:classical-ml},~\ref{sec:quantum-ml} and~\ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
 Finally, in Section~\ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
 The conclusion of the research is described in Section~\ref{sec:conclusion}.
 
@@ -300,14 +300,26 @@ This research is focused on universal gate model quantum computers.
 There exist special purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
 These quantum annealers are restricted to solving optimization problems, of which its usefulness has been doubted~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
 
+\section{Classical Machine Learning} \label{sec:classical-ml}
+Before looking at quantum machine learning, we first explore classical machine learning techniques, which quantum machine learning is built upon.
+Instead of being explicitly programmed to perform a certain task, a machine learning algorithms learns by analyzing large amounts of data.
+As a subfield of artificial intelligence, machine learning is used to perform complex tasks which come natural to us humans, such as image recognition, spam detection and recommendation.
+
+Machine learning algorithms are often divided into three categories: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement learning}.
+In supervised learning, we have a predefined set of training data in which data points are correctly labeled.
+Its goal is then to predict the correct label for new data it has not seen yet.
+
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
+With the recent advances in quantum computing, it has been suggested that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum}).
 Quantum machine learning is still in its very first stage of development, and lacks a widely agreed upon definition.
 However, there have been promising developments in the recent years.
 An efficient quantum algorithm named HHL (after its inventors) for solving a system of linear equations was found by~\cite{harrow2009quantum}.
 In the years since, HHL has been proposed for multiple machine learning applications\footnote{HHL and the algorithms which use it can only provide an exponential speedup by overcoming some major caveats~(\cite{aaronson2015read}). For example, the problem of loading a large amount of classical data into a quantum computer can quickly diminish or destroy the potential quantum speedup.}, such as $k$-means clustering~(\cite{lloyd2013quantum}) and support vector machines~(\cite{rebentrost2014quantum}).
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis erat eget erat euismod dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec pharetra, magna ac tincidunt varius, neque odio lobortis velit, eget tincidunt lectus sapien ac velit. Donec maximus euismod arcu, at efficitur urna. Praesent viverra elementum elementum. Cras lacinia nisi eleifend sodales posuere. Fusce ut blandit purus, quis ornare est. Aenean varius purus lorem, a lobortis orci mollis pretium. Nulla facilisi. Nulla in neque orci. Integer dolor massa, ullamcorper nec sagittis id, mattis a lectus. Vivamus efficitur mi a elit feugiat facilisis. Ut lorem tortor, dignissim nec quam et, dapibus vehicula nibh. Quisque mollis enim quis odio interdum, ac blandit mauris maximus. Aenean ac dolor in augue accumsan porta.
 
+Fusce at sodales turpis. Nullam pulvinar rhoncus diam eu consequat. Sed et ante ac augue rutrum cursus id id mi. Quisque aliquet at lectus eget condimentum. Quisque pharetra nulla vel vestibulum vulputate. Donec blandit lacus est, sed tempor nisi laoreet eget. Mauris maximus ultricies varius. Nullam id hendrerit ante, quis efficitur nibh. Pellentesque convallis dignissim dapibus. Nunc vehicula scelerisque posuere.
 
 \section{Implementations and Results} \label{sec:implementation-and-results}
 This section describes how QML and QC algorithms were implemented, tested and benchmarked.
@@ -386,7 +398,7 @@ The variational quantum neural network classifier works as following:
 \end{figure}
 
 We trained a quantum neural network using a training set of 2014 images and a test set of 843 images.
-As optimizer, we used stochastic mini-batch gradient descent with a learning rate of $0.4$ and a batch size of $32$.
+As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.4$ and a batch size of $32$.
 After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
 The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
 Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
@@ -404,12 +416,16 @@ We use the original $28 \times 28$ MNIST data set to train a QNN to detect if a 
 To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=.95\linewidth]{figures/mnist_28x28_ovr.png}
+	\includegraphics[width=.85\linewidth]{figures/mnist_28x28_ovr.png}
 	\caption{Sample of data set used for one-vs-rest classification. The classifier has to decide if a handwritten digit is 0 or not 0. Note that the image vectors had to be padded with zeros to fit into a $2^{10}$-dimensional Hilbert space as $9 < \log_2(28 \cdot 28) < 10$.}
 	\label{fig:mnist_ova}
 \end{figure}
+As the complexity of the problem grows, we compare the performance of two optimizers: SGD and L-BFGS-B.
+
 
 \section{Conclusion} \label{sec:conclusion}
+
+\clearpage
 
 \printbibliography[heading=bibintoc]
 
