@@ -319,8 +319,8 @@ An efficient quantum algorithm named HHL (after its inventors) for solving a sys
 In the years since, HHL has been proposed for multiple machine learning applications\footnote{HHL and the algorithms which use it can only provide an exponential speedup by overcoming some major caveats~(\cite{aaronson2015read}). For example, the problem of loading a large amount of classical data into a quantum computer can quickly diminish or destroy the potential quantum speedup.}, such as $k$-means clustering~(\cite{lloyd2013quantum}) and support vector machines~(\cite{rebentrost2014quantum}).
 
 HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we won't have access to any time soon.
-To circumvent this requirement, variational quantum machine learning algorithms have become a main focus area of research.
-Variational quantum machine learning algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
+To circumvent this requirement, variational QML algorithms have become a main focus area of research.
+Variational QML algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
 Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}) and quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum}).
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
@@ -335,7 +335,7 @@ The experimental results described were achieved by simulating quantum circuits 
 \subsection{Quantum Neural Network}
 A quantum neural network inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten digits.
 The famous MNIST database of handwritten digits~(\cite{mnist-digits}) was used for this (Figure~\ref{fig:mnist}).
-For initial experiment, the images of the data set were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
+For initial experiment, the images of thes data set were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
 After a successful initial experiment, the experiment was extended to multi-class classification of the original $28 \times 28$ data set.
 \begin{figure}[ht]
 	\centering
