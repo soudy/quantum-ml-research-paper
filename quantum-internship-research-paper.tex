@@ -1,7 +1,7 @@
 \documentclass[a4paper,10pt]{article}
 
 \usepackage[utf8]{inputenx}
-\usepackage[style=apa,backend=biber,alldates=iso8601,maxcitenames=3]{biblatex}
+\usepackage[style=apa,backend=biber,alldates=iso8601]{biblatex}
 \usepackage[nottoc,notlot,notlof]{tocbibind}
 \usepackage[font={it}, labelfont=bf]{caption}
 \usepackage{hyperref}
@@ -47,7 +47,7 @@
 \addbibresource{quantum-internship-research-paper.bib}
 
 \title{Simulation of Quantum Algorithms for Solving Machine Learning and Chemistry Problems}
-\author{Steven Oud \\ \emph{SURFsara}}
+\author{Steven Oud \\ \emph{SURFsara, Amsterdam}}
 \date{\today}
 
 \begin{document}
@@ -55,9 +55,10 @@
 \maketitle
 
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis erat eget erat euismod dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec pharetra, magna ac tincidunt varius, neque odio lobortis velit, eget tincidunt lectus sapien ac velit. Donec maximus euismod arcu, at efficitur urna. Praesent viverra elementum elementum. Cras lacinia nisi eleifend sodales posuere. Fusce ut blandit purus, quis ornare est. Aenean varius purus lorem, a lobortis orci mollis pretium. Nulla facilisi. Nulla in neque orci. Integer dolor massa, ullamcorper nec sagittis id, mattis a lectus. Vivamus efficitur mi a elit feugiat facilisis. Ut lorem tortor, dignissim nec quam et, dapibus vehicula nibh. Quisque mollis enim quis odio interdum, ac blandit mauris maximus. Aenean ac dolor in augue accumsan porta.
-
-Fusce at sodales turpis. Nullam pulvinar rhoncus diam eu consequat. Sed et ante ac augue rutrum cursus id id mi. Quisque aliquet at lectus eget condimentum. Quisque pharetra nulla vel vestibulum vulputate. Donec blandit lacus est, sed tempor nisi laoreet eget. Mauris maximus ultricies varius. Nullam id hendrerit ante, quis efficitur nibh. Pellentesque convallis dignissim dapibus. Nunc vehicula scelerisque posuere.
+Quantum computing is a promising technology of the near future.
+Since its first proposal researchers have been looking to use it for solving difficult chemistry and physics problems.
+More recently, research towards its application in the field of machine learning has shown promise.
+We take a look at how to apply current state-of-the-art quantum algorithms to solve machine learning and chemistry problems.
 \end{abstract}
 
 \tableofcontents
@@ -89,14 +90,14 @@ This is further expanded into the following sub questions:
 
 This report is structured as follows. First, in Section~\ref{sec:methods}, we describe how the research was conducted.
 Second, in Section~\ref{sec:quantum-computation-information}, a short introduction to quantum computation and information is given.
-Third, in Sections~\ref{sec:classical-ml},~\ref{sec:quantum-ml} and~\ref{sec:quantum-chemistry}, research towards quantum machine learning and quantum chemistry is described.
+Third, in Sections~\ref{sec:classical-ml},~\ref{sec:quantum-ml}, and~\ref{sec:quantum-chemistry}, an overview of the (quantum) machine learning and quantum fields is given.
 Finally, in Section~\ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
 The conclusion of the research is described in Section~\ref{sec:conclusion}.
 
 \section{Methods} \label{sec:methods}
 The research in this report was done mostly through desk research, with the help and advice of my colleagues.
 The first step was to get familiar with the QML and QC fields; what background knowledge is required, what is the current state of research and what are the next steps?
-To get started, several papers in promising areas of research were provided by my colleagues. 
+To get started, several papers in promising areas of research were provided by colleagues. 
 From there, databases such as Google Scholar and arXiv were used to find further information about these areas.
 Search terms used include \emph{quantum machine learning}, \emph{quantum neural network}, \emph{quantum support vector machine}, \emph{variational quantum eigensolver}, \emph{quantum phase estimation}, \emph{quantum perceptron}, \emph{quantum classifier}, \emph{quantum machine learning library}, \emph{quantum chemistry simulation} and \emph{hybrid quantum optimization}.
 
@@ -217,7 +218,7 @@ Another frequently used gate is the Hadamard gate, which produces an equal super
 \begin{equation}
 H = \hgate{}.
 \end{equation}
-Which acts on the computational basis states as following:
+It acts on the computational basis states as following:
 \begin{equation}
 \begin{aligned}
 H\ket{0} &=
@@ -265,7 +266,7 @@ However, this would imply that $c_0c'_0 = c_1c'_1 = 1/\sqrt2$ and $c_0c'_1 = c_1
 
 The remarkable thing about entanglement is that it works over any distance.
 That is, given the state \ket{\Phi^+}, one qubit could be located in another galaxy while the other qubit is located on earth.
-When we measure the qubit on earth, we know that the qubit in the other galaxy is in the same state as we measured.
+When we measure the qubit on earth, we immediately know that the qubit in the other galaxy is in the same state as we measured.
 This does not allow for faster than light communication, as a classical channel is still required to communicate results between the observers.
 
 \subsection{Quantum Speedup}
@@ -296,9 +297,10 @@ These hybrid algorithms are often referred to as \emph{variational quantum algor
 Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems~(\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian~(\cite{vqe}).
 These variational algorithms typically involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
 
-This research is focused on universal gate model quantum computers.
+So far we have been talking about so-called universal gate model quantum computers.
 There exist special purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
 These quantum annealers are restricted to solving optimization problems, of which its usefulness has been doubted~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
+This research is focused on universal gate model quantum computers, as its usefulness and applications are more evident (although not certain).
 
 \section{Classical Machine Learning} \label{sec:classical-ml}
 Before looking at quantum machine learning, we first explore classical machine learning techniques, which quantum machine learning is built upon.
@@ -315,6 +317,11 @@ Quantum machine learning is still in its very first stage of development, and la
 However, there have been promising developments in the recent years.
 An efficient quantum algorithm named HHL (after its inventors) for solving a system of linear equations was found by~\cite{harrow2009quantum}.
 In the years since, HHL has been proposed for multiple machine learning applications\footnote{HHL and the algorithms which use it can only provide an exponential speedup by overcoming some major caveats~(\cite{aaronson2015read}). For example, the problem of loading a large amount of classical data into a quantum computer can quickly diminish or destroy the potential quantum speedup.}, such as $k$-means clustering~(\cite{lloyd2013quantum}) and support vector machines~(\cite{rebentrost2014quantum}).
+
+HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we won't have access to any time soon.
+To circumvent this requirement, variational quantum machine learning algorithms have become a main focus area of research.
+Variational quantum machine learning algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
+Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}) and quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum}).
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis erat eget erat euismod dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec pharetra, magna ac tincidunt varius, neque odio lobortis velit, eget tincidunt lectus sapien ac velit. Donec maximus euismod arcu, at efficitur urna. Praesent viverra elementum elementum. Cras lacinia nisi eleifend sodales posuere. Fusce ut blandit purus, quis ornare est. Aenean varius purus lorem, a lobortis orci mollis pretium. Nulla facilisi. Nulla in neque orci. Integer dolor massa, ullamcorper nec sagittis id, mattis a lectus. Vivamus efficitur mi a elit feugiat facilisis. Ut lorem tortor, dignissim nec quam et, dapibus vehicula nibh. Quisque mollis enim quis odio interdum, ac blandit mauris maximus. Aenean ac dolor in augue accumsan porta.
@@ -344,7 +351,7 @@ After a successful initial experiment, the experiment was extended to multi-clas
 		\caption{Downsampled binary data set of $8 \times 8$ images.}
 		\label{fig:mnist_8x8}
 	\end{subfigure}
-	\caption{Samples of MNIST data set used for quantum neural network binary classification.}
+	\caption{Samples of MNIST data set used for binary classification.}
 	\label{fig:mnist}
 \end{figure}
 
@@ -352,16 +359,16 @@ After a successful initial experiment, the experiment was extended to multi-clas
 The problem of supervised classification in machine learning is defined as following: given a training set of data whose category is known, train a model which is able to identify to which category new data belongs.
 A simple example that we will tackle in this section is recognizing if a handwritten digit is a 1 or an 8.
 
-We implement a quantum neural network to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
+We implement a QNN to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
 It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit, known as a variational algorithm.
 An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
-The variational quantum neural network classifier works as following:
+The variational QNN classifier works as following:
 \begin{enumerate}
 	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x} using for example qRAM~(\cite{qram}).
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
 	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta})\ket{x, 1}$, where $U(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
-	\item Measure expectation value $\expval{Z} = \bra{x, 1}U(\vec{\theta})^\dagger Z_n U(\vec{\theta})\ket{x, 1}$ of readout qubit.
-	\item Calculate and minimize $\loss(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
+	\item Measure expectation value $\expval{\sigma_z} = \bra{x, 1}U(\vec{\theta})^\dagger \sigma_z U(\vec{\theta})\ket{x, 1}$ of readout qubit.
+	\item Calculate and minimize $\loss(\vec{\theta}, \expval{\sigma_z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
@@ -373,11 +380,11 @@ The variational quantum neural network classifier works as following:
 		\lstick{\ket{x}~~} & & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
 		& ~~\vdots & & & ~~\hdots & & & \vdots \\
 		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
-		& \lstick{\ket{1}} & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
+		& \lstick{\ket{1}} & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{\sigma_z}} \cw
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the quantum neural network classifier. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{Z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the QNN. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 
@@ -385,19 +392,19 @@ The variational quantum neural network classifier works as following:
 	\[
 	\Large
 	\Qcircuit @C=0.7em @R=0.4em @!R {
-		& & \multigate{5}{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \ctrl{5} & \qw \\
-		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
-		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw  \\
+		& & \multigate{5}{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \qw \\
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw\\
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw  \\
 		& & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
-		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw \\
-		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \targ & \qw
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw \\
+		& & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \qw
 	}
 	\]
 	\caption{Decomposition of a layer $U(\vec{\theta}_l)$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
 	\label{fig:parametrized_unitary}
 \end{figure}
 
-We trained a quantum neural network using a training set of 2014 images and a test set of 843 images.
+We trained a QNN using a training set of 2014 images and a test set of 843 images.
 As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.4$ and a batch size of $32$.
 After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
 The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
@@ -406,22 +413,44 @@ It shows the potential, given we solve the issues surrounding qRAM~(\cite{aarons
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.9\linewidth]{figures/downsampled_qnn.png}
-	\caption{Quantum neural network performance on binary classification.}
+	\caption{Quantum neural network performance on binary classification using SGD optimizer.}
 	\label{fig:bdc-performance}
 \end{figure}
 
 \subsubsection{One-vs-Rest Classifier}
 To make a step into the direction of multi-class classification using a QNN, we first consider the problem of one-vs-rest classification.
-We use the original $28 \times 28$ MNIST data set to train a QNN to detect if a handwritten digit is 0 or not 0 (Figure~\ref{fig:mnist_ova}).
+We use the original $28 \times 28$ MNIST data set to train a QNN to detect if a handwritten digit is 0 or not 0.
 To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
+As the complexity of the problem grows, we compare the performance of multiple optimizers: SGD, RMSprop and Adam.
+We used a set of training data with 3553 samples, and a set of test data with 1960 samples.
+Some hyperparameter tuning was done to find the optimal learning rate, but more tuning can be done to possibly increase performance.
+The results of the experiment can be found in Figure~\ref{fig:ovr_results}.
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=.85\linewidth]{figures/mnist_28x28_ovr.png}
-	\caption{Sample of data set used for one-vs-rest classification. The classifier has to decide if a handwritten digit is 0 or not 0. Note that the image vectors had to be padded with zeros to fit into a $2^{10}$-dimensional Hilbert space as $9 < \log_2(28 \cdot 28) < 10$.}
-	\label{fig:mnist_ova}
+	\begin{subfigure}{1\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/qnn_ovr_accuracy.png}
+		\caption{Accuracy of training data of different optimizers tested.}
+		\vspace*{4mm}
+	\end{subfigure}
+	\begin{subfigure}{1\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/qnn_ovr_cost}
+		\caption{Cost of training data of different optimizers tested.}
+	\end{subfigure}
+	\caption{Experimental results of a one-vs-rest QNN classifier for detecting if a handwritten digit is 0 or not.}
+	\label{fig:ovr_results}
 \end{figure}
-As the complexity of the problem grows, we compare the performance of two optimizers: SGD and L-BFGS-B.
+As the feature space grows, SGD has trouble converging, resulting in a sweet spot of 4 layers where it performs best.
 
+\subsubsection{Multiclass Classifier}
+Finally we generalize the QNN to a multiclass classifier by implementing a fidelity loss function as suggested by \cite{perez2019data}.
+First, we introduce $C$ maximally orthogonal label states, where $C$ is the number of classes.
+Then, instead of using the square loss function on the expectation value, we measure the fidelity of the final state of the readout qubit and the label state.
+%\begin{equation}
+%F(\vec{\theta}, \vec{x}) = \lvert\bra{\psi_c}U(\vec{\theta})\ket{x, 1}\rvert^2.
+%\end{equation}
+The goal then is to maximize the fidelity between the final state of the readout qubit and the correct label state.
 
 \section{Conclusion} \label{sec:conclusion}
 
