@@ -258,11 +258,11 @@ However, the measurement immediately collapsed the whole state to either \ket{00
 So by measuring the first qubit, we also know the state of the second qubit.
 The individual states are related to each other, and this relation is called entanglement.
 More formally, two qubits are entangled if and only if the state of those two qubits cannot be expressed as two individual states.
-For the entangled state \ket{\Phi^+}, let's assume there exist amplitudes $\{c_0,c_1,c'_0, c'_1\}$ such that:
+For the entangled state \ket{\Phi^+}, let's assume there exist amplitudes $\{a, b, c, d\}$ such that:
 \begin{equation}
-\ket{\Phi^+} = (c_0\ket{0} + c_1\ket{1}) \otimes (c'_0\ket{0} + c'_1\ket{1}) = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
+\ket{\Phi^+} = (a\ket{0} + b\ket{1}) \otimes (c\ket{0} + d\ket{1}) = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
 \end{equation}
-However, this would imply that $c_0c'_0 = c_1c'_1 = 1/\sqrt2$ and $c_0c'_1 = c_1c'_0 = 0$, which does not have a solution.
+However, this would imply that $ac = bd = 1/\sqrt2$ and $ad = bc = 0$, which is a contradiction.
 
 The remarkable thing about entanglement is that it works over any distance.
 That is, given the state \ket{\Phi^+}, one qubit could be located in another galaxy while the other qubit is located on earth.
@@ -303,16 +303,24 @@ These quantum annealers are restricted to solving optimization problems, of whic
 This research is focused on universal gate model quantum computers, as its usefulness and applications are more evident (although not certain).
 
 \section{Classical Machine Learning} \label{sec:classical-ml}
-Before looking at quantum machine learning, we first explore classical machine learning techniques, which quantum machine learning is built upon.
+Before looking at quantum machine learning, we first explore classical machine learning techniques, which quantum machine learning is largely built upon.
 Instead of being explicitly programmed to perform a certain task, a machine learning algorithms learns by analyzing large amounts of data.
 As a subfield of artificial intelligence, machine learning is used to perform complex tasks which come natural to us humans, such as image recognition, spam detection and recommendation.
 
 Machine learning algorithms are often divided into three categories: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement learning}.
 In supervised learning, we have a predefined set of training data in which data points are correctly labeled.
-Its goal is then to predict the correct label for new data it has not seen yet.
+Its goal is then to predict the correct label for new data it has not seen.
+In unsupervised learning we do not have labeled data points, and instead we try to find previously unknown patterns in the data set.
+Finally, in reinforcement learning, an agent learns how to behave in an environment by interacting with it and receiving feedback based on these actions.
+
+The field of classical machine learning is well defined and can be used to classify images, recognize patterns and speech, play complex games and many more.
+However, as the amount of globally stored data is growing by about 20\% every year~(\cite{hilbert2011world}), researchers are looking more and more for innovative approaches to machine learning.
+A promising idea that is currently being investigated is the use of quantum computers to optimize classical machine learning algorithms~(\cite{schuld2015introduction}).
+The research field of quantum machine learning may offer new ways of intelligent data processing and even guide and advance classical machine learning.
 
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
-With the recent advances in quantum computing, it has been suggested that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum}).
+It has been known for a while that for some problems quantum algorithms can offer a speedup over their classical counterpart~(\cite{nielsen-chuang}).
+Recent advances in quantum computing suggest that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum}).
 Quantum machine learning is still in its very first stage of development, and lacks a widely agreed upon definition.
 However, there have been promising developments in the recent years.
 An efficient quantum algorithm named HHL (after its inventors) for solving a system of linear equations was found by~\cite{harrow2009quantum}.
@@ -334,9 +342,9 @@ The experimental results described were achieved by simulating quantum circuits 
 
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten digits.
-The famous MNIST database of handwritten digits~(\cite{mnist-digits}) was used for this (Figure~\ref{fig:mnist}).
-For initial experiment, the images of thes data set were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
-After a successful initial experiment, the experiment was extended to multi-class classification of the original $28 \times 28$ data set.
+The famous MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}).
+For initial experiment, the images of the data set were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
+After a successful initial experiment, the experiment was extended to one-vs-rest classification of the original $28 \times 28$ data set, and finally generalized to multi-class classification of the original data set.
 \begin{figure}[ht]
 	\centering
 	\begin{subfigure}{.5\textwidth}
@@ -355,7 +363,7 @@ After a successful initial experiment, the experiment was extended to multi-clas
 	\label{fig:mnist}
 \end{figure}
 
-\subsubsection{Binary Downsampled Classifier}
+\subsubsection{Binary Downsampled Classifier} \label{sec:bdc}
 The problem of supervised classification in machine learning is defined as following: given a training set of data whose category is known, train a model which is able to identify to which category new data belongs.
 A simple example that we will tackle in this section is recognizing if a handwritten digit is a 1 or an 8.
 
@@ -422,35 +430,41 @@ To make a step into the direction of multi-class classification using a QNN, we 
 We use the original $28 \times 28$ MNIST data set (Figure~\ref{fig:mnist_28x28}) to train a QNN to detect if a handwritten digit is 0 or not 0.
 To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
 As the complexity of the problem grows, we compare the performance of multiple optimizers: SGD, RMSprop and Adam.
-We used a set of training data with 3553 samples, and a set of test data with 1960 samples.
+We used a set of training data with 5923 samples, and a set of test data with 1960 samples.
 Some hyperparameter tuning was done to find the optimal learning rate, but more tuning can be done to possibly increase performance.
 The results of the experiment can be found in Figure~\ref{fig:ovr_results}.
+Increasing the amount of layers seems to improve convergence rate, but ultimately there doesn't seem to be a big performance difference between 4 and 8 layers.
+As the feature space grows, SGD has trouble converging, resulting in a sweet spot of 4 layers where it performs best, but it is still easily outperformed by the other optimizers.
+RMSprop and Adam both seem to converge to 92.5\% accuracy with 4 and 8 layers, and RMSprop even manages this with 2 layers.
 \begin{figure}[ht]
 	\centering
 	\begin{subfigure}{1\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_ovr_accuracy.png}
-		\caption{Accuracy of training data of different optimizers tested.}
+		\caption{Accuracy on test data set with different optimizers.}
 		\vspace*{4mm}
 	\end{subfigure}
 	\begin{subfigure}{1\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_ovr_cost}
-		\caption{Cost of training data of different optimizers tested.}
+		\caption{Cost with different optimizers.}
 	\end{subfigure}
 	\caption{Experimental results of a one-vs-rest QNN classifier for detecting if a handwritten digit is 0 or not.}
 	\label{fig:ovr_results}
 \end{figure}
-As the feature space grows, SGD has trouble converging, resulting in a sweet spot of 4 layers where it performs best.
 
 \subsubsection{Multiclass Classifier}
-Finally we generalize the QNN to a multiclass classifier by implementing a fidelity loss function as suggested by \cite{perez2019data}.
+Finally we generalize the QNN to a multiclass classifier by implementing a fidelity loss function as proposed by \cite{perez2019data}.
+To implement this we need to make some changes to the QNN described in Section~\ref{sec:bdc}.
 First, we introduce $C$ maximally orthogonal label states, where $C$ is the number of classes.
-Then, instead of using the square loss function on the expectation value, we measure the fidelity of the final state of the readout qubit and the label state.
+Then, instead of using the square loss function on the expectation value as cost, we measure the fidelity of the final state of the readout qubit and the label state.
 %\begin{equation}
 %F(\vec{\theta}, \vec{x}) = \lvert\bra{\psi_c}U(\vec{\theta})\ket{x, 1}\rvert^2.
 %\end{equation}
 The goal then is to maximize the fidelity between the final state of the readout qubit and the correct label state.
+
+We conduct a similar experiment to that from the previous section.
+The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
 
 \section{Conclusion} \label{sec:conclusion}
 
