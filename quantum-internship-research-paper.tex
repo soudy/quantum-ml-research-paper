@@ -313,7 +313,18 @@ Its goal is then to predict the correct label for new data it has not seen.
 In unsupervised learning we do not have labeled data points, and instead we try to find previously unknown patterns in the data set.
 Finally, in reinforcement learning, an agent learns how to behave in an environment by interacting with it and receiving feedback based on these actions.
 
-The field of classical machine learning is well defined and can be used to classify images, recognize patterns and speech, play complex games and many more.
+Artificial neural networks (ANN) are ubiquitous in the field of supervised machine learning.
+They are inspired by the biological neural networks found in our brains and have developed into a wide range of methods that have advanced the state of the art in various fields.
+Some of the methods include feedforward neural networks for classification and regression, convolutional neural networks for processing visual data~(\cite{cirecsan2012multi}) and generative adversarial networks for generating new data based on existing data~(\cite{goodfellow2014generative}).
+Another notable machine learning model for supervised learning is support vector machine (SVM), which can be used for classification or regression.
+They have been found to be able to solve problems such as semantic parsing~(\cite{pradhan2004shallow}) and handwritten character recognition~(\cite{decoste2002training}).
+
+A popular method of unsupervised learning is clustering.
+Clustering is the task of grouping data points together with other data points which are most similar.
+Some well-known clustering algorithms include $k$-means clustering and hierarchical clustering.
+Generative adversarial networks can be thought of as unsupervised learning algorithms and can even be used in reinforcement learning~(\cite{ho2016generative}).
+
+Classical machine learning algorithms are well defined and can be used to classify images, recognize patterns and speech, play complex games and much more.
 However, as the amount of globally stored data is growing by about 20\% every year~(\cite{hilbert2011world}), researchers are looking more and more for innovative approaches to machine learning.
 A promising idea that is currently being investigated is the use of quantum computers to optimize classical machine learning algorithms~(\cite{schuld2015introduction}).
 The research field of quantum machine learning may offer new ways of intelligent data processing and even guide and advance classical machine learning.
@@ -339,6 +350,7 @@ Fusce at sodales turpis. Nullam pulvinar rhoncus diam eu consequat. Sed et ante 
 \section{Implementations and Results} \label{sec:implementation-and-results}
 This section describes how QML and QC algorithms were implemented, tested and benchmarked.
 The experimental results described were achieved by simulating quantum circuits using SURFsara's Lisa computing system~(\cite{surfsara-lisa}).
+Simulations were executed using the PennyLane~(\cite{bergholm2018pennylane}) framework.
 
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten digits.
@@ -382,7 +394,7 @@ The variational QNN classifier works as following:
 \begin{figure}[ht]
 	\[
 	\Large
-	\Qcircuit @C=1em @R=0.3em @!R {
+	\Qcircuit @C=1em @R=0.4em @!R {
 		& & \multigate{5}{U(\vec{\theta}_1)} & \multigate{5}{U(\vec{\theta}_2)} & \qw & & \multigate{5}{U(\vec{\theta}_L)} & \qw & \qw \\
 		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
 		\lstick{\ket{x}~~} & & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
@@ -395,6 +407,13 @@ The variational QNN classifier works as following:
 	\caption{General circuit of the QNN. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
+
+We trained a QNN using a training set of 2014 images and a test set of 843 images.
+As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.4$ and a batch size of $32$.
+After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy without any hyperparameter tuning or circuit optimization.
+The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
+Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
+It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
 
 \begin{figure}[ht]
 	\[
@@ -410,19 +429,6 @@ The variational QNN classifier works as following:
 	\]
 	\caption{Decomposition of a layer $U(\vec{\theta}_l)$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
 	\label{fig:parametrized_unitary}
-\end{figure}
-
-We trained a QNN using a training set of 2014 images and a test set of 843 images.
-As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.4$ and a batch size of $32$.
-After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy (Figure~\ref{fig:bdc-performance}) without any hyperparameter tuning or circuit optimization.
-The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
-Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
-It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=.9\linewidth]{figures/downsampled_qnn.png}
-	\caption{Quantum neural network performance on binary classification using SGD optimizer.}
-	\label{fig:bdc-performance}
 \end{figure}
 
 \subsubsection{One-vs-Rest Classifier}
@@ -447,7 +453,7 @@ RMSprop and Adam both seem to converge to 92.5\% accuracy with 4 and 8 layers, a
 	\begin{subfigure}{1\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_ovr_cost}
-		\caption{Cost with different optimizers.}
+		\caption{Cost landscape of different optimizers.}
 	\end{subfigure}
 	\caption{Experimental results of a one-vs-rest QNN classifier for detecting if a handwritten digit is 0 or not.}
 	\label{fig:ovr_results}
