@@ -342,6 +342,18 @@ To circumvent this requirement, variational QML algorithms have become a main fo
 Variational QML algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
 Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}) and quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum}).
 
+Quantum machine learning can help us process the huge amounts of data we keep creating, due to their ability to encode exponentially more data in their state compared to classical bits.
+Furthermore, they can potentially speed up certain computational heavy parts used in machine learning algorithms by a large factor.
+Finally, we can use QML algorithms to learn properties about quantum states, for which exists no classical equivalent.
+
+To realize these applications we need to overcome some major obstacles.
+First, we need to build quantum computers with more qubits, better qubits and longer coherence times.
+Second, we need an efficient way to prepare classical data into a quantum state.
+A quantum random access memory (qRAM) architecture has been proposed for this~(\cite{qram}), but it largely depends on the data being uniform, which our data often is not.
+Third, similarly to the previous point, is the readout problem.
+Since measurement destroys a quantum mechanical system's wave function, we need to do repeated measurements to extract any meaningful information of the system.
+This implies we can't efficiently retrieve output data stored in an exponentially large Hilbert space.
+
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis erat eget erat euismod dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec pharetra, magna ac tincidunt varius, neque odio lobortis velit, eget tincidunt lectus sapien ac velit. Donec maximus euismod arcu, at efficitur urna. Praesent viverra elementum elementum. Cras lacinia nisi eleifend sodales posuere. Fusce ut blandit purus, quis ornare est. Aenean varius purus lorem, a lobortis orci mollis pretium. Nulla facilisi. Nulla in neque orci. Integer dolor massa, ullamcorper nec sagittis id, mattis a lectus. Vivamus efficitur mi a elit feugiat facilisis. Ut lorem tortor, dignissim nec quam et, dapibus vehicula nibh. Quisque mollis enim quis odio interdum, ac blandit mauris maximus. Aenean ac dolor in augue accumsan porta.
 
@@ -384,7 +396,7 @@ It uses a quantum circuit together with a classical optimization algorithm to fi
 An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
 The variational QNN classifier works as following:
 \begin{enumerate}
-	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x} using for example qRAM~(\cite{qram}).
+	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x}.
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
 	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta})\ket{x, 1}$, where $U(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
 	\item Measure expectation value $\expval{\sigma_z} = \bra{x, 1}U(\vec{\theta})^\dagger \sigma_z U(\vec{\theta})\ket{x, 1}$ of readout qubit.
