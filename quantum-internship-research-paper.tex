@@ -24,7 +24,7 @@
 
 \renewcommand{\abstractname}{Summary}
 \renewcommand*{\bibfont}{\small}
-\renewcommand*{\arraystretch}{1.1}
+\renewcommand*{\arraystretch}{1.2}
 
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\loss}{loss}
@@ -59,6 +59,7 @@ Quantum computing is a promising technology of the near future.
 Since its first proposal researchers have been looking to use it for solving difficult chemistry and physics problems.
 More recently, research towards its application in the field of machine learning has shown promise.
 We take a look at how to apply current state-of-the-art quantum algorithms to solve machine learning and chemistry problems.
+With the help of quantum circuit simulation we implement a variational quantum neural network for classifying handwritten digits and show that a QNN can be trained to perform binary and one-vs-rest classification.
 \end{abstract}
 
 \tableofcontents
@@ -75,7 +76,7 @@ In the context of the SURF Open Innovation Lab, SURFsara seeks to stimulate and 
 Within this context SURFsara is interested in testing, benchmarking and creating good examples of quantum computing applications that can be used by the scientific community.
 
 SURFsara HPC center supports various research institutes and universities of the Netherlands.
-The chemistry community is currently one of the largest; the machine learning community probably the fastest growing one.
+The chemistry community is currently one of the largest; the machine learning community probably the fastest growing.
 Both of these fields are large areas of research within the quantum computing field, expecting improvements to be gained from them.
 As the main interest of SURFsara is to support the potential main use cases of quantum computers in the future, the tasks of this internship will be focused on quantum machine learning (QML) and quantum chemistry (QC).
 
@@ -103,7 +104,7 @@ Search terms used include \emph{quantum machine learning}, \emph{quantum neural 
 
 \section{Quantum Computation and Information} \label{sec:quantum-computation-information}
 Quantum computers take advantage of quantum mechanical effects such as superposition and entanglement to solve certain problems faster than classical computers.
-The idea of a quantum computer was first proposed by Richard Feynman for solving problems in physics and chemistry (\cite{feynman-simulating}).
+The idea of a quantum computer was first proposed by Richard Feynman for solving problems in physics and chemistry, remarking that \say{\emph{If you want to make a simulation of nature, you'd better make it quantum mechanical, and by golly it's a wonderful problem, because it doesn't look so easy.}}~(\cite{feynman-simulating}).
 Since then the field has advanced a lot with algorithms such as Shor's algorithm for factoring integers (\cite{shor-factoring}) and Grover's search algorithm (\cite{grover-search}).
 These quantum algorithms show efficient solutions for problems that are considered hard for classical computers.
 
@@ -119,7 +120,7 @@ The state of a qubit (the so-called \emph{wave function}) can be described as fo
 \begin{equation}
 \ket{\psi} = c_0\ket{0} + c_1\ket{1}.
 \end{equation}
-Quantum states are denoted using Dirac notation \ket{\cdotp}, which is a column vector in $\mathbb{C}^n$.
+Quantum states are denoted using Dirac notation \ket{\,\cdotp\,}, which is a column vector in $\mathbb{C}^n$.
 Here the coefficients $\{c_0, c_1\}$ are complex valued numbers called \emph{probability amplitudes}.
 When we measure a quantum state, it collapses probabilistically to one of the basis states.
 The norm square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
@@ -272,8 +273,8 @@ This does not allow for faster than light communication, as a classical channel 
 \subsection{Quantum Speedup}
 Quantum algorithms promise to provide a speedup over classical algorithms by ``abusing" quantum phenomena such as superposition, interference and entanglement.
 They usually offer a quadratic or exponential speedup over their classical counterpart.
-\cite{scott-aaronson-qc} probably described it best:
-\say{The goal in quantum computing is to choreograph a computation so that the amplitudes leading to wrong answers cancel each other out, while the amplitudes leading to right answers reinforce.}
+Scott Aaronson probably described it best:
+\say{\emph{The goal in quantum computing is to choreograph a computation so that the amplitudes leading to wrong answers cancel each other out, while the amplitudes leading to right answers reinforce.}}~(\cite{scott-aaronson-qc}).
 
 The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
 Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
@@ -292,7 +293,7 @@ Current and near future quantum computers---often referred to as noisy intermedi
 However, they suffer from noise, which greatly limits their coherence time and thus usefulness.
 Quantum error correcting codes exist which can be used to protect from noise, but these require a high amount of qubits per logical qubit.
 
-Research has adapted to the limitations of NISQ devices, and hybrid quantum/classical algorithms have become an important area of research.
+Research has adapted to the limitations of NISQ devices, and hybrid quantum/classical algorithms have become an important area of research~(\cite{mcclean2016theory}).
 These hybrid algorithms are often referred to as \emph{variational quantum algorithms}.
 Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems~(\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian~(\cite{vqe}).
 These variational algorithms typically involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
@@ -331,7 +332,7 @@ The research field of quantum machine learning may offer new ways of intelligent
 
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
 It has been known for a while that for some problems quantum algorithms can offer a speedup over their classical counterpart~(\cite{nielsen-chuang}).
-Recent advances in quantum computing suggest that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum}).
+Recent advances in quantum computing suggest that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum, yoo2014quantum}).
 Quantum machine learning is still in its very first stage of development, and lacks a widely agreed upon definition.
 However, there have been promising developments in the recent years.
 An efficient quantum algorithm named HHL (after its inventors) for solving a system of linear equations was found by~\cite{harrow2009quantum}.
@@ -340,34 +341,49 @@ In the years since, HHL has been proposed for multiple machine learning applicat
 HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we won't have access to any time soon.
 To circumvent this requirement, variational QML algorithms have become a main focus area of research.
 Variational QML algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
-Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}) and quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum}).
+Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum}) and clustering~(\cite{otterbach2017unsupervised}).
 
-Quantum machine learning can help us process the huge amounts of data we keep creating, due to their ability to encode exponentially more data in their state compared to classical bits.
+Quantum machine learning can help us process the huge amounts of data we keep creating.
 Furthermore, they can potentially speed up certain computational heavy parts used in machine learning algorithms by a large factor.
 Finally, we can use QML algorithms to learn properties about quantum states, for which exists no classical equivalent.
-
-To realize these applications we need to overcome some major obstacles.
+However, to realize these applications we need to overcome some major obstacles.
 First, we need to build quantum computers with more qubits, better qubits and longer coherence times.
 Second, we need an efficient way to prepare classical data into a quantum state.
-A quantum random access memory (qRAM) architecture has been proposed for this~(\cite{qram}), but it largely depends on the data being uniform, which our data often is not.
+A quantum random access memory (qRAM) architecture has been proposed for this~(\cite{qram}), but it largely depends on the data being relatively uniform~(\cite{aaronson2015read}).
 Third, similarly to the previous point, is the readout problem.
 Since measurement destroys a quantum mechanical system's wave function, we need to do repeated measurements to extract any meaningful information of the system.
-This implies we can't efficiently retrieve output data stored in an exponentially large Hilbert space.
+So the output could be contained in an exponentially large Hilbert space, but we cannot efficiently extract this information.
 
 \section{Quantum Chemistry} \label{sec:quantum-chemistry}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis erat eget erat euismod dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec pharetra, magna ac tincidunt varius, neque odio lobortis velit, eget tincidunt lectus sapien ac velit. Donec maximus euismod arcu, at efficitur urna. Praesent viverra elementum elementum. Cras lacinia nisi eleifend sodales posuere. Fusce ut blandit purus, quis ornare est. Aenean varius purus lorem, a lobortis orci mollis pretium. Nulla facilisi. Nulla in neque orci. Integer dolor massa, ullamcorper nec sagittis id, mattis a lectus. Vivamus efficitur mi a elit feugiat facilisis. Ut lorem tortor, dignissim nec quam et, dapibus vehicula nibh. Quisque mollis enim quis odio interdum, ac blandit mauris maximus. Aenean ac dolor in augue accumsan porta.
+Since the founding of the field of quantum mechanics, we have been able to describe the state of a quantum-mechanical system by solving the Schr{\"o}dinger equation~(\cite{griffiths2018introduction}).
+However, the complexity of a quantum system grows exponentially with the number of particles.
+As Dirac noted: \say{\emph{The exact application of these laws leads to equations much too complicated to be soluble.}}~(\cite{dirac1929quantum}).
+This makes classical computers unfit for simulating quantum systems efficiently.
+Feynman proposed that we instead use quantum mechanics to simulate itself by using a quantum computer as simulation platform~(\cite{feynman-simulating}).
 
-Fusce at sodales turpis. Nullam pulvinar rhoncus diam eu consequat. Sed et ante ac augue rutrum cursus id id mi. Quisque aliquet at lectus eget condimentum. Quisque pharetra nulla vel vestibulum vulputate. Donec blandit lacus est, sed tempor nisi laoreet eget. Mauris maximus ultricies varius. Nullam id hendrerit ante, quis efficitur nibh. Pellentesque convallis dignissim dapibus. Nunc vehicula scelerisque posuere.
+It is believed that quantum computers will have applications in chemistry, biology, drug discovery and materials science~(\cite{mcardle2018quantum}).
+Several quantum algorithms have been proposed to solve problems in chemistry more efficiently~(\cite{lidar1999calculating, kassal2008polynomial, aspuru2005simulated, vqe}).
+However, currently available quantum hardware restricts these experiments to focus only on small molecules that we can already simulate classically.
+
+A fundamental problem in computational chemistry is finding the ground-state energy level of molecules~(\cite{aspuru2005simulated}).
+This has also been a main area of research in the field of quantum computational chemistry.
+There are two well-known quantum algorithms for finding the ground-state of a molecule.
+The quantum phase estimation algorithm (QPE) is one which offers an exponential speedup over classical algorithms.
+However, it requires a quantum computer to stay coherent for millions to billions of quantum gates, compared to the tens to hundreds achievable in near-term.
+An alternative algorithm suited for NISQ devices named the variational quantum eigensolver (VQE) was recently proposed~(\cite{vqe}).
+It greatly reduces the quantum resources required by using classical optimization methods combined with short quantum subroutines for measuring the expectation value of a Hamiltonian.
+The QPE and VQE algorithms can more generally be described as finding eigenvalues of a unitary operator.
+This has use cases outside chemistry such as determining the results of internet search engines~(\cite{page1999pagerank}) and designing new materials and drugs~(\cite{golub2000eigenvalue}).
 
 \section{Implementations and Results} \label{sec:implementation-and-results}
 This section describes how QML and QC algorithms were implemented, tested and benchmarked.
-The experimental results described were achieved by simulating quantum circuits using SURFsara's Lisa computing system~(\cite{surfsara-lisa}).
+The experimental results described were achieved by simulating quantum circuits using SURFsara's computing systems.
 Simulations were executed using the PennyLane~(\cite{bergholm2018pennylane}) framework.
 
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten digits.
 The famous MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}).
-For initial experiment, the images of the data set were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
+For initial experiment, the images were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
 After a successful initial experiment, the experiment was extended to one-vs-rest classification of the original $28 \times 28$ data set, and finally generalized to multi-class classification of the original data set.
 \begin{figure}[ht]
 	\centering
@@ -416,7 +432,7 @@ The variational QNN classifier works as following:
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the QNN. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 
