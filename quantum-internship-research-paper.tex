@@ -13,10 +13,12 @@
 \usepackage{xcolor}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{multirow}
 \usepackage{subcaption}
 \usepackage{multicol}
 \usepackage{dirtytalk}
 \usepackage{tikz-3dplot}
+\usepackage[outline]{contour}
 \usetikzlibrary{3d}
 
 \DeclareLanguageMapping{english}{english-apa}
@@ -27,7 +29,6 @@
 \renewcommand*{\arraystretch}{1.2}
 
 \DeclareMathOperator{\sgn}{sgn}
-\DeclareMathOperator{\loss}{loss}
 
 \newcommand{\qstatezero}{
 	\begin{pmatrix}1 \\ 0\end{pmatrix}
@@ -59,7 +60,7 @@ Quantum computing is a promising technology of the near future.
 Since its first proposal researchers have been looking to use it for solving difficult chemistry and physics problems.
 More recently, research towards its application in the field of machine learning has shown promise.
 We take a look at how to apply current state-of-the-art quantum algorithms to solve machine learning and chemistry problems.
-With the help of quantum circuit simulation we implement a variational quantum neural network for classifying handwritten digits and show that a QNN can be trained to perform binary and one-vs-rest classification.
+With the help of quantum circuit simulation we implement a variational quantum neural network for classifying handwritten digits and demonstrate that a QNN can be trained to perform binary, one-vs-rest and multiclass classification.
 \end{abstract}
 
 \tableofcontents
@@ -108,14 +109,14 @@ The idea of a quantum computer was first proposed by Richard Feynman for solving
 Since then the field has advanced a lot with algorithms such as Shor's algorithm for factoring integers (\cite{shor-factoring}) and Grover's search algorithm (\cite{grover-search}).
 These quantum algorithms show efficient solutions for problems that are considered hard for classical computers.
 
-This section summarizes basic concepts of quantum computation and information theory required to understand how quantum computers can be used to speedup certain computational problems.
-This is a very high level overview of quantum computation and is far from a complete introduction to the field.
+This section summarizes basic concepts of quantum computation and information theory.
+It is a very high level overview of quantum computation and is far from a complete introduction to the field.
 For a more complete introduction to quantum computation and information, we refer to the book by~\cite{nielsen-chuang}.
 
 \subsection{Quantum States}
 The basic and smallest unit of quantum information is the quantum bit, or \emph{qubit}.
 A qubit is a two-state quantum-mechanical system, which can be represented for example in the spin of an electron (but any quantized physical property can be used).
-A qubit can be in a state of an orthonormal basis $\{\ket{0}, \ket{1}\}$ (corresponding to spin up and spin down for the electron example), but it can also be in a linear combination, or \emph{superposition}, of states.
+A qubit can be in a state of an orthonormal basis $\{\ket{0}, \ket{1}\}$ (corresponding to spin up and spin down for the electron example), but it can also be in a linear combination, or \emph{superposition} of states.
 The state of a qubit (the so-called \emph{wave function}) can be described as following:
 \begin{equation}
 \ket{\psi} = c_0\ket{0} + c_1\ket{1}.
@@ -125,11 +126,12 @@ Here the coefficients $\{c_0, c_1\}$ are complex valued numbers called \emph{pro
 When we measure a quantum state, it collapses probabilistically to one of the basis states.
 The norm square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
 As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|c_i|^2 = 1$.
-As an example we have an arbitrary state:
+For example, consider the following arbitrary state:
 \begin{equation}
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
 \end{equation}
 After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being in the state \ket{0}, and a $|{-}\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
+
 The laws of quantum mechanics greatly restrict our access to information stored in quantum states.
 We cannot access the amplitudes of a state, other than by preparing and sampling a state many times to get an approximation. 
 When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
@@ -252,7 +254,7 @@ H\dfrac{1}{\sqrt2}(\ket{0} - \ket{1}) &= \ket{1}.
 We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$.
 
 \subsection{Entanglement} \label{sec:entanglement}
-There also exist multi-qubit gates, which are required for universal quantum computing.
+There also exist multi-qubit gates, which act on two qubits or more and are required for universal quantum computing.
 These gates introduce the phenomena entanglement.
 Consider the following state:
 \begin{equation}
@@ -283,7 +285,7 @@ Scott Aaronson probably described it best:
 The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
 Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
 Shor showed that this can be done in polynomial time on a quantum computer~(\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
-It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}), which we are very far away from achieving (companies are currently struggling to have 50 coherent qubits).
+It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}), which we are very far away from achieving as companies are currently struggling to have 50 coherent qubits.
 
 There is some very convincing theoretical evidence that quantum computers can speed up certain computations by a large factor.
 Till we have reached quantum supremacy though, it is just that: theoretical.
@@ -345,7 +347,7 @@ In the years since, HHL has been proposed for multiple machine learning applicat
 HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we won't have access to any time soon.
 To circumvent this requirement, variational QML algorithms have become a main focus area of research.
 Variational QML algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
-Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum}) and clustering~(\cite{otterbach2017unsupervised}).
+Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum, ghobadi2019power}) and clustering~(\cite{otterbach2017unsupervised}).
 
 Quantum machine learning can help us process the huge amounts of data we keep creating.
 Furthermore, they can potentially speed up certain computational heavy parts used in machine learning algorithms by a large factor.
@@ -373,7 +375,7 @@ A fundamental problem in computational chemistry is finding the ground-state ene
 This has also been a main area of research in the field of quantum computational chemistry.
 There are two well-known quantum algorithms for finding the ground-state of a molecule.
 The quantum phase estimation algorithm (QPE) is one which offers an exponential speedup over classical algorithms.
-However, it requires a quantum computer to stay coherent for millions to billions of quantum gates, compared to the tens to hundreds achievable in near-term.
+However, it requires a quantum computer to stay coherent for millions to billions of quantum gates, compared to the tens to hundreds achievable in the near-term.
 An alternative algorithm suited for NISQ devices named the variational quantum eigensolver (VQE) was recently proposed~(\cite{vqe}).
 It greatly reduces the quantum resources required by using classical optimization methods combined with short quantum subroutines for measuring the expectation value of a Hamiltonian.
 The QPE and VQE algorithms can more generally be described as finding eigenvalues of a unitary operator.
@@ -420,7 +422,7 @@ The variational QNN classifier works as following:
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
 	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta})\ket{x, 1}$, where $U(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
 	\item Measure expectation value $\expval{\sigma_z} = \bra{x, 1}U(\vec{\theta})^\dagger \sigma_z U(\vec{\theta})\ket{x, 1}$ of readout qubit.
-	\item Calculate and minimize $\loss(\vec{\theta}, \expval{\sigma_z})$ through a classical optimization algorithm.
+	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{\sigma_z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
@@ -442,8 +444,12 @@ The variational QNN classifier works as following:
 
 We trained a QNN using a training set of 2014 images and a test set of 843 images.
 As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.4$ and a batch size of $32$.
+Due to computational cost, we define one epoch as processing one mini-batch and doing one optimization step, instead of going over the whole training set in batches.
 After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy without any hyperparameter tuning or circuit optimization.
-The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a single-qubit classifier to be at least comparable with classical methods.}.
+Note that this means that the network was trained on $32 \cdot 20 = 640$ samples from the original set of 2014 images, due to our one mini-batch per epoch approach.
+Ideally we would use true mini-batches, but as we are limited to classical simulation of quantum circuits, this would take a very long time.
+
+The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods.}.
 Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
 It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
 
@@ -468,12 +474,12 @@ To make a step into the direction of multi-class classification using a QNN, we 
 We use the original $28 \times 28$ MNIST data set (Figure~\ref{fig:mnist_28x28}) to train a QNN to detect if a handwritten digit is 0 or not 0.
 To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
 As the complexity of the problem grows, we compare the performance of multiple optimizers: SGD, RMSprop and Adam.
-We used a set of training data with 5923 samples, and a set of test data with 1960 samples.
+We trained the network for 50 epochs with a batch size of 32.
 Some hyperparameter tuning was done to find the optimal learning rate, but more tuning can be done to possibly increase performance.
 The results of the experiment are shown in Figure~\ref{fig:ovr_results}.
-Increasing the amount of layers seems to improve convergence rate, but ultimately there doesn't seem to be a big performance difference between 4 and 8 layers.
-As the feature space grows, SGD has trouble converging, resulting in a sweet spot of 4 layers where it performs best, but it is still easily outperformed by the other optimizers.
-RMSprop and Adam both seem to converge to 92.5\% accuracy with 4 and 8 layers, and RMSprop even manages this with 2 layers.
+Increasing the amount of layers seems to improve convergence rate, but ultimately there doesn't seem to be a big performance gain from increasing the amount of layers for this certain problem.
+The exception to this is with SGD, which seems to benefit from more layers up to 4, after which its performance decreases again.
+RMSprop and Adam both seem to converge to around 94\% accuracy, where SGD settles in at 90\%.
 \begin{figure}[ht]
 	\centering
 	\begin{subfigure}{1\textwidth}
@@ -492,17 +498,93 @@ RMSprop and Adam both seem to converge to 92.5\% accuracy with 4 and 8 layers, a
 \end{figure}
 
 \subsubsection{Multiclass Classifier}
-Finally we generalize the QNN to a multiclass classifier by implementing a fidelity loss function as proposed by \cite{perez2019data}.
+Finally we generalize the QNN to a multiclass classifier by implementing a fidelity loss function as proposed by~\cite{perez2019data}.
 To implement this we need to make some changes to the QNN described in Section~\ref{sec:bdc}.
-First, we introduce $C$ maximally orthogonal label states, where $C$ is the number of classes.
+First, we introduce $C$ maximally orthogonal label states, where $C$ is the number of classes (Figure~\ref{fig:orthanogal_label_states}).
 Then, instead of using the square loss function on the expectation value as cost, we measure the fidelity of the final state of the readout qubit and the label state.
-%\begin{equation}
-%F(\vec{\theta}, \vec{x}) = \lvert\bra{\psi_c}U(\vec{\theta})\ket{x, 1}\rvert^2.
-%\end{equation}
 The goal then is to maximize the fidelity between the final state of the readout qubit and the correct label state.
+
+\begin{figure}[ht]
+	\contourlength{0.8pt}
+	\centering
+	\begin{blochsphere}[radius=1.75cm, tilt=15, rotation=-20, opacity=0.1, color=white]
+		\drawBallGrid[style={opacity=0.05}]{30}{30};
+		
+		\labelLatLon{zero}{90}{0};
+		\labelLatLon{min}{0}{180};
+		\labelLatLon{mini}{0}{90};
+		\labelLatLon{plusi}{180}{90};
+		\labelLatLon{plus}{0}{0};
+		\labelLatLon{one}{-90}{90};
+			
+		\drawGreatCircle[style={opacity=0.4}]{0}{0}{0};
+		\drawGreatCircle[style={opacity=0.4}]{90}{0}{0};
+		\drawGreatCircle[style={opacity=0.4}]{90}{90}{90};
+		
+		\node[right=1mm] at (plusi) {\contour{black!9}{\ket{+i}}};
+	
+		\draw[opacity=0.4] (min) -- (plus);
+		\draw[opacity=0.4] (mini) -- (plusi);
+			
+		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (plus);
+		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (min);
+		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (plusi);
+		
+		\draw[color=red, line width=0.27mm, opacity=0.7] (min) -- (plusi);
+		
+		\drawStateLatLon[statecolor=blue, statewidth=0.5pt, opacity=1]{state}{110}{-21};
+		\node[left] at (state) {\ket{\psi}};
+		
+		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (mini);
+		
+		\draw[color=red, line width=0.27mm, opacity=0.7] (plus) -- (plusi);
+		\draw[color=red, line width=0.27mm, opacity=0.7] (plus) -- (mini);
+	
+		\draw[color=red, line width=0.27mm, opacity=0.7] (min) -- (mini);
+		
+		\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (min);
+		\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (plus);
+		\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (mini);
+		
+		\node[above] at (zero) {\ket{0}};
+		\node[left=1mm] at (min) {\ket{-}};
+		\node[left] at (mini) {\contour{black!9}{\ket{-i}}};
+		\node[right=1mm] at (plus) {\ket{+}};
+
+		\node[below=1mm] at (one) {\ket{1}};
+	\end{blochsphere}
+	\caption{Bloch sphere representation of six maximally orthogonal points which are used as labels. The circuit output state \ket{\psi} would get classified to the class corresponding to the label state \ket{0} as their fidelity $\ip{0}{\psi}$ is the largest.}
+	\label{fig:orthanogal_label_states}
+\end{figure}
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
+The network was trained for 100 epochs with a batch size of 64.
+The results are shown in Table~\ref{table:multiclass_results}.
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ c|c|c } 
+		\hline
+		Optimizer & Layers & Test accuracy \\
+		\hline
+		\multirow{3}{4em}{RMSProp} & 2 & 37.6\% \\ 
+		& 4 & 52.3\% \\ 
+		& 8 & 73\% \\
+		\hline
+		\multirow{3}{4em}{Adam} & 2 & 17.7\% \\ 
+		& 4 & 21.5\% \\ 
+		& 8 & 65.8\% \\ 
+		\hline
+	\end{tabular}
+	\caption{Quantum neural network performance on multiclass classification of six classes.}
+	\label{table:multiclass_results}
+\end{table}
+
+\subsubsection{Conclusion}
+We have described and implemented a quantum neural network capable of classification.
+By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of doing binary, one-vs-rest and multiclass classification on classical data.
+The QNN is able to represent $N$-dimensional classical data in $\log_2N$ qubits and can also potentially learn properties of quantum data.
+Further improvements could be made by using more quantum-specific optimization methods~(\cite{stokes2019quantum, sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
 
 \section{Conclusion} \label{sec:conclusion}
 
