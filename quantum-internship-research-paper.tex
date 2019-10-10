@@ -26,9 +26,8 @@
 
 \renewcommand{\abstractname}{Summary}
 \renewcommand*{\bibfont}{\small}
-\renewcommand*{\arraystretch}{1.2}
 
-\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\sign}{sign}
 
 \newcommand{\qstatezero}{
 	\begin{pmatrix}1 \\ 0\end{pmatrix}
@@ -121,13 +120,14 @@ The state of a qubit (the so-called \emph{wave function}) can be described as fo
 \begin{equation}
 \ket{\psi} = c_0\ket{0} + c_1\ket{1}.
 \end{equation}
-Quantum states are denoted using Dirac notation \ket{\,\cdotp\,}, which is a column vector in $\mathbb{C}^n$.
+Quantum states are denoted using Dirac notation \ket{\,\cdotp\,} (named a \emph{ket}), which is a column vector in $\mathbb{C}^n$.
 Here the coefficients $\{c_0, c_1\}$ are complex valued numbers called \emph{probability amplitudes}.
+The computational basis states $\{\ket{0}, \ket{1}\}$ are defined as the column vectors $\begin{pmatrix}1 & 0\end{pmatrix}^T$ and $\begin{pmatrix}0 & 1\end{pmatrix}^T$ respectively.
 When we measure a quantum state, it collapses probabilistically to one of the basis states.
 The norm square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
 As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|c_i|^2 = 1$.
 For example, consider the following arbitrary state:
-\begin{equation}
+\begin{equation} \label{eq:arbitary_state_example}
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
 \end{equation}
 After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being in the state \ket{0}, and a $|{-}\sqrt3/2|^2 = 3/4$ chance of being in the state \ket{1}.
@@ -139,12 +139,27 @@ If we measure again immediately after the first measure, we get the same result 
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
 Measuring a quantum state collapses the wave function and destroys state information.
 
-We define the computational basis states $\{\ket{0}, \ket{1}\}$ as following:
+We can define measurement more systematically.
+The probability of finding a state \ket{\psi} in state \ket{\varphi} after measurement is given by
 \begin{equation}
-\ket{0} = \qstatezero{}, \quad
-\ket{1} = \qstateone{}.
+\lvert\ip{\varphi}{\psi}\rvert^2,
 \end{equation}
-This idea generalizes to multi-qubit systems.
+where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$ ($\bra{\varphi} = \ket{\varphi}^\dagger$).
+The bra ket notation $\ip{\varphi}{\psi}$ can then be thought of as the inner product between the vectors \ket{\varphi} and \ket{\psi}.
+Taking the example from Equation~\ref{eq:arbitary_state_example}, the probability of measuring \ket{0} can be calculated as following.
+First we take the inner product between \ket{0} and \ket{\psi}:
+\begin{equation}
+\begin{aligned}
+\ip{0}{\psi} &= \bra{0}\dfrac{i}{2}\ket{0} - \bra{0}\dfrac{\sqrt3}{2}\ket{1} \\
+&= \dfrac{i}{2}\ip{0}{0} - \dfrac{\sqrt3}{2}\ip{0}{1} \\
+&= \dfrac{i}{2}\begin{pmatrix}1 & 0\end{pmatrix} \qstatezero - \dfrac{\sqrt3}{2}\begin{pmatrix}1 & 0\end{pmatrix} \qstateone \\
+&= \dfrac{i}{2}. \\
+\end{aligned}
+\end{equation}
+Then we take the square norm to give $\lvert \ip{0}{\psi} \rvert^2 = \lvert i/2 \rvert^2 = 1/4$, yielding the result we expected.
+The measurement $\lvert\ip{\varphi}{\psi}\rvert^2$ is also sometimes referred to as the overlap or fidelity between \ket{\psi} and \ket{\varphi}, as it essentially measures the closeness of two quantum states.
+%The orthogonality of the computational basis states can be understood from this: $\ip{0}{0} = 1$ and $\ip{0}{1} = 0$.
+
 A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:entanglement}}:
 \begin{equation}
 \ket{\psi} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \dotsm \otimes \ket{\psi_n},
@@ -169,8 +184,8 @@ A unitary operation can then be thought of as rotations around the $x$, $y$ and 
 \begin{figure}[ht]
 	\centering
 	\hspace{1.175cm}
-	\begin{blochsphere}[radius=1.75cm, tilt=15, rotation=-20, opacity=0.1, color=white]
-		\drawBallGrid[style={opacity=0.1}]{30}{30}
+	\begin{blochsphere}[radius=1.5cm, tilt=15, rotation=-20, opacity=0.1, color=white]
+		\drawBallGrid[style={opacity=0.05}]{30}{30};
 		
 		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
 		\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
@@ -438,7 +453,7 @@ The variational QNN classifier works as following:
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sgn(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sign(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 
@@ -505,84 +520,95 @@ Then, instead of using the square loss function on the expectation value as cost
 The goal then is to maximize the fidelity between the final state of the readout qubit and the correct label state.
 We define the fidelity cost function as following:
 \begin{equation}
-\mathcal{F}(\vec{\theta}, \vec{x}) = \dfrac{1}{M} \sum_{i=0}^{M} \left(1 - \lvert \bra{s_i}U(\vec{\theta})\ket{x_i, 1} \rvert^2\right),
+\mathcal{F}(\vec{\theta}, \vec{x}) = \dfrac{1}{M} \sum_{i=0}^{M} \left(1 - \lvert \bra{y_i}U(\vec{\theta})\ket{x_i, 1} \rvert^2\right),
 \end{equation}
-where $\vec{x}$ is a set of $M$ training samples, $\ket{s_i}$ the correct label state of a sample $\vec{x_i}$ and $\vec{\theta}$ are the circuit parameters.
-
-\begin{figure}[ht]
-	\contourlength{0.8pt}
-	\centering
-	\begin{blochsphere}[radius=1.75cm, tilt=15, rotation=-20, opacity=0.1, color=white]
-		\drawBallGrid[style={opacity=0.05}]{30}{30};
-		
-		\labelLatLon{zero}{90}{0};
-		\labelLatLon{min}{0}{180};
-		\labelLatLon{mini}{0}{90};
-		\labelLatLon{plusi}{180}{90};
-		\labelLatLon{plus}{0}{0};
-		\labelLatLon{one}{-90}{90};
-			
-		\drawGreatCircle[style={opacity=0.4}]{0}{0}{0};
-		\drawGreatCircle[style={opacity=0.4}]{90}{0}{0};
-		\drawGreatCircle[style={opacity=0.4}]{90}{90}{90};
-		
-		\node[right=1mm] at (plusi) {\ket{+i}};
-	
-		\draw[opacity=0.4] (min) -- (plus);
-		\draw[opacity=0.4] (mini) -- (plusi);
-			
-		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (plus);
-		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (min);
-		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (plusi);
-		
-		\draw[color=red, line width=0.27mm, opacity=0.7] (min) -- (plusi);
-		
-		\drawStateLatLon[statecolor=blue, statewidth=0.5pt, opacity=1]{state}{110}{-21};
-		\node[left] at (state) {\ket{\psi}};
-		
-		\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (mini);
-		
-		\draw[color=red, line width=0.27mm, opacity=0.7] (plus) -- (plusi);
-		\draw[color=red, line width=0.27mm, opacity=0.7] (plus) -- (mini);
-	
-		\draw[color=red, line width=0.27mm, opacity=0.7] (min) -- (mini);
-		
-		\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (min);
-		\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (plus);
-		\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (mini);
-		
-		\node[above=1mm] at (zero) {\ket{0}};
-		\node[left=1mm] at (min) {\ket{-}};
-		\node[left] at (mini) {\contour{black!9}{\ket{-i}}};
-		\node[right=1mm] at (plus) {\ket{+}};
-
-		\node[below=1mm] at (one) {\ket{1}};
-	\end{blochsphere}
-	\caption{Bloch sphere representation of six maximally orthogonal points which are used as labels. The circuit output state \ket{\psi} would get classified to the class corresponding to the label state \ket{0} as their fidelity $\lvert\ip{0}{\psi}\rvert^2$ is the largest.}
-	\label{fig:orthanogal_label_states}
-\end{figure}
+where $\vec{x}$ is a set of $M$ training samples, $\ket{y_i}$ the correct label state of sample $\vec{x}_i$ and $\vec{\theta}$ are the circuit parameters.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
+We take the six polar states $\{\ket{0}, \ket{1}, \ket{+}, \ket{-}, \ket{+i}, \ket{-i}\}$ as our maximally orthogonal label states (Figure~\ref{fig:orthanogal_label_states}).
 The network was trained for 100 epochs with a batch size of 64.
 The results are shown in Table~\ref{table:multiclass_results}.
-\begin{table}[h!]
+\begin{table}[ht]
 	\centering
-	\begin{tabular}{ c|c|c } 
-		\hline
-		Optimizer & Layers & Test accuracy \\
-		\hline
-		\multirow{3}{4em}{RMSProp} & 2 & 37.6\% \\ 
-		& 4 & 52.3\% \\ 
-		& 8 & 73\% \\
-		\hline
-		\multirow{3}{4em}{Adam} & 2 & 17.7\% \\ 
-		& 4 & 21.5\% \\ 
-		& 8 & 65.8\% \\ 
-		\hline
-	\end{tabular}
-	\caption{Quantum neural network performance on multiclass classification of six classes.}
-	\label{table:multiclass_results}
+	\begin{minipage}{.485\textwidth}
+		\centering
+		\contourlength{1.25pt}
+		\begin{blochsphere}[radius=1.5cm, tilt=15, rotation=-20, opacity=0.1, color=white]
+			\drawBallGrid[style={opacity=0.05}]{30}{30};
+			
+			\labelLatLon{zero}{90}{0};
+			\labelLatLon{min}{0}{180};
+			\labelLatLon{mini}{0}{90};
+			\labelLatLon{plusi}{180}{90};
+			\labelLatLon{plus}{0}{0};
+			\labelLatLon{one}{-90}{90};
+				
+			\drawGreatCircle[style={opacity=0.4}]{0}{0}{0};
+			\drawGreatCircle[style={opacity=0.4}]{90}{0}{0};
+			\drawGreatCircle[style={opacity=0.4}]{90}{90}{90};
+			
+			\node[right=1mm] at (plusi) {\ket{+i}};
+		
+			\draw[opacity=0.4] (min) -- (plus);
+			\draw[opacity=0.4] (mini) -- (plusi);
+				
+			\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (plus);
+			\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (min);
+			\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (plusi);
+			
+			\draw[color=red, line width=0.27mm, opacity=0.7] (min) -- (plusi);
+			
+			\drawStateLatLon[statecolor=blue, statewidth=0.5pt, opacity=1]{state}{103}{-18};
+			\node[left] at (state) {\ket{\psi}};
+			
+			\draw[color=red, line width=0.27mm, opacity=0.7] (zero) -- (mini);
+			
+			\draw[color=red, line width=0.27mm, opacity=0.7] (plus) -- (plusi);
+			\draw[color=red, line width=0.27mm, opacity=0.7] (plus) -- (mini);
+		
+			\draw[color=red, line width=0.27mm, opacity=0.7] (min) -- (mini);
+			
+			\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (min);
+			\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (plus);
+			\draw[color=red, line width=0.27mm, opacity=0.7] (one) -- (mini);
+			
+			\node[above=1mm] at (zero) {\ket{0}};
+			\node[left=1mm] at (min) {\ket{-}};
+			\node[left] at (mini) {\contour{black!9}{\ket{-i}}};
+			\node[right=1mm] at (plus) {\ket{+}};
+	
+			\node[below=1mm] at (one) {\ket{1}};
+		\end{blochsphere}
+		\captionof{figure}{Bloch sphere representation of six maximally orthogonal points which are used as labels. The circuit output state \ket{\psi} would get classified to the class corresponding to the label state \ket{0}, as their fidelity $\lvert\ip{0}{\psi}\rvert^2$ is the largest.}
+		\label{fig:orthanogal_label_states}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.485\textwidth}
+		\centering
+		\begin{tabular}{ c|c|c } 
+			\hline
+			Optimizer & Layers & Test accuracy \\
+			\hline
+			\multirow{3}{4em}{SGD} & 4 & 0\% \\ 
+			& 8 & 0\% \\ 
+			& 10 & 0\% \\
+			& 12 & 0\% \\
+			\hline
+			\multirow{3}{4em}{RMSprop} & 4 & 0\% \\ 
+			& 8 & 0\% \\ 
+			& 10 & 0\% \\
+			& 12 & 0\% \\
+			\hline
+			\multirow{3}{4em}{Adam} & 4 & 0\% \\ 
+			& 8 & 0\% \\ 
+			& 10 & 0\% \\
+			& 12 & 0\% \\
+			\hline
+		\end{tabular}
+		\caption{Quantum neural network performance on multiclass classification of six classes.}
+		\label{table:multiclass_results}
+	\end{minipage}
 \end{table}
 
 \subsubsection{Conclusion}
