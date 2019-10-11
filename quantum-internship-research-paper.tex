@@ -125,7 +125,7 @@ Here the coefficients $\{c_0, c_1\}$ are complex valued numbers called \emph{pro
 The computational basis states $\{\ket{0}, \ket{1}\}$ are defined as the column vectors $(\begin{matrix}1 & 0\end{matrix})^T$ and $(\begin{matrix}0 & 1\end{matrix})^T$ respectively.
 When we measure a quantum state, it collapses probabilistically to one of the basis states.
 The norm square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
-As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|c_i|^2 = 1$.
+As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i}|c_i|^2 = 1$.
 For example, consider the following arbitrary state:
 \begin{equation} \label{eq:arbitary_state_example}
 \ket{\psi} = \dfrac{i}{2}\ket{0} - \dfrac{\sqrt3}{2}\ket{1}.
@@ -314,7 +314,7 @@ Current and near future quantum computers---often referred to as noisy intermedi
 However, they suffer from noise, which greatly limits their coherence time and thus usefulness.
 Quantum error correcting codes exist which can be used to protect from noise, but these require a high amount of qubits per logical qubit.
 
-Research has adapted to the limitations of NISQ devices, and hybrid quantum/classical algorithms have become an important area of research~(\cite{mcclean2016theory}).
+Research has adapted to the limitations of NISQ devices, and hybrid quantum-classical algorithms have become an important area of research~(\cite{mcclean2016theory, guerreschi2017practical}).
 These hybrid algorithms are often referred to as \emph{variational quantum algorithms}.
 Examples of such algorithms are the quantum approximate optimization algorithm (QAOA) for optimization problems~(\cite{qaoa}), and the variational quantum eigensolver (VQE) for finding eigenvalues of a Hamiltonian~(\cite{vqe}).
 These variational algorithms typically involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer.
@@ -353,7 +353,7 @@ The research field of quantum machine learning may offer new ways of intelligent
 
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
 It has been known for a while that for some problems quantum algorithms can offer a speedup over their classical counterpart~(\cite{nielsen-chuang}).
-Recent advances in quantum computing suggest that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum, yoo2014quantum}).
+Recent advances in quantum computing suggest that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum, yoo2014quantum, biamonte2017quantum}).
 Quantum machine learning is still in its very first stage of development, and lacks a widely agreed upon definition.
 However, there have been promising developments in the recent years.
 An efficient quantum algorithm named HHL (after its inventors) for solving a system of linear equations was found by~\cite{harrow2009quantum}.
@@ -362,7 +362,7 @@ In the years since, HHL has been proposed for multiple machine learning applicat
 HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we won't have access to any time soon.
 To circumvent this requirement, variational QML algorithms have become a main focus area of research.
 Variational QML algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
-Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum, ghobadi2019power}) and clustering~(\cite{otterbach2017unsupervised}).
+Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal, grant2018hierarchical}), quantum generative models~(\cite{romero2019variational, benedetti2019adversarial, benedetti2019generative}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum, ghobadi2019power}), clustering~(\cite{otterbach2017unsupervised}) and quantum Boltzmann machines~(\cite{verdon2017quantum, anschuetz2019realizing}).
 
 Quantum machine learning can help us process the huge amounts of data we keep creating.
 Furthermore, they can potentially speed up certain computational heavy parts used in machine learning algorithms by a large factor.
@@ -429,14 +429,14 @@ The problem of supervised classification in machine learning is defined as follo
 A simple example that we will tackle in this section is recognizing if a handwritten digit is a 1 or an 8.
 
 We implement a QNN to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
-It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit, known as a variational algorithm.
+It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit.
 An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
 The variational QNN classifier works as following:
 \begin{enumerate}
 	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x}.
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
-	\item Apply $L$ layers of parameterized unitaries: $U(\vec{\theta})\ket{x, 1}$, where $U(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
-	\item Measure expectation value $\expval{\sigma_z} = \bra{x, 1}U(\vec{\theta})^\dagger \sigma_z U(\vec{\theta})\ket{x, 1}$ of readout qubit.
+	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})\ket{x, 1}$, where $\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
+	\item Measure expectation value $\expval{\sigma_z} = \bra{x, 1}\mathcal{U}(\vec{\theta})^\dagger \sigma_z\, \mathcal{U}(\vec{\theta})\ket{x, 1}$ of readout qubit.
 	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{\sigma_z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
@@ -453,7 +453,7 @@ The variational QNN classifier works as following:
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta}_l)$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sign(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sign(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 
@@ -472,15 +472,15 @@ It shows the potential, given we solve the issues surrounding qRAM~(\cite{aarons
 	\[
 	\Large
 	\Qcircuit @C=0.7em @R=0.4em @!R {
-		& & & \multigate{5}{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \qw \\
-		& & & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw\\
-		& & & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw  \\
-		& & & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
-		& & & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw \\
-		& & & \ghost{U(\vec{\theta}_l)} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \qw
+		& & \multigate{5}{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \targ & \qw \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw  \\
+		& & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \ctrl{-5} & \qw
 	}
 	\]
-	\caption{Decomposition of a layer $U(\vec{\theta}_l)$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
+	\caption{Decomposition of a layer $U(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
 	\label{fig:parametrized_unitary}
 \end{figure}
 
@@ -520,9 +520,9 @@ Then, instead of using the square loss function on the expectation value as cost
 The goal then is to maximize the fidelity between the final state of the readout qubit and the correct label state.
 We define the fidelity cost function as following:
 \begin{equation}
-\mathcal{F}(\vec{\theta}, \vec{x}) = \dfrac{1}{M} \sum_{i=0}^{M} \left(1 - \lvert \bra{y_i}U(\vec{\theta})\ket{x_i, 1} \rvert^2\right),
+\mathcal{F}(\vec{\theta}) = \dfrac{1}{D} \sum_{d=1}^{D} \left(1 - \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
 \end{equation}
-where $\vec{x}$ is a set of $M$ training samples, $\ket{y_i}$ the correct label state of sample $\vec{x}_i$ and $\vec{\theta}$ are the circuit parameters.
+where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, $\vec{\theta}$ are the circuit parameters and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
