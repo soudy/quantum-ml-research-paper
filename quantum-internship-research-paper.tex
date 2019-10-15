@@ -46,7 +46,7 @@
 
 \addbibresource{quantum-internship-research-paper.bib}
 
-\title{Simulation of Quantum Algorithms for Solving Machine Learning and Chemistry Problems}
+\title{Simulation of Quantum Algorithms for Solving Machine Learning Problems}
 \author{Steven Oud \\ \emph{SURFsara, Amsterdam}}
 \date{\today}
 
@@ -58,11 +58,13 @@
 Quantum computing is a promising technology of the near future.
 Since its first proposal researchers have been looking to use it for solving difficult chemistry and physics problems.
 More recently, research towards its application in the field of machine learning has shown promise.
-We take a look at how to apply current state-of-the-art quantum algorithms to solve machine learning and chemistry problems.
+We take a look at how to apply current state-of-the-art quantum algorithms to solve machine learning problems.
 With the help of quantum circuit simulation we implement a variational quantum neural network for classifying handwritten digits and demonstrate that a QNN can be trained to perform binary, one-vs-rest and multiclass classification.
 \end{abstract}
 
 \tableofcontents
+
+\clearpage
 
 \section{Introduction}
 Quantum computing is one of the most promising technology developments of the coming years.
@@ -79,28 +81,29 @@ SURFsara HPC center supports various research institutes and universities of the
 The chemistry community is currently one of the largest; the machine learning community probably the fastest growing.
 Both of these fields are large areas of research within the quantum computing field, expecting improvements to be gained from them.
 As the main interest of SURFsara is to support the potential main use cases of quantum computers in the future, the tasks of this internship will be focused on quantum machine learning (QML) and quantum chemistry (QC).
+The first part of the internship will be focused on QML, and so will the research in this report.
 
-This report will try to give an answer to the main question ``\emph{How can quantum algorithms be implemented using simulated quantum circuits to solve machine learning and chemistry problems?}"
+This report will try to give an answer to the main question ``\emph{How can quantum algorithms be implemented using simulated quantum circuits to solve machine learning problems?}"
 This is further expanded into the following sub questions:
 \begin{enumerate}
-	\item What are current promising QML and QC algorithms?
-	\item What simulators are best suited for simulating QML and QC quantum circuits?
-	\item How can these quantum algorithms be integrated in current classical workflow of chemistry and machine learning applications?
-	\item How do these quantum algorithms perform (in regard to classical algorithms)?
+	\item What are current promising QML algorithms?
+	\item What simulators are best suited for simulating QML quantum circuits?
+	\item How can these quantum algorithms be integrated in current classical workflow of machine learning applications?
+	\item How do these quantum algorithms perform with regard to classical algorithms?
 \end{enumerate}
 
 This report is structured as follows. First, in Section~\ref{sec:methods}, we describe how the research was conducted.
 Second, in Section~\ref{sec:quantum-computation-information}, a short introduction to quantum computation and information is given.
-Third, in Sections~\ref{sec:classical-ml},~\ref{sec:quantum-ml}, and~\ref{sec:quantum-chemistry}, an overview of the (quantum) machine learning and quantum chemistry fields is given.
+Third, in Sections~\ref{sec:classical-ml} and ~\ref{sec:quantum-ml}, an overview of the (quantum) machine learning field is given.
 Finally, in Section~\ref{sec:implementation-and-results}, quantum algorithms are implemented using simulation and the results are discussed.
 The conclusion of the research is described in Section~\ref{sec:conclusion}.
 
 \section{Methods} \label{sec:methods}
 The research in this report was done mostly through desk research, with the help and advice of my colleagues.
-The first step was to get familiar with the QML and QC fields; what background knowledge is required, what is the current state of research and what are the next steps?
+The first step was to get familiar with the QML field; what background knowledge is required, what is the current state of research and what are the next steps?
 To get started, several papers in promising areas of research were provided by colleagues. 
 From there, databases such as Google Scholar and arXiv were used to find further information about these areas.
-Search terms used include \emph{quantum machine learning}, \emph{quantum neural network}, \emph{quantum support vector machine}, \emph{variational quantum eigensolver}, \emph{quantum phase estimation}, \emph{quantum perceptron}, \emph{quantum classifier}, \emph{quantum machine learning library}, \emph{quantum chemistry simulation} and \emph{hybrid quantum optimization}.
+Search terms used include \emph{quantum machine learning}, \emph{quantum neural network}, \emph{quantum support vector machine}, \emph{variational quantum eigensolver}, \emph{quantum phase estimation}, \emph{quantum perceptron}, \emph{quantum classifier}, \emph{quantum machine learning simulation}, \emph{quantum Boltzmann machine} and \emph{hybrid quantum optimization}.
 
 \section{Quantum Computation and Information} \label{sec:quantum-computation-information}
 Quantum computers take advantage of quantum mechanical effects such as superposition and entanglement to solve certain problems faster than classical computers.
@@ -135,7 +138,7 @@ After measuring this state, we have a $|i/2|^2 = 1/4$ chance of the system being
 The laws of quantum mechanics greatly restrict our access to information stored in quantum states.
 We cannot access the amplitudes of a state, other than by preparing and sampling a state many times to get an approximation. 
 When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
-If we measure again immediately after the first measure, we get the same result 100\% of the time.
+If we measure again immediately after the first measure, we get the same result.
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
 Measuring a quantum state collapses the wave function and destroys state information.
 
@@ -144,7 +147,11 @@ The probability of finding a state \ket{\psi} in state \ket{\varphi} after measu
 \begin{equation}
 \lvert\ip{\varphi}{\psi}\rvert^2,
 \end{equation}
-where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$ ($\bra{\varphi} = \ket{\varphi}^\dagger$).
+where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$.
+For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}c_0 & c_1\end{matrix})^T$, then
+\begin{equation}
+\bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}c_0^* & c_1^*\end{pmatrix}.
+\end{equation}
 The bra ket notation $\ip{\varphi}{\psi}$ can then be thought of as the inner product between the vectors \ket{\varphi} and \ket{\psi}.
 Taking the example from Equation~\ref{eq:arbitary_state_example}, the probability of measuring \ket{0} can be calculated as following.
 First we take the inner product between \ket{0} and \ket{\psi}:
@@ -156,19 +163,23 @@ First we take the inner product between \ket{0} and \ket{\psi}:
 &= \dfrac{i}{2}. \\
 \end{aligned}
 \end{equation}
-Then we take the square norm to give $\lvert \ip{0}{\psi} \rvert^2 = \lvert i/2 \rvert^2 = 1/4$, yielding the result we expected.
+Then we take the square norm to give
+\begin{equation}
+\lvert \ip{0}{\psi} \rvert^2 = \left\lvert \dfrac{i}{2} \right\rvert^2 = \dfrac{1}{4},
+\end{equation}
+yielding the result we expected.
 The measurement $\lvert\ip{\varphi}{\psi}\rvert^2$ is also sometimes referred to as the overlap or fidelity between \ket{\psi} and \ket{\varphi}, as it essentially measures the closeness of two quantum states.
-%The orthogonality of the computational basis states can be understood from this: $\ip{0}{0} = 1$ and $\ip{0}{1} = 0$.
+The orthogonality of the computational basis states can be understood from this: $\ip{0}{0} = \ip{1}{1} = 1$ and $\ip{0}{1} = \ip{1}{0} = 0$.
 
 A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:entanglement}}:
 \begin{equation}
-\ket{\psi} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \dotsm \otimes \ket{\psi_n},
+\ket{\Psi} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \dotsm \otimes \ket{\psi_n},
 \end{equation}
-resulting in a $N = 2^n$ dimensional state \ket{\psi}.
+resulting in a $N = 2^n$ dimensional state \ket{\Psi}.
 For example, a three qubit state lives in a  $2^3$-dimensional Hilbert space spanned by computational basis states $\{\ket{000}, \ket{001}, \ket{010}, \ldots, \ket{111}\}$:
 \begin{equation}
 \begin{aligned}
-\ket{\psi} &= c_0\ket{000} + c_1\ket{001} + c_2\ket{010} + \dotsm + c_{N-1}\ket{111} \\
+\ket{\Psi} &= c_0\ket{000} + c_1\ket{001} + c_2\ket{010} + \dotsm + c_{N-1}\ket{111} \\
 &= c_0\begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_1\begin{pmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_2\begin{pmatrix}0 \\ 0 \\ 1 \\ \vdots \\ 0\end{pmatrix} + \dotsm + c_{N-1}\begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 1\end{pmatrix} = \begin{pmatrix}c_0 \\ c_1 \\ c_2 \\ \vdots \\ c_{N-1}\end{pmatrix}.
 \end{aligned}
 \end{equation}
@@ -289,7 +300,7 @@ However, this would imply that $ac = bd = 1/\sqrt2$ and $ad = bc = 0$, which is 
 The remarkable thing about entanglement is that it works over any distance.
 That is, given the state \ket{\Phi^+}, one qubit could be located in another galaxy while the other qubit is located on earth.
 When we measure the qubit on earth, we immediately know that the qubit in the other galaxy is in the same state as we measured.
-This does not allow for faster than light communication, as a classical channel is still required to communicate results between the observers.
+This does not allow for faster than light communication, as a classical channel is still required to communicate the results between the observers.
 
 \subsection{Quantum Speedup}
 Quantum algorithms promise to provide a speedup over classical algorithms by ``abusing" quantum phenomena such as superposition, interference and entanglement.
@@ -372,33 +383,34 @@ First, we need to build quantum computers with more qubits, better qubits and lo
 Second, we need an efficient way to prepare classical data into a quantum state.
 A quantum random access memory (qRAM) architecture has been proposed for this~(\cite{qram}), but it largely depends on the data being relatively uniform~(\cite{aaronson2015read}).
 Third, similarly to the previous point, is the readout problem.
-Since measurement destroys a quantum mechanical system's wave function, we need to do repeated measurements to extract any meaningful information of the system.
+Since measurement is probabilistic and destroys a quantum mechanical system's wave function, we need to do repeated measurements to extract any meaningful information of the system.
 So the output could be contained in an exponentially large Hilbert space, but we cannot efficiently extract this information.
 
-\section{Quantum Chemistry} \label{sec:quantum-chemistry}
-Since the founding of the field of quantum mechanics, we have been able to describe the state of a quantum-mechanical system by solving the Schr{\"o}dinger equation~(\cite{griffiths2018introduction}).
-However, the complexity of a quantum system grows exponentially with the number of particles.
-As Dirac noted: \say{\emph{The exact application of these laws leads to equations much too complicated to be soluble.}}~(\cite{dirac1929quantum}).
-This makes classical computers unfit for simulating quantum systems efficiently.
-Feynman proposed that we instead use quantum mechanics to simulate itself by using a quantum computer as simulation platform~(\cite{feynman-simulating}).
-
-It is believed that quantum computers will have applications in chemistry, biology, drug discovery and materials science~(\cite{mcardle2018quantum}).
-Several quantum algorithms have been proposed to solve problems in chemistry more efficiently~(\cite{lidar1999calculating, kassal2008polynomial, aspuru2005simulated, vqe}).
-However, currently available quantum hardware restricts these experiments to focus only on small molecules that we can already simulate classically.
-
-A fundamental problem in computational chemistry is finding the ground-state energy level of molecules~(\cite{aspuru2005simulated}).
-This has also been a main area of research in the field of quantum computational chemistry.
-There are two well-known quantum algorithms for finding the ground-state of a molecule.
-The quantum phase estimation algorithm (QPE) is one which offers an exponential speedup over classical algorithms.
-However, it requires a quantum computer to stay coherent for millions to billions of quantum gates, compared to the tens to hundreds achievable in the near-term.
-An alternative algorithm suited for NISQ devices named the variational quantum eigensolver (VQE) was recently proposed~(\cite{vqe}).
-It greatly reduces the quantum resources required by using classical optimization methods combined with short quantum subroutines for measuring the expectation value of a Hamiltonian.
-The QPE and VQE algorithms can more generally be described as finding eigenvalues of a unitary operator.
-This has use cases outside chemistry such as determining the results of internet search engines~(\cite{page1999pagerank}) and designing new materials and drugs~(\cite{golub2000eigenvalue}).
+%\section{Quantum Chemistry} \label{sec:quantum-chemistry}
+%Since the founding of the field of quantum mechanics, we have been able to describe the state of a quantum-mechanical system by solving the Schr{\"o}dinger equation~(\cite{griffiths2018introduction}).
+%However, the complexity of a quantum system grows exponentially with the number of particles.
+%As Dirac noted: \say{\emph{The exact application of these laws leads to equations much too complicated to be soluble.}}~(\cite{dirac1929quantum}).
+%This makes classical computers unfit for simulating quantum systems efficiently.
+%Feynman proposed that we instead use quantum mechanics to simulate itself by using a quantum computer as simulation platform~(\cite{feynman-simulating}).
+%
+%It is believed that quantum computers will have applications in chemistry, biology, drug discovery and materials science~(\cite{mcardle2018quantum}).
+%Several quantum algorithms have been proposed to solve problems in chemistry more efficiently~(\cite{lidar1999calculating, kassal2008polynomial, aspuru2005simulated, vqe}).
+%However, currently available quantum hardware restricts these experiments to focus only on small molecules that we can already simulate classically.
+%
+%A fundamental problem in computational chemistry is finding the ground-state energy level of molecules~(\cite{aspuru2005simulated}).
+%This has also been a main area of research in the field of quantum computational chemistry.
+%There are two well-known quantum algorithms for finding the ground-state of a molecule.
+%The quantum phase estimation algorithm (QPE) is one which offers an exponential speedup over classical algorithms.
+%However, it requires a quantum computer to stay coherent for millions to billions of quantum gates, compared to the tens to hundreds achievable in the near-term.
+%An alternative algorithm suited for NISQ devices named the variational quantum eigensolver (VQE) was recently proposed~(\cite{vqe}).
+%It greatly reduces the quantum resources required by using classical optimization methods combined with short quantum subroutines for measuring the expectation value of a Hamiltonian.
+%The QPE and VQE algorithms can more generally be described as finding eigenvalues of a unitary operator.
+%This has use cases outside chemistry such as determining the results of internet search engines~(\cite{page1999pagerank}) and designing new materials and drugs~(\cite{golub2000eigenvalue}).
 
 \section{Implementations and Results} \label{sec:implementation-and-results}
-This section describes how QML and QC algorithms were implemented, tested and benchmarked.
-The experimental results described were achieved by simulating quantum circuits using SURFsara's computing systems.
+This section describes how QML algorithms were implemented, tested and benchmarked.
+While the final goal would be to run these algorithms on actual quantum hardware, we will focus on simulation because of the limitations of current quantum hardware.
+The experimental results described were obtained by simulating quantum circuits using SURFsara's computing systems.
 Simulations were executed using the PennyLane~(\cite{bergholm2018pennylane}) framework.
 
 \subsection{Quantum Neural Network}
@@ -420,7 +432,7 @@ After a successful initial experiment, the experiment was extended to one-vs-res
 		\caption{Downsampled binary data set of $8 \times 8$ images.}
 		\label{fig:mnist_8x8}
 	\end{subfigure}
-	\caption{Samples of MNIST data set used for binary classification.}
+	\caption{Samples of MNIST data set used for classification.}
 	\label{fig:mnist}
 \end{figure}
 
@@ -474,9 +486,9 @@ It shows the potential, given we solve the issues surrounding qRAM~(\cite{aarons
 	\Qcircuit @C=0.7em @R=0.4em @!R {
 		& & \multigate{5}{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \targ & \qw \\
 		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw  \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw \\
 		& & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw \\
+		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw  \\
 		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \ctrl{-5} & \qw
 	}
 	\]
@@ -489,12 +501,12 @@ To make a step into the direction of multi-class classification using a QNN, we 
 We use the original $28 \times 28$ MNIST data set (Figure~\ref{fig:mnist_28x28}) to train a QNN to detect if a handwritten digit is 0 or not 0.
 To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
 As the complexity of the problem grows, we compare the performance of multiple optimizers: SGD, RMSprop and Adam.
-We trained the network for 50 epochs with a batch size of 32.
+We trained the network for 100 epochs with a batch size of 64.
 Some hyperparameter tuning was done to find the optimal learning rate, but more tuning can be done to possibly increase performance.
 The results of the experiment are shown in Figure~\ref{fig:ovr_results}.
 Increasing the amount of layers seems to improve convergence rate, but ultimately there doesn't seem to be a big performance gain from increasing the amount of layers for this certain problem.
-The exception to this is with SGD, which seems to benefit from more layers up to 4, after which its performance decreases again.
-RMSprop and Adam both seem to converge to around 94\% accuracy, where SGD settles in at 90\%.
+The exception to this is SGD, which seems to benefit from more layers up to 4, after which its performance decreases again.
+RMSprop and Adam both seem to converge to around 95\% accuracy, where SGD settles in at 90\%.
 \begin{figure}[ht]
 	\centering
 	\begin{subfigure}{1\textwidth}
@@ -519,19 +531,23 @@ First, we introduce $C$ maximally orthogonal label states, where $C$ is the numb
 Then, instead of using the square loss function on the expectation value as cost, we measure the fidelity of the final state of the readout qubit and the label state.
 The goal then is to maximize the fidelity between the final state of the readout qubit and the correct label state.
 We define the fidelity cost function as following:
+%\begin{equation}
+%\mathcal{F}(\vec{\theta}) = \dfrac{1}{D} \sum_{d=1}^{D} \left(1 - \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
+%\end{equation}
 \begin{equation}
-\mathcal{F}(\vec{\theta}) = \dfrac{1}{D} \sum_{d=1}^{D} \left(1 - \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
+\mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
 \end{equation}
-where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, $\vec{\theta}$ are the circuit parameters and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
+where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
+We use a negative log likelihood cost function, as the fidelity of quantum states ranges between 0 and 1.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
 We take the six polar states $\{\ket{0}, \ket{1}, \ket{+}, \ket{-}, \ket{+i}, \ket{-i}\}$ as our maximally orthogonal label states (Figure~\ref{fig:orthanogal_label_states}).
-The network was trained for 100 epochs with a batch size of 64.
+The network was trained for 200 epochs with a batch size of 32.
 The results are shown in Table~\ref{table:multiclass_results}.
 \begin{table}[ht]
 	\centering
-	\begin{minipage}{.485\textwidth}
+	\begin{minipage}{.49\textwidth}
 		\centering
 		\contourlength{1.25pt}
 		\begin{blochsphere}[radius=1.5cm, tilt=15, rotation=-20, opacity=0.1, color=white]
@@ -584,40 +600,40 @@ The results are shown in Table~\ref{table:multiclass_results}.
 		\label{fig:orthanogal_label_states}
 	\end{minipage}
 	\hfill
-	\begin{minipage}{.485\textwidth}
+	\begin{minipage}{.45\textwidth}
 		\centering
+		{\renewcommand{\arraystretch}{1.2}
 		\begin{tabular}{ c|c|c } 
 			\hline
 			Optimizer & Layers & Test accuracy \\
 			\hline
-			\multirow{3}{4em}{SGD} & 4 & 0\% \\ 
-			& 8 & 0\% \\ 
-			& 10 & 0\% \\
+			\multirow{3}{5em}{SGD ($\eta = 0.05$)} & 4 & 25.3\% \\ 
+			& 8 & 26.3\% \\ 
+			& 10 & 41.4\% \\
 			& 12 & 0\% \\
 			\hline
-			\multirow{3}{4em}{RMSprop} & 4 & 0\% \\ 
-			& 8 & 0\% \\ 
-			& 10 & 0\% \\
+			\multirow{3}{5em}{RMSprop ($\eta = 0.01$)} & 4 & 47.7\% \\ 
+			& 8 & 69.2\% \\ 
+			& 10 & 67.4\% \\
 			& 12 & 0\% \\
 			\hline
-			\multirow{3}{4em}{Adam} & 4 & 0\% \\ 
-			& 8 & 0\% \\ 
-			& 10 & 0\% \\
+			\multirow{3}{5em}{Adam ($\eta = 0.02$)} & 4 & 54.9\% \\ 
+			& 8 & 62.4\% \\ 
+			& 10 & 73.2\% \\
 			& 12 & 0\% \\
 			\hline
 		\end{tabular}
+		}
 		\caption{Quantum neural network performance on multiclass classification of six classes.}
 		\label{table:multiclass_results}
 	\end{minipage}
 \end{table}
 
-\subsubsection{Conclusion}
+\section{Conclusion} \label{sec:conclusion}
 We have described and implemented a quantum neural network capable of classification.
 By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of doing binary, one-vs-rest and multiclass classification on classical data.
 The QNN is able to represent $N$-dimensional classical data in $\log_2N$ qubits and can also potentially learn properties of quantum data.
 Further improvements could be made by using more quantum-specific optimization methods~(\cite{stokes2019quantum, sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
-
-\section{Conclusion} \label{sec:conclusion}
 
 \clearpage
 
