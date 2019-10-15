@@ -108,7 +108,7 @@ Search terms used include \emph{quantum machine learning}, \emph{quantum neural 
 \section{Quantum Computation and Information} \label{sec:quantum-computation-information}
 Quantum computers take advantage of quantum mechanical effects such as superposition and entanglement to solve certain problems faster than classical computers.
 The idea of a quantum computer was first proposed by Richard Feynman for solving problems in physics and chemistry, remarking that \say{\emph{If you want to make a simulation of nature, you'd better make it quantum mechanical, and by golly it's a wonderful problem, because it doesn't look so easy.}}~(\cite{feynman-simulating}).
-Since then the field has advanced a lot with algorithms such as Shor's algorithm for factoring integers (\cite{shor-factoring}) and Grover's search algorithm (\cite{grover-search}).
+Since then the field has advanced a lot with algorithms such as Shor's algorithm for factoring integers~(\cite{shor-factoring}) and Grover's search algorithm~(\cite{grover-search}).
 These quantum algorithms show efficient solutions for problems that are considered hard for classical computers.
 
 This section summarizes basic concepts of quantum computation and information theory.
@@ -141,35 +141,6 @@ When we measure a state, it collapses to a basis state \ket{j} with probability 
 If we measure again immediately after the first measure, we get the same result.
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
 Measuring a quantum state collapses the wave function and destroys state information.
-
-We can define measurement more systematically.
-The probability of finding a state \ket{\psi} in state \ket{\varphi} after measurement is given by
-\begin{equation}
-\lvert\ip{\varphi}{\psi}\rvert^2,
-\end{equation}
-where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$.
-For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}c_0 & c_1\end{matrix})^T$, then
-\begin{equation}
-\bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}c_0^* & c_1^*\end{pmatrix}.
-\end{equation}
-The bra ket notation $\ip{\varphi}{\psi}$ can then be thought of as the inner product between the vectors \ket{\varphi} and \ket{\psi}.
-Taking the example from Equation~\ref{eq:arbitary_state_example}, the probability of measuring \ket{0} can be calculated as following.
-First we take the inner product between \ket{0} and \ket{\psi}:
-\begin{equation}
-\begin{aligned}
-\ip{0}{\psi} &= \bra{0}\dfrac{1}{\sqrt2}\ket{0} - \bra{0}\dfrac{i}{\sqrt2}\ket{1} \\
-&= \dfrac{1}{\sqrt2}\ip{0}{0} - \dfrac{i}{\sqrt2}\ip{0}{1} \\
-&= \dfrac{1}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstatezero - \dfrac{i}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstateone \\
-&= \dfrac{1}{\sqrt2}. \\
-\end{aligned}
-\end{equation}
-Then we take the square norm to give
-\begin{equation}
-\lvert \ip{0}{\psi} \rvert^2 = \left\lvert \dfrac{1}{\sqrt2} \right\rvert^2 = \dfrac{1}{2},
-\end{equation}
-yielding the result we expected.
-The measurement $\lvert\ip{\varphi}{\psi}\rvert^2$ is also sometimes referred to as the overlap or fidelity between \ket{\psi} and \ket{\varphi}, as it essentially measures the closeness of two quantum states.
-The orthogonality of the computational basis states can be understood from this: $\ip{0}{0} = \ip{1}{1} = 1$ and $\ip{0}{1} = \ip{1}{0} = 0$.
 
 A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:entanglement}}:
 \begin{equation}
@@ -279,13 +250,40 @@ H\dfrac{1}{\sqrt2}(\ket{0} - \ket{1}) &= \ket{1}.
 \end{equation}
 We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$.
 
+\subsection{Measurement}
+We can define measurement more systematically.
+The probability of finding a state \ket{\psi} in state \ket{\varphi} after measurement is given by
+\begin{equation}
+\lvert\ip{\varphi}{\psi}\rvert^2,
+\end{equation}
+where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$.
+For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}c_0 & c_1\end{matrix})^T$, then $\bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}c_0^* & c_1^*\end{pmatrix}$.
+The bra ket notation $\ip{\varphi}{\psi}$ can then be thought of as the inner product between the vectors \ket{\varphi} and \ket{\psi}.
+Taking the example from Equation~\ref{eq:arbitary_state_example}, the probability of measuring \ket{0} can be calculated as following.
+First we take the inner product between \ket{0} and \ket{\psi}:
+\begin{equation}
+\begin{aligned}
+\ip{0}{\psi} &= \bra{0}\dfrac{1}{\sqrt2}\ket{0} - \bra{0}\dfrac{i}{\sqrt2}\ket{1} \\
+&= \dfrac{1}{\sqrt2}\ip{0}{0} - \dfrac{i}{\sqrt2}\ip{0}{1} \\
+&= \dfrac{1}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstatezero - \dfrac{i}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstateone \\
+&= \dfrac{1}{\sqrt2}. \\
+\end{aligned}
+\end{equation}
+Then we take the square norm to give $\lvert \ip{0}{\psi} \rvert^2 = \lvert 1/\sqrt2 \rvert^2 = 1/2$,
+yielding the result we expected.
+The measurement $\lvert\ip{\varphi}{\psi}\rvert^2$ is also sometimes referred to as the overlap or fidelity between \ket{\psi} and \ket{\varphi}, as it essentially measures the closeness of two quantum states.
+The orthogonality of the computational basis states can be understood from this: $\ip{0}{0} = \ip{1}{1} = 1$ and $\ip{0}{1} = \ip{1}{0} = 0$.
+
 When we measure a quantum state, we measure with respect to a basis.
 So far we have been describing measurement in the computational basis, which for a single qubit consists of the basis states $\{\ket{0}, \ket{1}\}$.
-However, the choice of basis is arbitrary and can be described more generally.
+However, choice of basis is arbitrary and can be described more generally.
 We can describe a measurement by an observable $O$, which is a Hermitian operator.
 When we measure an observable $O$, we measure one of its eigenvalues $\lambda_i$, and the state collapses to the associated eigenvector \ket{\lambda_i}.
 In the computational basis, we measure the Pauli Z operator $\sigma_z$ (Equation~\ref{eq:paulis}), which has eigenvalues $\{1, -1\}$ and eigenvectors $\{\ket{0}, \ket{1}\}$.
-We can then calculate the expectation value $\expval{O}$ of an observable $O$ as follows:
+
+We are often interested in the expectation value of an observable for a state \ket{\psi}.
+The expectation value \expval{O} of an observable $O$ can be thought of as an average of all the possible measurement outcomes (the eigenvalues of $O$), weighted by their probability.
+It can be calculated as following:
 \begin{equation}
 \begin{aligned}
 \expval{O} &= \bra{\psi}O\ket{\psi} \\
@@ -295,13 +293,11 @@ We can then calculate the expectation value $\expval{O}$ of an observable $O$ as
 &= \sum_{i=0}^{N-1} \lvert c_i\rvert^2\lambda_i.
 \end{aligned}
 \end{equation}
-The expectation value of an observable $O$ can be thought of as an average of all the possible measurement outcomes (the eigenvalues of $O$), weighted by their probability.
-Experimentally, this would mean doing repeated measurements until you get a good approximation of $\expval{O}$.
-Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
+%Experimentally, this would mean doing repeated measurements until you get a good approximation of $\expval{O}$.
+%Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
 
 \subsection{Entanglement} \label{sec:entanglement}
-There also exist multi-qubit gates, which act on two qubits or more and are required for universal quantum computing.
-These gates introduce the phenomena entanglement.
+Multi-qubit systems introduce the phenomena of entanglement.
 Consider the following state:
 \begin{equation}
 \ket{\Phi^+} = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
@@ -331,11 +327,10 @@ Scott Aaronson probably described it best:
 The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
 Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
 Shor showed that this can be done in polynomial time on a quantum computer~(\cite{shor-factoring}), providing an exponential speedup over classical algorithms. 
-It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}), which we are very far away from achieving as companies are currently struggling to have 50 coherent qubits.
+It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}).
 
-There is some very convincing theoretical evidence that quantum computers can speed up certain computations by a large factor.
-Till we have reached quantum supremacy though, it is just that: theoretical.
-We should however keep working with the resources we currently have available to advance the field of quantum computing and push the limitations of computation.
+There are other quantum algorithms which promise a significant speed up, such as Grover's algorithms for searching unstructured databases~(\cite{grover-search}) and the quantum phase estimation algorithms for finding eigenvalues of a unitary operator~(\cite{nielsen-chuang}).
+However, these algorithms often require quantum computers with millions of coherent qubits, which we will most likely not have access to any time soon.
 
 \subsection{Current State of Quantum Computing}
 It is important to note that quantum computers are still at the experimental stage, and a lot of results are theoretical.
