@@ -89,7 +89,7 @@ This is further expanded into the following sub questions:
 	\item What are current promising QML algorithms?
 	\item What simulators are best suited for simulating QML quantum circuits?
 	\item How can these quantum algorithms be integrated in current classical workflow of machine learning applications?
-	\item How do these quantum algorithms perform with regard to classical algorithms?
+	\item How do these quantum algorithms compare to classical algorithms?
 \end{enumerate}
 
 This report is structured as follows. First, in Section~\ref{sec:methods}, we describe how the research was conducted.
@@ -142,7 +142,7 @@ If we measure again immediately after the first measure, we get the same result.
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
 Measuring a quantum state collapses the wave function and destroys state information.
 
-A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:entanglement}}:
+A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:quantum_state_evolution}}:
 \begin{equation}
 \ket{\Psi} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \dotsm \otimes \ket{\psi_n},
 \end{equation}
@@ -154,43 +154,61 @@ For example, a three qubit state lives in a  $2^3$-dimensional Hilbert space spa
 &= c_0\begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_1\begin{pmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_2\begin{pmatrix}0 \\ 0 \\ 1 \\ \vdots \\ 0\end{pmatrix} + \dotsm + c_{N-1}\begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 1\end{pmatrix} = \begin{pmatrix}c_0 \\ c_1 \\ c_2 \\ \vdots \\ c_{N-1}\end{pmatrix}.
 \end{aligned}
 \end{equation}
+Note that the state space of a quantum state grows exponentially with the number of qubits.
+This is where some of the potential power of quantum computers comes from, we need $2^n$ complex numbers to describe an $n$ qubit state.
 
-\subsection{Quantum State Evolution}
+\subsection{Quantum State Evolution} \label{sec:quantum_state_evolution}
 In classical computers, we manipulate bits through logical gates.
 Equivalently, quantum computers use quantum gates, which transforms one quantum state to another through an operator $U$.
 These operators must be unitary.
 That is, they must preserve the norm of the vector and be reversible: $U^\dagger U = UU^\dagger = I$ (where $^\dagger$ is the complex conjugate and $I$ the identity matrix).
 Single qubit states can be thought of as a vector on the surface of a sphere (the Bloch sphere).
 A unitary operation can then be thought of as rotations around the $x$, $y$ and $z$ axes of the sphere (Figure~\ref{fig:bloch-sphere}).
+For bigger and more complex quantum operations we will often use circuit notation, as shown in Figure~\ref{fig:quantum_circuit}.
 
 \begin{figure}[ht]
 	\centering
-	\hspace{1.175cm}
-	\begin{blochsphere}[radius=1.5cm, tilt=15, rotation=-20, opacity=0.1, color=white]
-		\drawBallGrid[style={opacity=0.05}]{30}{30};
-		
-		\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
-		\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
-		\drawStatePolar[axisarrow=true, statewidth=0.5]{z-axis}{0}{0}
-		\node[left] at (x-axis) {$x$};
-		\node[right] at (y-axis) {$y$};
-		\node[left] at (z-axis) {$z$};
-		
-	    \drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
-		
-		\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
-		\node[above right] at (start_state) {\ket{\psi}};
-		
-		\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{125}{14}
-		\node[right=1mm] at (end_state) {$\ket{\psi'} = U\ket{\psi}$};
-		
-		\labelLatLon{up}{90}{0};
-		\labelLatLon{down}{-90}{90};
-		\node[above=1mm] at (up) {\ket{0}};
-		\node[below=1mm] at (down) {\ket{1}};
-	\end{blochsphere}
-	\caption{Arbitrary transformation of state \ket{\psi} by operator $U$ visualized on the Bloch sphere.}
-	\label{fig:bloch-sphere}
+	\begin{minipage}{.49\textwidth}
+		\centering
+		\hspace{1.5cm}
+		\begin{blochsphere}[radius=1.75cm, tilt=15, rotation=-20, opacity=0.1, color=white]
+			\drawBallGrid[style={opacity=0.05}]{30}{30};
+			
+			\drawStatePolar[axisarrow=true, statewidth=0.5]{x-axis}{90}{90}
+			\drawStatePolar[axisarrow=true, statewidth=0.5]{y-axis}{90}{0}
+			\drawStatePolar[axisarrow=true, statewidth=0.5]{z-axis}{0}{0}
+			\node[left] at (x-axis) {$x$};
+			\node[right] at (y-axis) {$y$};
+			\node[left] at (z-axis) {$z$};
+			
+			\drawBallGrid[style={opacity=0.25, loosely dashed}]{180}{180}
+			
+			\drawStatePolar[statecolor=blue, statewidth=0.5, labelmark=true]{start_state}{15}{14}
+			\node[above right] at (start_state) {\ket{\psi}};
+			
+			\drawStatePolar[statecolor=red, statewidth=0.5, labelmark=true]{end_state}{125}{14}
+			\node[right=1mm] at (end_state) {$\ket{\psi'} = U\ket{\psi}$};
+			
+			\labelLatLon{up}{90}{0};
+			\labelLatLon{down}{-90}{90};
+			\node[above=1mm] at (up) {\ket{0}};
+			\node[below=1mm] at (down) {\ket{1}};
+		\end{blochsphere}
+		\caption{Arbitrary transformation of state \ket{\psi} by operator $U$ visualized on the Bloch sphere.}
+		\label{fig:bloch-sphere}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.48\textwidth}
+		\centering
+		\[
+		\Large
+		\Qcircuit @C=1em @R=0em {
+			& \lstick{\ket{\psi}} & \gate{U} & \qw & \ket{\psi'}
+		}
+		\]
+		\caption{Quantum circuit notation of the operation $\ket{\psi'} = U\ket{\psi}$.}
+		\label{fig:quantum_circuit}
+	\end{minipage}
 \end{figure}
 
 As an example, the $X$ gate is equivalent to the classical \textsc{not}: $X\ket{0} = \ket{1}$ and $X\ket{1} = \ket{0}$.
@@ -223,8 +241,8 @@ It acts on the computational basis states as following:
 \begin{aligned}
 H\ket{0} &=
 \hgate{}
-\qstatezero{}
-=
+\qstatezero{} \\
+&=
 \dfrac{1}{\sqrt2}
 \begin{pmatrix}1 \\ 1\end{pmatrix} \\
 &= \dfrac{1}{\sqrt2}(\ket{0} + \ket{1}),
@@ -234,74 +252,51 @@ H\ket{0} &=
 \begin{aligned}
 H\ket{1} &=
 \hgate{}
-\qstateone{}
-=
+\qstateone{} \\
+&=
 \dfrac{1}{\sqrt2}
 \begin{pmatrix}\phantom{-}1 \\ -1\end{pmatrix} \\
 &= \dfrac{1}{\sqrt2}(\ket{0} - \ket{1}).
 \end{aligned}
 \end{equation}
 Applying the Hadamard gate again on the equal superposition created above is an example of destructive interference:
-\begin{equation}
-\begin{aligned}
+\begin{align}
 H\dfrac{1}{\sqrt2}(\ket{0} + \ket{1}) &= \ket{0}, \\
 H\dfrac{1}{\sqrt2}(\ket{0} - \ket{1}) &= \ket{1}.
-\end{aligned}
-\end{equation}
+\end{align}
 We find that applying the Hadamard twice is the same as doing nothing, or more formally, we say the Hadamard gate is \emph{Hermitian}: $H = H^\dagger$.
 
-\subsection{Measurement}
-We can define measurement more systematically.
-The probability of finding a state \ket{\psi} in state \ket{\varphi} after measurement is given by
-\begin{equation}
-\lvert\ip{\varphi}{\psi}\rvert^2,
-\end{equation}
-where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$.
-For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}c_0 & c_1\end{matrix})^T$, then 
-\begin{equation}
-\bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}c_0^* & c_1^*\end{pmatrix}.
-\end{equation}
-The bra ket notation $\ip{\varphi}{\psi}$ can then be thought of as the inner product between the vectors \ket{\varphi} and \ket{\psi}.
-Taking the example from Equation~\ref{eq:arbitary_state_example}, the probability of measuring \ket{0} can be calculated as following.
-First we take the inner product between \ket{0} and \ket{\psi}:
+Multi-qubit gates act on two or more qubits and are required for universal quantum computing.
+The CNOT (controlled \textsc{not}) gate is a quantum gate comparable to a classical \textsc{xor} gate.
+It acts on two qubits: a control qubit, and a target qubit.
+If the control is set to 0, the target qubit is left alone.
+If the control is set to 1, the target qubit is flipped.
+It acts on the computational basis states as following (with the control qubit being the leftmost qubit):
 \begin{equation}
 \begin{aligned}
-\ip{0}{\psi} &= \bra{0}\dfrac{1}{\sqrt2}\ket{0} - \bra{0}\dfrac{i}{\sqrt2}\ket{1} \\
-&= \dfrac{1}{\sqrt2}\ip{0}{0} - \dfrac{i}{\sqrt2}\ip{0}{1} \\
-&= \dfrac{1}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstatezero - \dfrac{i}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstateone \\
-&= \dfrac{1}{\sqrt2}. \\
+\text{CNOT}\ket{00} = \ket{00}, \\
+\text{CNOT}\ket{01} = \ket{01}, \\
+\text{CNOT}\ket{10} = \ket{11}, \\
+\text{CNOT}\ket{11} = \ket{10}.
 \end{aligned}
 \end{equation}
-Then we take the square norm to give $\lvert \ip{0}{\psi} \rvert^2 = \lvert 1/\sqrt2 \rvert^2 = 1/2$,
-yielding the result we expected.
-The measurement $\lvert\ip{\varphi}{\psi}\rvert^2$ is also sometimes referred to as the overlap or fidelity between \ket{\psi} and \ket{\varphi}, as it essentially measures the closeness of two quantum states.
-The orthogonality of the computational basis states can be understood from this: $\ip{0}{0} = \ip{1}{1} = 1$ and $\ip{0}{1} = \ip{1}{0} = 0$.
+The circuit notation of the CNOT gate is shown in Figure~\ref{fig:cnot_gate}.
 
-When we measure a quantum state, we measure with respect to a basis.
-So far we have been describing measurement in the computational basis, which for a single qubit consists of the basis states $\{\ket{0}, \ket{1}\}$.
-However, choice of basis is arbitrary and can be described more generally.
-We can describe a measurement by an observable $O$, which is a Hermitian operator.
-When we measure an observable $O$, we measure one of its eigenvalues $\lambda_i$, and the state collapses to the associated eigenvector \ket{\lambda_i}.
-In the computational basis, we measure the Pauli Z operator $\sigma_z$ (Equation~\ref{eq:paulis}), which has eigenvalues $\{1, -1\}$ and eigenvectors $\{\ket{0}, \ket{1}\}$.
+\begin{figure}[ht]
+  \[
+  \Large
+  \Qcircuit @C=1em @R=1em @!R {
+    \lstick{\ket{x}} & \ctrl{1} & \qw & \rstick{\hspace*{-5mm}\ket{x}} \\
+    \lstick{\ket{y}} & \targ & \qw & \rstick{\hspace*{-5mm}\ket{y \oplus x}} \\
+  }
+  \]
 
-We are often interested in the expectation value of an observable for a state \ket{\psi}.
-The expectation value \expval{O} of an observable $O$ can be thought of as an average of all the possible measurement outcomes (the eigenvalues of $O$), weighted by their probability.
-It can be calculated as following:
-\begin{equation}
-\begin{aligned}
-\expval{O} &= \bra{\psi}O\ket{\psi} \\
-&= \big(c_0^*\bra{\lambda_0} + \ldots + c_{N-1}^*\bra{\lambda_{N-1}}\big) \big(c_0O\ket{\lambda_0} + \ldots + c_{N-1}O\ket{\lambda_{N-1}}\big) \\
-&= \big(c_0^*\bra{\lambda_0} + \ldots + c_{N-1}^*\bra{\lambda_{N-1}}\big) \big(c_0\lambda_0\ket{\lambda_0} + \ldots + c_{N-1}\lambda_{N-1}\ket{\lambda_{N-1}}\big) \\
-&=  \left\lvert c_0\right\rvert^2\lambda_0 + \ldots + \left\lvert c_{N-1}\right\rvert^2 \lambda_{N-1} \\
-&= \sum_{i=0}^{N-1} \left\lvert c_i\right\rvert^2\lambda_i.
-\end{aligned}
-\end{equation}
-%Experimentally, this would mean doing repeated measurements until you get a good approximation of $\expval{O}$.
-%Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
+  \caption{\textsc{CNOT} gate acting on a state \ket{x, y}. $\textsc{CNOT}\ket{x, y} = \ket{x, y \oplus x}$, where $\oplus$ represents the binary sum (\textsc{xor}).}
+  \label{fig:cnot_gate}
+\end{figure}
 
-\subsection{Entanglement} \label{sec:entanglement}
-Multi-qubit systems introduce the phenomena of entanglement.
-Consider the following state:
+Multi-qubit gates introduce the quantum phenomena \emph{entanglement}.
+Consider the following state: 
 \begin{equation}
 \ket{\Phi^+} = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
 \end{equation}
@@ -319,7 +314,61 @@ However, this would imply that $ac = bd = 1/\sqrt2$ and $ad = bc = 0$, which is 
 The remarkable thing about entanglement is that it works over any distance.
 That is, given the state \ket{\Phi^+}, one qubit could be located in another galaxy while the other qubit is located on earth.
 When we measure the qubit on earth, we immediately know that the qubit in the other galaxy is in the same state as we measured.
-This does not allow for faster than light communication, as a classical channel is still required to communicate the results between the observers.
+This is part of what made Einstein dissatisfied with the theory of quantum mechanics, referring to entanglement as ``spooky action at a distance."
+He argued that it allowed for faster than light communication, thus violating the speed limit on the transmission of information described in his theory of relativity.
+However, this is not the  case, as a classical channel is still required to communicate the results between the observers.
+
+\subsection{Measurement}
+We can define measurement more systematically.
+The probability of finding a state \ket{\psi} in state \ket{\varphi} after measurement is given by
+\begin{equation}
+\lvert\ip{\varphi}{\psi}\rvert^2,
+\end{equation}
+where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$.
+For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}c_0 & c_1\end{matrix})^T$, then 
+\begin{equation}
+\bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}c_0 \\ c_1\end{pmatrix}^\dagger =  \begin{pmatrix}c_0^* & c_1^*\end{pmatrix}.
+\end{equation}
+The bra-ket notation $\ip{\varphi}{\psi}$ can then be thought of as the inner product between the vectors \ket{\varphi} and \ket{\psi}.
+Taking the example from Equation~\ref{eq:arbitary_state_example}, the probability of measuring \ket{0} can be calculated as following.
+First we take the inner product between \ket{0} and \ket{\psi}:
+\begin{equation}
+\begin{aligned}
+\ip{0}{\psi} &= \bra{0}\dfrac{1}{\sqrt2}\ket{0} - \bra{0}\dfrac{i}{\sqrt2}\ket{1} \\
+&= \dfrac{1}{\sqrt2}\ip{0}{0} - \dfrac{i}{\sqrt2}\ip{0}{1} \\
+&= \dfrac{1}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstatezero - \dfrac{i}{\sqrt2}\begin{pmatrix}1 & 0\end{pmatrix} \qstateone \\
+&= \dfrac{1}{\sqrt2}. \\
+\end{aligned}
+\end{equation}
+Then we take the square norm to give
+\begin{equation}
+\lvert \ip{0}{\psi} \rvert^2 = \left\lvert \dfrac{1}{\sqrt2} \right\rvert^2 = \dfrac{1}{2},
+\end{equation}
+yielding the result we expected.
+The measurement $\lvert\ip{\varphi}{\psi}\rvert^2$ is also sometimes referred to as the overlap or fidelity between \ket{\psi} and \ket{\varphi}, as it essentially measures the closeness of two quantum states.
+The orthogonality of the computational basis states can be understood from this: $\ip{0}{0} = \ip{1}{1} = 1$ and $\ip{0}{1} = \ip{1}{0} = 0$.
+
+When we measure a quantum state, we measure with respect to a basis.
+So far we have been describing measurement in the computational basis, which for a single qubit consists of the basis states $\{\ket{0}, \ket{1}\}$.
+However, choice of basis is arbitrary and can be described more generally.
+We can describe a measurement by an observable $O$, which is a Hermitian operator.
+When we measure an observable $O$, we measure one of its eigenvalues $\lambda_i$, and the state collapses to the associated eigenvector \ket{\lambda_i}.
+In the computational basis, we measure the Pauli $Z$ operator $\sigma_z$ (Equation~\ref{eq:paulis}), which has eigenvalues $\{1, -1\}$ and eigenvectors $\{\ket{0}, \ket{1}\}$.
+
+We are often interested in the expectation value of an observable for a state \ket{\psi}.
+The expectation value \expval{O} of an observable $O$ can be thought of as an average of all the possible measurement outcomes (the eigenvalues of $O$), weighted by their probability.
+It can be calculated as following:
+\begin{equation}
+\begin{aligned}
+\expval{O} &= \bra{\psi}O\ket{\psi} \\
+&= \big(c_0^*\bra{\lambda_0} + \ldots + c_{N-1}^*\bra{\lambda_{N-1}}\big) \big(c_0O\ket{\lambda_0} + \ldots + c_{N-1}O\ket{\lambda_{N-1}}\big) \\
+&= \big(c_0^*\bra{\lambda_0} + \ldots + c_{N-1}^*\bra{\lambda_{N-1}}\big) \big(c_0\lambda_0\ket{\lambda_0} + \ldots + c_{N-1}\lambda_{N-1}\ket{\lambda_{N-1}}\big) \\
+&=  \left\lvert c_0\right\rvert^2\lambda_0 + \ldots + \left\lvert c_{N-1}\right\rvert^2 \lambda_{N-1} \\
+&= \sum_{i=0}^{N-1} \left\lvert c_i\right\rvert^2\lambda_i.
+\end{aligned}
+\end{equation}
+Experimentally, this would mean doing repeated measurements until you get a good approximation of $\expval{O}$.
+Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
 
 \subsection{Quantum Speedup}
 Quantum algorithms promise to provide a speedup over classical algorithms by ``abusing" quantum phenomena such as superposition, interference and entanglement.
@@ -350,7 +399,7 @@ These variational algorithms typically involve a small quantum subroutine run in
 
 So far we have been talking about so-called universal gate model quantum computers.
 There exist special purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
-These quantum annealers are restricted to solving optimization problems, of which its usefulness has been doubted~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
+These quantum annealers are restricted to solving optimization problems, of which its usefulness is not directly obvious~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
 This research is focused on universal gate model quantum computers, as its usefulness and applications seem more evident (although not certain).
 
 \section{Classical Machine Learning} \label{sec:classical-ml}
@@ -379,6 +428,8 @@ Classical machine learning algorithms are well defined and can be used to classi
 However, as the amount of globally stored data is growing by about 20\% every year~(\cite{hilbert2011world}), researchers are looking more and more for innovative approaches to machine learning.
 A promising idea that is currently being investigated is the use of quantum computers to optimize classical machine learning algorithms~(\cite{schuld2015introduction}).
 The research field of quantum machine learning may offer new ways of intelligent data processing and even guide and advance classical machine learning.
+
+\clearpage
 
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
 It has been known for a while that for some problems quantum algorithms can offer a speedup over their classical counterpart~(\cite{nielsen-chuang}).
@@ -433,7 +484,7 @@ Simulations were executed using the PennyLane~(\cite{bergholm2018pennylane}) fra
 
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten digits.
-The famous MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}).
+The MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}).
 For initial experiment, the images were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
 After a successful initial experiment, the experiment was extended to one-vs-rest classification of the original $28 \times 28$ data set, and finally generalized to multi-class classification of the original data set.
 \begin{figure}[ht]
@@ -529,13 +580,13 @@ RMSprop and Adam both seem to converge to around 95\% accuracy, where SGD settle
 	\centering
 	\begin{subfigure}{1\textwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{figures/qnn_ovr_accuracy.png}
+		\includegraphics[width=1\linewidth]{figures/qnn_ovr_accuracy.pdf}
 		\caption{Accuracy on test data set with different optimizers.}
 		\vspace*{4mm}
 	\end{subfigure}
 	\begin{subfigure}{1\textwidth}
 		\centering
-		\includegraphics[width=1\linewidth]{figures/qnn_ovr_cost}
+		\includegraphics[width=1\linewidth]{figures/qnn_ovr_cost.pdf}
 		\caption{Cost landscape of different optimizers.}
 	\end{subfigure}
 	\caption{Experimental results of a one-vs-rest QNN classifier for detecting if a handwritten digit is 0 or not.}
@@ -556,7 +607,7 @@ We define the fidelity cost function as following:
 \mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
 \end{equation}
 where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
-We use a negative log likelihood cost function, as the fidelity of quantum states ranges between 0 and 1.
+We also experiment with a different layer structure from Figure~\ref{fig:bdc-circuit}, where we use $R_xR_zR_x$ rotation gates instead of $R_xR_yR_z$.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
@@ -625,17 +676,17 @@ The results are shown in Table~\ref{table:multiclass_results}.
 			\hline
 			Optimizer & Layers & Test accuracy \\
 			\hline
-			\multirow{3}{5em}{SGD ($\eta = 0.05$)} & 4 & 24.2\% \\ 
+			\multirow{3}{5em}{SGD ($\eta = 0.4$)} & 4 & 47.5\% \\ 
 			& 8 & 0\% \\ 
 			& 10 & 0\% \\
 			& 12 & 0\% \\
 			\hline
-			\multirow{3}{5em}{RMSprop ($\eta = 0.01$)} & 4 & 60.3\% \\ 
+			\multirow{3}{5em}{RMSprop ($\eta = 0.01$)} & 4 & 57.6\% \\ 
 			& 8 & 0\% \\ 
 			& 10 & 0\% \\
 			& 12 & 0\% \\
 			\hline
-			\multirow{3}{5em}{Adam ($\eta = 0.02$)} & 4 & 56.4\% \\ 
+			\multirow{3}{5em}{Adam ($\eta = 0.02$)} & 4 & 63.2\% \\ 
 			& 8 & 0\% \\ 
 			& 10 & 0\% \\
 			& 12 & 0\% \\
