@@ -142,7 +142,7 @@ If we measure again immediately after the first measure, we get the same result.
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
 Measuring a quantum state collapses the wave function and destroys state information.
 
-A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:quantum_state_evolution}}:
+A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}:\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:quantum_state_evolution}}
 \begin{equation}
 \ket{\Psi} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \dotsm \otimes \ket{\psi_n},
 \end{equation}
@@ -429,15 +429,13 @@ However, as the amount of globally stored data is growing by about 20\% every ye
 A promising idea that is currently being investigated is the use of quantum computers to optimize classical machine learning algorithms~(\cite{schuld2015introduction}).
 The research field of quantum machine learning may offer new ways of intelligent data processing and even guide and advance classical machine learning.
 
-\clearpage
-
 \section{Quantum Machine Learning} \label{sec:quantum-ml}
 It has been known for a while that for some problems quantum algorithms can offer a speedup over their classical counterpart~(\cite{nielsen-chuang}).
 Recent advances in quantum computing suggest that machine learning algorithms may also be susceptible to a quantum speedup~(\cite{lee2019experimental, lloyd2013quantum, gao2018quantum, yoo2014quantum, biamonte2017quantum}).
 Quantum machine learning is still in its very first stage of development, and lacks a widely agreed upon definition.
 However, there have been promising developments in the recent years.
 An efficient quantum algorithm named HHL (after its inventors) for solving a system of linear equations was found by~\cite{harrow2009quantum}.
-In the years since, HHL has been proposed for multiple machine learning applications\footnote{HHL and the algorithms which use it can only provide an exponential speedup by overcoming some major caveats~(\cite{aaronson2015read}). For example, the problem of loading a large amount of classical data into a quantum computer can quickly diminish or destroy the potential quantum speedup.}, such as $k$-means clustering~(\cite{lloyd2013quantum}) and support vector machines~(\cite{rebentrost2014quantum}).
+In the years since, HHL has been proposed for multiple machine learning applications,\footnote{HHL and the algorithms which use it can only provide an exponential speedup by overcoming some major caveats~(\cite{aaronson2015read}). For example, the problem of loading a large amount of classical data into a quantum computer can quickly diminish or destroy the potential quantum speedup.} such as $k$-means clustering~(\cite{lloyd2013quantum}) and support vector machines~(\cite{rebentrost2014quantum}).
 
 HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we won't have access to any time soon.
 To circumvent this requirement, variational QML algorithms have become a main focus area of research.
@@ -514,7 +512,10 @@ It uses a quantum circuit together with a classical optimization algorithm to fi
 An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
 The variational QNN classifier works as following:
 \begin{enumerate}
-	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x}.
+	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x}:
+	\begin{equation}
+	 \ket{x} = \dfrac{1}{\lVert\vec{x}\rVert}\sum_{i=0}^{N-1} x_i\ket{i}.
+	\end{equation}
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
 	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})\ket{x, 1}$, where $\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
 	\item Measure expectation value $\expval{\sigma_z} = \bra{x, 1}\mathcal{U}(\vec{\theta})^\dagger \sigma_z\, \mathcal{U}(\vec{\theta})\ket{x, 1}$ of readout qubit.
@@ -545,7 +546,7 @@ After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy 
 Note that this means that the network was trained on $32 \cdot 20 = 640$ samples from the original set of 2014 images, due to our one mini-batch per epoch approach.
 Ideally we would use true mini-batches, but as we are limited to classical simulation of quantum circuits, this would take a very long time.
 
-The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi})\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods.}.
+The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi}).\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods.}
 Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
 It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
 
