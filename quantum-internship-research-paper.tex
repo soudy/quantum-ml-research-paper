@@ -281,7 +281,6 @@ It acts on the computational basis states as following (with the control qubit b
 \end{aligned}
 \end{equation}
 The circuit notation of the CNOT gate is shown in Figure~\ref{fig:cnot_gate}.
-
 \begin{figure}[ht]
   \[
   \Large
@@ -294,7 +293,6 @@ The circuit notation of the CNOT gate is shown in Figure~\ref{fig:cnot_gate}.
   \caption{\textsc{CNOT} gate acting on a state \ket{x, y}. $\textsc{CNOT}\ket{x, y} = \ket{x, y \oplus x}$, where $\oplus$ represents the binary sum (\textsc{xor}).}
   \label{fig:cnot_gate}
 \end{figure}
-
 Multi-qubit gates introduce the quantum phenomena \emph{entanglement}.
 Consider the following state: 
 \begin{equation}
@@ -367,7 +365,7 @@ It can be calculated as following:
 &= \sum_{i=0}^{N-1} \left\lvert c_i\right\rvert^2\lambda_i.
 \end{aligned}
 \end{equation}
-Experimentally, this would mean doing repeated measurements until you get a good approximation of $\expval{O}$.
+Experimentally, this would mean doing repeated measurements until we get a good approximation of $\expval{O}$.
 Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
 
 \subsection{Quantum Speedup}
@@ -489,17 +487,17 @@ After a successful initial experiment, the experiment was extended to one-vs-res
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=.925\linewidth]{figures/mnist_28x28.png}
+		\includegraphics[width=.925\linewidth]{figures/mnist_28x28.pdf}
 		\caption{Original data set of $28 \times 28$ images.}
 		\label{fig:mnist_28x28}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=.925\linewidth]{figures/mnist_8x8}
+		\includegraphics[width=.925\linewidth]{figures/mnist_8x8.pdf}
 		\caption{Downsampled binary data set of $8 \times 8$ images.}
 		\label{fig:mnist_8x8}
 	\end{subfigure}
-	\caption{Samples of MNIST data set used for classification.}
+	\caption{Samples of the MNIST handwritten digits data set used for classification.}
 	\label{fig:mnist}
 \end{figure}
 
@@ -507,7 +505,7 @@ After a successful initial experiment, the experiment was extended to one-vs-res
 The problem of supervised classification in machine learning is defined as following: given a training set of data whose category is known, train a model which is able to identify to which category new data belongs.
 A simple example that we will tackle in this section is recognizing if a handwritten digit is a 1 or an 8.
 
-We implement a QNN to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
+We implement a variational QNN to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
 It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit.
 An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
 The variational QNN classifier works as following:
@@ -517,8 +515,15 @@ The variational QNN classifier works as following:
 	 \ket{x} = \dfrac{1}{\lVert\vec{x}\rVert}\sum_{i=0}^{N-1} x_i\ket{i}.
 	\end{equation}
 	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
-	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})\ket{x, 1}$, where $\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
-	\item Measure expectation value $\expval{\sigma_z} = \bra{x, 1}\mathcal{U}(\vec{\theta})^\dagger \sigma_z\, \mathcal{U}(\vec{\theta})\ket{x, 1}$ of readout qubit.
+	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})\ket{x, 1}$, where
+	\begin{equation}
+	\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1).
+	\end{equation}
+	\item Measure expectation value
+	\begin{equation}
+	\expval{\sigma_z} = \bra{x, 1}\mathcal{U}(\vec{\theta})^\dagger \sigma_z\, \mathcal{U}(\vec{\theta})\ket{x, 1}
+	\end{equation}
+	of readout qubit.
 	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{\sigma_z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
@@ -539,14 +544,10 @@ The variational QNN classifier works as following:
 	\label{fig:bdc-circuit}
 \end{figure}
 
-We trained a QNN using a training set of 2014 images and a test set of 843 images.
-As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.4$ and a batch size of $32$.
-Due to computational cost, we define one epoch as processing one mini-batch and doing one optimization step, instead of going over the whole training set in batches.
-After training for 20 epochs with 2 layers, it managed to reach 91.1\% accuracy without any hyperparameter tuning or circuit optimization.
-Note that this means that the network was trained on $32 \cdot 20 = 640$ samples from the original set of 2014 images, due to our one mini-batch per epoch approach.
-Ideally we would use true mini-batches, but as we are limited to classical simulation of quantum circuits, this would take a very long time.
-
-The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\%~(\cite{cirecsan2012multi}).\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods.}
+We trained a QNN using a training set of 3777 images and a test set of 1687 images.
+As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.05$ and a batch size of $32$.
+After training for 20 epochs with 2 layers, it reached 96.7\% test accuracy without any hyperparameter tuning or circuit optimization.
+The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\% on multiclass classification of all the digits~(\cite{cirecsan2012multi}).\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods.}
 Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
 It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
 
@@ -571,12 +572,12 @@ To make a step into the direction of multi-class classification using a QNN, we 
 We use the original $28 \times 28$ MNIST data set (Figure~\ref{fig:mnist_28x28}) to train a QNN to detect if a handwritten digit is 0 or not 0.
 To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
 As the complexity of the problem grows, we compare the performance of multiple optimizers: SGD, RMSprop and Adam.
-We trained the network for 100 epochs with a batch size of 64.
+We trained the network for 30 epochs with a batch size of 32.
+The training and testing data set consisted of 473 and 1372 images respectively.\footnote{The training data set is relatively small compared to the testing data set because of the computational limits of quantum circuit simulation. However, we show that the model still generalizes well with a small training set.}
 Some hyperparameter tuning was done to find the optimal learning rate, but more tuning can be done to possibly increase performance.
 The results of the experiment are shown in Figure~\ref{fig:ovr_results}.
-Increasing the amount of layers seems to improve convergence rate, but ultimately there doesn't seem to be a big performance gain from increasing the amount of layers for this certain problem.
-The exception to this is SGD, which seems to benefit from more layers up to 4, after which its performance decreases again.
-RMSprop and Adam both seem to converge to around 95\% accuracy, where SGD settles in at 90\%.
+Adam seems to benefit most from increasing the amount of layers, showing an increase in convergence rate, final accuracy and a lower standard deviation.
+
 \begin{figure}[ht]
 	\centering
 	\begin{subfigure}{1\textwidth}
@@ -590,7 +591,7 @@ RMSprop and Adam both seem to converge to around 95\% accuracy, where SGD settle
 		\includegraphics[width=1\linewidth]{figures/qnn_ovr_cost.pdf}
 		\caption{Cost landscape of different optimizers.}
 	\end{subfigure}
-	\caption{Experimental results of a one-vs-rest QNN classifier for detecting if a handwritten digit is 0 or not.}
+	\caption{Experimental results of a one-vs-rest QNN classifier for detecting if a handwritten digit is 0 or not. The data shown is the mean taken from five runs with the standard deviation plotted as the area under the mean.}
 	\label{fig:ovr_results}
 \end{figure}
 
@@ -608,12 +609,11 @@ We define the fidelity cost function as following:
 \mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
 \end{equation}
 where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
-We also experiment with a different layer structure from Figure~\ref{fig:bdc-circuit}, where we use $R_xR_zR_x$ rotation gates instead of $R_xR_yR_z$.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
 We take the six polar states $\{\ket{0}, \ket{1}, \ket{+}, \ket{-}, \ket{+i}, \ket{-i}\}$ as our maximally orthogonal label states (Figure~\ref{fig:orthanogal_label_states}).
-The network was trained for 200 epochs with a batch size of 32.
+The network was trained for one epoch with the complete training data set consisting of 36.012 samples and tested on 4506 samples.
 The results are shown in Table~\ref{table:multiclass_results}.
 \begin{table}[ht]
 	\centering
@@ -677,20 +677,17 @@ The results are shown in Table~\ref{table:multiclass_results}.
 			\hline
 			Optimizer & Layers & Test accuracy \\
 			\hline
-			\multirow{3}{5em}{SGD ($\eta = 0.4$)} & 4 & 47.5\% \\ 
-			& 8 & 0\% \\ 
-			& 10 & 0\% \\
-			& 12 & 0\% \\
+			\multirow{3}{5em}{SGD ($\eta = 0.4$)} & 2 & 0\% \\ 
+			& 4 & 47.5\% \\ 
+			& 8 & 0\% \\
 			\hline
-			\multirow{3}{5em}{RMSprop ($\eta = 0.01$)} & 4 & 57.6\% \\ 
-			& 8 & 0\% \\ 
-			& 10 & 0\% \\
-			& 12 & 0\% \\
+			\multirow{3}{5em}{RMSprop ($\eta = 0.01$)} & 2 & 0\% \\ 
+			& 4 & 57.6\% \\ 
+			& 8 & 0\% \\
 			\hline
-			\multirow{3}{5em}{Adam ($\eta = 0.02$)} & 4 & 63.2\% \\ 
-			& 8 & 0\% \\ 
-			& 10 & 0\% \\
-			& 12 & 0\% \\
+			\multirow{3}{5em}{Adam ($\eta = 0.02$)} & 2 & 0\% \\ 
+			& 4 & 63.2\% \\ 
+			& 8 & 0\% \\
 			\hline
 		\end{tabular}
 		}
