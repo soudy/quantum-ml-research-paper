@@ -55,7 +55,7 @@
 \maketitle
 
 \begin{abstract}
-Quantum computing is a promising technology of the near future.
+Quantum computing is a promising technology of the near future, shown to speed up certain computational problems.
 Since its first proposal researchers have been looking to use it for solving difficult chemistry and physics problems.
 More recently, research towards its application in the field of machine learning has shown promise.
 We take a look at how to apply current state-of-the-art quantum algorithms to solve machine learning problems.
@@ -481,6 +481,7 @@ Simulations were executed using the PennyLane~(\cite{bergholm2018pennylane}) fra
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\cite{qnn-near-term} was implemented for classifying handwritten digits.
 The MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}).
+This data set is often used in introductions to machine learning, so it seems natural to use this data set to test our QNN.
 For initial experiment, the images were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
 After a successful initial experiment, the experiment was extended to one-vs-rest classification of the original $28 \times 28$ data set, and finally generalized to multi-class classification of the original data set.
 \begin{figure}[ht]
@@ -514,42 +515,40 @@ The variational QNN classifier works as following:
 	\begin{equation}
 	 \ket{x} = \dfrac{1}{\lVert\vec{x}\rVert}\sum_{i=0}^{N-1} x_i\ket{i}.
 	\end{equation}
-	\item Prepare a readout qubit in the state \ket{1}, giving \ket{x, 1}.
-	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})\ket{x, 1}$, where
+	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})\ket{x}$, where
 	\begin{equation}
 	\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1).
 	\end{equation}
 	\item Measure expectation value
 	\begin{equation}
-	\expval{\sigma_z} = \bra{x, 1}\mathcal{U}(\vec{\theta})^\dagger \sigma_z\, \mathcal{U}(\vec{\theta})\ket{x, 1}
+	\expval{\sigma_z} = \bra{x}\mathcal{U}(\vec{\theta})^\dagger \sigma_z\, \mathcal{U}(\vec{\theta})\ket{x}
 	\end{equation}
-	of readout qubit.
+	of last qubit.
 	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{\sigma_z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
 	\[
 	\Large
-	\Qcircuit @C=1em @R=0.4em @!R {
-		& & \multigate{5}{U(\vec{\theta}_1)} & \multigate{5}{U(\vec{\theta}_2)} & \qw & & \multigate{5}{U(\vec{\theta}_L)} & \qw & \qw \\
+	\Qcircuit @C=1em @R=0.6em @!R {
+		& & \multigate{4}{U(\vec{\theta}_1)} & \multigate{4}{U(\vec{\theta}_2)} & \qw & & \multigate{4}{U(\vec{\theta}_L)} & \qw & \qw \\
 		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
 		\lstick{\ket{x}~~} & & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
 		& ~~\vdots & & & ~~\hdots & & & \vdots \\
-		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
-		& \lstick{\ket{1}} & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{\sigma_z}} \cw
+		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{\sigma_z}} \cw
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the readout qubit is measured and the predicted class is decided by $\sign(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure \ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the last qubit is measured and the predicted class is decided by $\sign(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure~\ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 
-We trained a QNN using a training set of 3777 images and a test set of 1687 images.
+We trained a QNN using a training set of 3148 images and a test set of 843 images.
 As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.05$ and a batch size of $32$.
-After training for 20 epochs with 2 layers, it reached 96.7\% test accuracy without any hyperparameter tuning or circuit optimization.
-The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\% on multiclass classification of all the digits~(\cite{cirecsan2012multi}).\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact,~\cite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods.}
-Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem (\cite{csaji2001approximation}) applies to quantum neural networks.
-It shows the potential, given we solve the issues surrounding qRAM~(\cite{aaronson2015read}), to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
+After training for 20 epochs with 2 layers, it reached 97.2\% test accuracy without any hyperparameter tuning or circuit optimization.
+The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\% on multiclass classification of all the digits~(\cite{cirecsan2012multi}).\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact, \cite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods.}
+Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem~(\cite{csaji2001approximation}) applies to quantum neural networks.
+It shows the potential to use quantum computers to process (quantum) data which classical computers cannot process efficiently.
 
 \begin{figure}[ht]
 	\[
@@ -563,14 +562,14 @@ It shows the potential, given we solve the issues surrounding qRAM~(\cite{aarons
 		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \ctrl{-5} & \qw
 	}
 	\]
-	\caption{Decomposition of a layer $U(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil + 1$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil + 1 = 7$ qubits.}
+	\caption{Decomposition of a layer $U(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The amount of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil = 6$ qubits.}
 	\label{fig:parametrized_unitary}
 \end{figure}
 
 \subsubsection{One-vs-Rest Classifier}
 To make a step into the direction of multi-class classification using a QNN, we first consider the problem of one-vs-rest classification.
-We use the original $28 \times 28$ MNIST data set (Figure~\ref{fig:mnist_28x28}) to train a QNN to detect if a handwritten digit is 0 or not 0.
-To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits, plus a readout qubit, for $11$ qubits total.
+We use the original $28 \times 28$ MNIST data set (Figure~\ref{fig:mnist_28x28}) to train a QNN to detect if a handwritten digit is 0 or not.
+To encode a $28 \times 28$-dimensional image we need $\lceil \log_2(28 \cdot 28) \rceil = 10$ qubits.
 As the complexity of the problem grows, we compare the performance of multiple optimizers: SGD, RMSprop and Adam.
 We trained the network for 30 epochs with a batch size of 32.
 The training and testing data set consisted of 473 and 1372 images respectively.\footnote{The training data set is relatively small compared to the testing data set because of the computational limits of quantum circuit simulation. However, we show that the model still generalizes well with a small training set.}
@@ -599,21 +598,21 @@ Adam seems to benefit most from increasing the amount of layers, showing an incr
 Finally we generalize the QNN to a multiclass classifier by implementing a fidelity loss function as proposed by~\cite{perez2019data}.
 To implement this we need to make some changes to the QNN described in Section~\ref{sec:bdc}.
 First, we introduce $C$ maximally orthogonal label states, where $C$ is the number of classes (Figure~\ref{fig:orthanogal_label_states}).
-Then, instead of using the square loss function on the expectation value as cost, we measure the fidelity of the final state of the readout qubit and the label state.
-The goal then is to maximize the fidelity between the final state of the readout qubit and the correct label state.
+Then, instead of using the square loss function on the expectation value as cost, we measure the fidelity of the final state of the last qubit and the label state.
+The goal then is to maximize the fidelity between the final state of the last qubit and the correct label state.
 We define the fidelity cost function as following:
 %\begin{equation}
 %\mathcal{F}(\vec{\theta}) = \dfrac{1}{D} \sum_{d=1}^{D} \left(1 - \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
 %\end{equation}
 \begin{equation}
-\mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d, 1} \rvert^2\right),
+\mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d} \rvert^2\right),
 \end{equation}
 where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
 We take the six polar states $\{\ket{0}, \ket{1}, \ket{+}, \ket{-}, \ket{+i}, \ket{-i}\}$ as our maximally orthogonal label states (Figure~\ref{fig:orthanogal_label_states}).
-The network was trained for one epoch with the complete training data set consisting of 36.012 samples and tested on 4506 samples.
+The network was shown the complete training data set consisting of 36.012 samples once and tested on 4506 samples.
 The results are shown in Table~\ref{table:multiclass_results}.
 \begin{table}[ht]
 	\centering
@@ -696,11 +695,17 @@ The results are shown in Table~\ref{table:multiclass_results}.
 	\end{minipage}
 \end{table}
 
+We have described and implemented a variational QNN capable of doing classification on classical data, exploiting the exponential Hilbert space of quantum states to encode classical data in a logarithmic amount of qubits.
+By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of solving real world problems.
+Further improvements could be made by using more quantum-specific optimization methods~(\cite{stokes2019quantum}), optimizing the measuring of expectation values~(\cite{sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
+
 \section{Conclusion} \label{sec:conclusion}
-We have described and implemented a quantum neural network capable of classification.
-By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of doing binary, one-vs-rest and multiclass classification on classical data.
-The QNN is able to represent $N$-dimensional classical data in $\log_2N$ qubits and can also potentially learn properties of quantum data.
-Further improvements could be made by using more quantum-specific optimization methods~(\cite{stokes2019quantum, sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
+Machine learning algorithms are widely used to perform complex tasks such as image recognition, playing games, recognizing speech and more.
+Recently, researchers have been looking for ways to apply quantum computers to machine learning, resulting in the field of quantum machine learning.
+Quantum machine learning is an exciting new field which shows the potential to speed up certain machine learning algorithms by using quantum computers.
+However, most known QML algorithms are resource-intensive and cannot be implemented on the NISQ devices we will have access to in the near future.
+This has caused much resource to shift towards the development of variational algorithms, which involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer. 
+We implemented a variational QNN to perform image classification and demonstrated its performance through quantum circuit simulation.
 
 \clearpage
 
