@@ -44,7 +44,7 @@
 	\end{pmatrix}
 }
 
-\addbibresource{quantum-internship-research-paper.bib}
+\addbibresource{quantum-ml-research-paper.bib}
 
 \title{Simulation of Quantum Algorithms for Solving Machine Learning Problems}
 \author{Steven Oud \\ \emph{SURFsara, Amsterdam}}
@@ -313,7 +313,7 @@ The remarkable thing about entanglement is that it works over any distance.
 That is, given the state \ket{\Phi^+}, one qubit could be located in another galaxy while the other qubit is located on earth.
 When we measure the qubit on earth, we immediately know that the qubit in the other galaxy is in the same state as we measured.
 This is part of what made Einstein dissatisfied with the theory of quantum mechanics, referring to entanglement as ``spooky action at a distance."
-He argued that it allowed for faster than light communication, thus violating the speed limit on the transmission of information described in his theory of relativity.
+He argued that it allowed for faster than light communication, thus violating the speed limit on the transmission of information as described in his theory of relativity.
 However, this is not the  case, as a classical channel is still required to communicate the results between the observers.
 
 \subsection{Measurement}
@@ -351,7 +351,7 @@ So far we have been describing measurement in the computational basis, which for
 However, choice of basis is arbitrary and can be described more generally.
 We can describe a measurement by an observable $O$, which is a Hermitian operator.
 When we measure an observable $O$, we measure one of its eigenvalues $\lambda_i$, and the state collapses to the associated eigenvector \ket{\lambda_i}.
-In the computational basis, we measure the Pauli $Z$ operator $\sigma_z$ (Equation~\ref{eq:paulis}), which has eigenvalues $\{1, -1\}$ and eigenvectors $\{\ket{0}, \ket{1}\}$.
+In the computational basis, we measure the Pauli $Z$ operator $\sigma_z$ (Equation~\ref{eq:paulis}), which has eigenvalues $\{1, -1\}$ with eigenvectors $\{\ket{0}, \ket{1}\}$.
 
 We are often interested in the expectation value of an observable for a state \ket{\psi}.
 The expectation value \expval{O} of an observable $O$ can be thought of as an average of all the possible measurement outcomes (the eigenvalues of $O$), weighted by their probability.
@@ -380,12 +380,12 @@ Shor showed that this can be done in polynomial time on a quantum computer~(\cit
 It has been estimated that a 2048-bit RSA integer could be factored in eight hours using 20 million noisy qubits (\cite{shor-20mil}).
 
 There are other quantum algorithms which promise a significant speed up, such as Grover's algorithms for searching unstructured databases~(\cite{grover-search}) and the quantum phase estimation algorithms for finding eigenvalues of a unitary operator~(\cite{nielsen-chuang}).
-However, these algorithms often require quantum computers with millions of coherent qubits, which we will most likely not have access to any time soon.
+However, these algorithms often require quantum computers with large amounts of coherent qubits, which we will most likely not have access to any time soon.
 
 \subsection{Current State of Quantum Computing}
 It is important to note that quantum computers are still at the experimental stage, and a lot of results are theoretical.
 For example, the highest number factored by using Shor's algorithm on an actual quantum computer thus far is 21~(\cite{shor-21}).
-Furthermore, quantum supremacy, which is the potential ability of a quantum computer to solve problems that classical computers practically cannot~(\cite{preskill-qc}), has not been achieved yet as of writing this.
+Furthermore, quantum supremacy---which is the potential ability of a quantum computer to solve problems that classical computers practically cannot efficiently~(\cite{preskill-qc})---has not been achieved yet as of writing this.
 Current and near future quantum computers---often referred to as noisy intermediate-scale quantum (NISQ) devices---will have about 50-100 qubits and may be able to achieve quantum supremacy~(\cite{preskill-nisq}).
 However, they suffer from noise, which greatly limits their coherence time and thus usefulness.
 Quantum error correcting codes exist which can be used to protect from noise, but these require a high amount of qubits per logical qubit.
@@ -703,9 +703,14 @@ Further work can be done by using more quantum-specific optimization methods~(\c
 Machine learning algorithms are widely used to perform complex tasks such as image recognition, playing games, recognizing speech and more.
 Recently, researchers have been looking for ways to apply quantum computers to machine learning, resulting in the field of quantum machine learning.
 Quantum machine learning is an exciting new field which shows the potential to speed up certain machine learning algorithms by using quantum computers.
-However, most known QML algorithms are resource-intensive and cannot be implemented on the NISQ devices we will have access to in the near future.
-This has caused much resource to shift towards the development of variational algorithms, which involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer. 
-We implemented a variational QNN to perform image classification and demonstrated its performance through quantum circuit simulation.
+However, most known QML algorithms require a large amount of quantum resources and cannot be implemented on the NISQ devices we will have access to in the near future.
+This has caused much research to shift towards the development of variational algorithms, which involve a small quantum subroutine run inside of a classical optimization loop, removing the need for a large-scale, coherent quantum computer. 
+In this report we implemented a variational QNN to perform image classification and demonstrated its performance through quantum circuit simulation.
+Though this is just one small step to advance QML and make QML more accessible to researchers around the world, every little step counts.
+It is likely that most QML approaches will not be of much practical use in the near future.
+Variational algorithms however might already provide a quantum advantage at the level of 50-100 qubits for certain problems, but we should not expect the claimed exponential speedups to be achieved on near-term devices.
+There is still much work to be done in implementation and theory, but the work done so far is promising.
+Quantum machine learning may very well solve the computational problems we are facing today and revolutionize the field of machine learning.
 
 \clearpage
 
