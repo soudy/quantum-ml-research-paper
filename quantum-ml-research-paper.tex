@@ -372,8 +372,8 @@ Experimentally, this would mean doing repeated measurements until we get a good 
 Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
 
 \subsection{Quantum Speedup}
-Quantum algorithms promise to provide a speedup over classical algorithms by ``exploiting" quantum phenomena such as superposition, interference, and entanglement.
-They usually offer a quadratic or exponential speedup over their classical counterpart.
+Quantum algorithms promise to provide a speedup over classical algorithms by ``exploiting" quantum phenomena such as superposition, interference, and entanglement~(\cite{nielsen-chuang}).
+They usually offer an exponential or polynomial speedup over their classical counterpart.
 Scott Aaronson probably described it best:
 \say{The goal in quantum computing is to choreograph a computation so that the amplitudes leading to wrong answers cancel each other out, while the amplitudes leading to right answers reinforce.}~(\cite{scott-aaronson-qc}).
 
@@ -707,6 +707,7 @@ All optimizers seem to perform relatively equal, with the adaptive optimizers fi
 We have described and implemented a variational QNN capable of classifying classical data, exploiting the exponential Hilbert space of quantum states to encode classical data in a logarithmic amount of qubits.
 By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of solving real-world problems.
 In Appendix~\ref{sec:classification-other} we apply the classifier on other data sets to show its ability to adapt to various problems.
+
 Further work can be done by using more quantum-specific optimization methods~(\cite{stokes2019quantum}), optimizing the measuring of expectation values~(\cite{sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
 
 \section{Conclusion} \label{sec:conclusion}
