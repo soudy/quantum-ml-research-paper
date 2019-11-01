@@ -368,8 +368,8 @@ It can be calculated as following:
 &= \sum_{i=0}^{N-1} \left\lvert c_i\right\rvert^2\lambda_i.
 \end{aligned}
 \end{equation}
-Experimentally, this would mean doing repeated measurements until we get a good approximation of $\expval{O}$.
-Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
+%Experimentally, this would mean doing repeated measurements until we get a good approximation of $\expval{O}$.
+%Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
 
 \subsection{Quantum Speedup}
 Quantum algorithms promise to provide a speedup over classical algorithms by ``exploiting" quantum phenomena such as superposition, interference, and entanglement~(\cite{nielsen-chuang}).
@@ -482,9 +482,10 @@ So the output could be contained in an exponentially large Hilbert space, but we
 
 \section{Implementation and Results} \label{sec:implementation-and-results}
 This section describes the experiments conducted, their results and possible future work.
-While the final goal would be to run algorithms on actual quantum hardware, we will focus on simulation because of the limitations of current quantum hardware.
-The experimental results described were obtained by simulating quantum circuits using SURFsara's computing systems Cartesius and Lisa~(\cite{surfsara}).
+While we would eventually want to run algorithms on actual quantum hardware, we will focus on simulation because of the limitations of current quantum hardware.
+The experimental results described were obtained by simulating quantum circuits using SURFsara's computing systems~(\cite{surfsara}).
 Simulations were done using the PennyLane~(\cite{bergholm2018pennylane}) framework.
+For performance reasons, a PennyLane back-end for the Qulacs quantum circuit simulator~(\cite{qulacs}) was implemented, effectively speeding up simulations by a factor of 2 and providing GPU support.
 
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\textcite{qnn-near-term} was implemented for classifying handwritten digits.
@@ -579,7 +580,7 @@ The training and testing data set consisted of 710 and 1372 images respectively.
 Some hyperparameter tuning was done to find the optimal learning rate, but more tuning can be done to possibly increase performance.
 The results of the experiment are shown in Figure~\ref{fig:ovr_results}.
 In general, the performance of the classifiers seems to improve as we increase the number of layers, but ultimately it does not seem to benefit from more than 4 layers.
-Adaptive learning rate methods such as RMSprop and Adam convergence faster and higher compared to vanilla SGD.
+Adaptive learning rate methods such as RMSprop and Adam convergence faster and find a better optimum compared to vanilla SGD.
 The amount of trainable parameters per network is 60 for 2 layers, 120 for 4 layers and 240 for 8 layers.
 In contrast, a classical neural network has at least $28 \cdot 28 = 784$ parameters just for the input layer.
 
@@ -615,10 +616,10 @@ where $D$ is the number of training samples, $\ket{y_d}$ the correct label state
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
 We take the six polar states $\{\ket{0}, \ket{1}, \ket{+}, \ket{-}, \ket{+i}, \ket{-i}\}$ as our maximally orthogonal label states (Figure~\ref{fig:orthanogal_label_states}).
-The network was shown the training data set consisting of 27,009 samples once and tested on 6009 samples.
+The network was shown the training data set consisting of 27,009 samples once and was tested on 6009 samples.
 The results are shown in Table~\ref{table:multiclass_results}.
 All optimizers seem to perform relatively equal, with the adaptive optimizers finding a slightly better optimum with 10 layers.
-%We see a bigger difference in performance when increasing layers 
+We see a bigger performance increase when increasing the number of layers than before, likely due to the task at hand being more complex.
 
 \begin{table}[ht]
 	\centering
@@ -706,7 +707,9 @@ All optimizers seem to perform relatively equal, with the adaptive optimizers fi
 
 We have described and implemented a variational QNN capable of classifying classical data, exploiting the exponential Hilbert space of quantum states to encode classical data in a logarithmic amount of qubits.
 By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of solving real-world problems.
+We do further experiments with the QNN in the appendices.
 In Appendix~\ref{sec:classification-other} we apply the classifier on other data sets to show its ability to adapt to various problems.
+Appendix~\ref{sec:qnn-regression} demonstrates the QNN's capability of doing regression tasks.
 
 Further work can be done by using more quantum-specific optimization methods~(\cite{stokes2019quantum}), optimizing the measuring of expectation values~(\cite{sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
 
@@ -721,7 +724,7 @@ However, we should not expect the promised exponential speedups to be achieved o
 In this report we implemented a variational QNN to perform image classification and demonstrated its performance through quantum circuit simulation.
 We hope this work will somewhat help advance the field of QML and make QML more accessible to researchers around the world.
 There is still much work to be done in both implementation and theory, but the work done so far is promising.
-Quantum computing may very well solve the computational problems we are facing today and revolutionize the field of machine learning.
+Quantum computing may very well solve some of the computational problems we are facing today and revolutionize the field of machine learning.
 
 \clearpage
 
@@ -741,7 +744,7 @@ It is encoded into a quantum state by single-qubit rotations instead of amplitud
 Because of the low dimensional data, we redundantly encode it once in an extra qubit, resulting in a two-qubit classifier.
 We also use the data re-uploading technique described by \textcite{perez2019data} to achieve generalization with just two qubits.
 The results are plotted in Figure~\ref{fig:classification_decision_regions}.
-We can see that increasing the number of layers allows the network to learn more complex shapes, but even with two layers it finds the desired shape.
+We can see that increasing the number of layers allows the network to learn more complex shapes, but even with 2 layers it finds the desired shape.
 Note that due to the non-linear behavior of rotation gates, the QNN has an easy time finding circular patterns in data.
 
 \begin{figure}[ht]
@@ -758,9 +761,28 @@ Note that due to the non-linear behavior of rotation gates, the QNN has an easy 
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_linear_classification.pdf}
 	\end{subfigure}
-	\cprotect\caption{Classification results of a two-qubit QNN on the \verb|make_moons| (top row), \verb|make_circles| (middle row) and \verb|make_classification| (bottom row) data sets. The decision boundary is plotted with a dashed line. The red and blue contours represent the certainty of classifying 0 and 1 respectively.}
+	\cprotect\caption{Classification results of a two-qubit QNN on the \verb|make_moons| (top row), \verb|make_circles| (middle row) and \verb|make_classification| (bottom row) data sets. All networks were trained for 10 epochs using SGD as optimizer with learning rate 0.4. The red and blue contours represent the certainty of classifying 0 and 1 respectively.}
 	\label{fig:classification_decision_regions}
 \end{figure}
+
+\section{Regression Results} \label{sec:qnn-regression}
+To perform regression, we need to make our QNN output a real number.
+We do this by multiplying the expectation value $\expval{\sigma_z}$ by a trainable parameter $\alpha$, which is initialized to 1.
+So at the end of the circuit, instead of taking the sign of $\expval{\sigma_z}$, we take $\expval{\sigma_z} \cdot \alpha$ as the output of the QNN.
+We also need to change the cost function to some measure of the difference between the estimated values and the actual values.
+For this purpose we use the mean squared error loss.
+Furthermore, we use the same encoding techniques described in Appendix~\ref{sec:classification-other}.
+We take on the problem of learning the functions $-x^2$, $\cos x$, $|x|$ and $e^x$ to demonstrate its ability of representing non-linear functions.
+The network is shown 50 samples of the functions in the range $[-1, 1]$ and is tested on 100 evenly spaced numbers over the same interval.
+The results are shown in Figure~\ref{fig:qnn_regression_results}.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=1\linewidth]{figures/qnn_regression.pdf}
+	\caption{Performance of our QNN learning real functions. The QNNs were trained for 100 epochs with 2 layers and RMSprop as optimizer with learning rate 0.02. Input data was encoded redundantly 3 times, resulting in 4 qubits used total.}
+	\label{fig:qnn_regression_results}
+\end{figure}
+
 \end{appendices}
 
 \end{document}
