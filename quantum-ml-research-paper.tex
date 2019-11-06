@@ -5,7 +5,7 @@
 \usepackage[nottoc,notlot,notlof]{tocbibind}
 \usepackage[font={it}, labelfont=bf]{caption}
 \usepackage[toc, page]{appendix}
-\usepackage[colorlinks]{hyperref}
+\usepackage{hyperref}
 \usepackage[braket, qm]{qcircuit}
 \usepackage{a4wide}
 \usepackage{enumitem}
@@ -22,6 +22,13 @@
 \usepackage[outline]{contour}
 \usepackage{cprotect}
 \usetikzlibrary{3d}
+
+\hypersetup{
+	colorlinks,
+	linkcolor={red!90!black},
+	citecolor={green!90!black},
+	urlcolor={magenta!90!black}
+}
 
 \newbibmacro{string+doi}[1]{%
 	\iffieldundef{doi}{#1}{\href{http://dx.doi.org/\thefield{doi}}{#1}}}
@@ -83,7 +90,7 @@ The development of practical quantum computers that can be used to solve real-wo
 
 Already last year, SURFsara started several activities and collaborations in the field of quantum computing.
 The overall objective of SURFsara is to support Dutch researchers in taking an early and competitive advantage in quantum computing technologies and facilities while these become available.
-Like with any emerging compute technology, it needs early adopters in the scientific computing community to identify problems of practical interest that are suitable as proof-of-concept applications.
+Like with many emerging compute technologies, it needs early adopters in the scientific computing community to identify problems of practical interest that are suitable as proof-of-concept applications.
 In the context of the SURF Open Innovation Lab, SURFsara seeks to stimulate and support these advances in scientific research in close collaboration with research groups.
 Within this context SURFsara is interested in testing, benchmarking and creating good examples of quantum computing applications that can be used by the scientific community.
 
@@ -152,7 +159,7 @@ If we measure again immediately after the first measure, we get the same result.
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
 Measuring a quantum state collapses the wave function and destroys state information.
 
-A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the \emph{Kronecker product}:\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:quantum_state_evolution}}
+A multi-qubit system with $n$ states $\{\ket{\psi_1}, \ket{\psi_2}, \ldots, \ket{\psi_n}\}$ can be represented using the Kronecker product:\footnote{Entangled states are an exception to this, which will be further discussed in Section~\ref{sec:quantum_state_evolution}}
 \begin{equation}
 \ket{\Psi} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \dotsm \otimes \ket{\psi_n},
 \end{equation}
@@ -224,19 +231,19 @@ For bigger and more complex quantum operations we will often use circuit notatio
 As an example, the $X$ gate is equivalent to the classical \textsc{not}: $X\ket{0} = \ket{1}$ and $X\ket{1} = \ket{0}$.
 It is known as one of the three Pauli matrices used in quantum mechanics:
 \begin{equation} \label{eq:paulis}
-\sigma_1 = \sigma_x =
+\sigma_x = X =
 \begin{pmatrix}
 0 & 1 \\
 1 & 0
 \end{pmatrix},
 \quad
-\sigma_2 = \sigma_y =
+\sigma_y = Y =
 \begin{pmatrix}
 0 & -i \\
 i & \phantom{-}0
 \end{pmatrix},
 \quad
-\sigma_3 = \sigma_z =
+\sigma_z = Z =
 \begin{pmatrix}
 1 & \phantom{-}0 \\
 0 & -1
@@ -281,16 +288,15 @@ The CNOT (controlled \textsc{not}) gate is a quantum gate comparable to a classi
 It acts on two qubits: a control qubit, and a target qubit.
 If the control is set to 0, the target qubit is left alone.
 If the control is set to 1, the target qubit is flipped.
-It acts on the computational basis states as following (with the control qubit being the leftmost qubit):
-\begin{equation}
-\begin{aligned}
-\text{CNOT}\ket{00} = \ket{00}, \\
-\text{CNOT}\ket{01} = \ket{01}, \\
-\text{CNOT}\ket{10} = \ket{11}, \\
-\text{CNOT}\ket{11} = \ket{10}.
-\end{aligned}
-\end{equation}
-The circuit notation of the CNOT gate is shown in Figure~\ref{fig:cnot_gate}.
+%It acts on the computational basis states as following (with the control qubit being the leftmost qubit):
+%\begin{equation}
+%\begin{aligned}
+%\text{CNOT}\ket{00} = \ket{00}, \\
+%\text{CNOT}\ket{01} = \ket{01}, \\
+%\text{CNOT}\ket{10} = \ket{11}, \\
+%\text{CNOT}\ket{11} = \ket{10}.
+%\end{aligned}
+%\end{equation}
 \begin{figure}[ht]
   \[
   \Large
@@ -303,7 +309,10 @@ The circuit notation of the CNOT gate is shown in Figure~\ref{fig:cnot_gate}.
   \caption{\textsc{CNOT} gate acting on a state \ket{x, y}. $\textsc{CNOT}\ket{x, y} = \ket{x, y \oplus x}$, where $\oplus$ represents the binary sum (\textsc{xor}).}
   \label{fig:cnot_gate}
 \end{figure}
-Multi-qubit gates introduce the quantum phenomena entanglement.
+
+\noindent
+The circuit notation of the CNOT gate is shown in Figure~\ref{fig:cnot_gate}.
+Multi-qubit gates are required for universal quantum computing and introduce the quantum phenomena entanglement.
 Consider the following state: 
 \begin{equation}
 \ket{\Phi^+} = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
@@ -317,7 +326,7 @@ For the entangled state \ket{\Phi^+}, let's assume there exist amplitudes $\{a, 
 \begin{equation}
 \ket{\Phi^+} = (a\ket{0} + b\ket{1}) \otimes (c\ket{0} + d\ket{1}) = \dfrac{1}{\sqrt2}(\ket{00} + \ket{11}).
 \end{equation}
-This would imply that $ac = bd = 1/\sqrt2$ and $ad = bc = 0$, which is a contradiction.
+This would imply that $\big(ac = bd = 1/\sqrt2\,\big) \wedge \big(ad = bc = 0\big)$, which is a contradiction.
 Thus, \ket{\Phi^+} is an entangled state.
 
 Another remarkable thing about entanglement is that it works over any distance.
@@ -333,7 +342,7 @@ The probability of finding a state \ket{\psi} in state \ket{\varphi} after measu
 \begin{equation}
 \lvert\ip{\varphi}{\psi}\rvert^2,
 \end{equation}
-where the \emph{bra} notation $\bra{\varphi}$ represents the conjugate transpose of $\ket{\varphi}$.
+where the notation $\bra{\varphi}$, called a bra, represents the conjugate transpose of $\ket{\varphi}$.
 For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}c_0 & c_1\end{matrix})^T$, then 
 \begin{equation}
 \bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}c_0 \\ c_1\end{pmatrix}^\dagger =  \begin{pmatrix}c_0^* & c_1^*\end{pmatrix}.
@@ -377,14 +386,16 @@ It can be calculated as following:
 &= \sum_{i=0}^{N-1} \left\lvert c_i\right\rvert^2\lambda_i.
 \end{aligned}
 \end{equation}
-%Experimentally, this would mean doing repeated measurements until we get a good approximation of $\expval{O}$.
-%Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
+Experimentally, this would mean doing repeated measurements until we get a good approximation of $\expval{O}$.
+Note that repeated measurements means repeated state preparation and measurement, as the state collapses after measurement.
 
 \subsection{Quantum Speedup}
-Quantum algorithms promise to provide a speedup over classical algorithms by ``exploiting" quantum phenomena such as superposition, interference, and entanglement~(\cite{nielsen-chuang}).
+Certain quantum algorithms promise to provide a speedup over classical algorithms by ``exploiting" quantum phenomena such as superposition, interference, and entanglement~(\cite{nielsen-chuang}).
 They usually offer an exponential or polynomial speedup over their classical counterpart.
 Scott Aaronson probably described it best:
 \say{The goal in quantum computing is to choreograph a computation so that the amplitudes leading to wrong answers cancel each other out, while the amplitudes leading to right answers reinforce.}~(\cite{scott-aaronson-qc}).
+It is far from obvious how to design a quantum algorithm, especially one that provides a speed up over classical algorithms.
+Quantum algorithm design requires a completely different way of thinking compared to classical algorithm design and requires interdisciplinary knowledge of mathematics, computer science and physics.
 
 The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
 Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
@@ -414,7 +425,7 @@ These variational algorithms typically involve a small quantum subroutine run in
 
 So far we have been talking about so-called universal gate model quantum computers.
 There exist special-purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
-These quantum annealers are restricted to solving optimization problems, of which its usefulness is not directly obvious~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
+These quantum annealers are restricted to solving optimization problems, of which its promised speedup is not widely agreed upon~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
 This research is focused on universal gate model quantum computers, as its usefulness and applications appear more evident.
 
 \section{Classical Machine Learning} \label{sec:classical-ml}
@@ -455,7 +466,7 @@ In the years since, HHL has been proposed for multiple machine learning applicat
 HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we will not have access to any time soon.
 To circumvent this requirement, variational QML algorithms have become a main focus area of research.
 Variational QML algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
-Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal, grant2018hierarchical}), quantum generative models~(\cite{romero2019variational, benedetti2019adversarial, benedetti2019generative}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum, ghobadi2019power}), clustering~(\cite{otterbach2017unsupervised}) and quantum Boltzmann machines~(\cite{verdon2017quantum, anschuetz2019realizing}).
+Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal, grant2018hierarchical}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum, ghobadi2019power}), clustering~(\cite{otterbach2017unsupervised}) and quantum Boltzmann machines~(\cite{verdon2017quantum, anschuetz2019realizing}).
 
 Quantum machine learning can help us process the huge amounts of data we keep creating.
 Furthermore, they can potentially speed up certain computational heavy parts used in machine learning algorithms by a large factor.
@@ -494,10 +505,10 @@ This section describes the experiments conducted, the results and possible futur
 While we would eventually want to run algorithms on actual quantum hardware, we will focus on simulation because of the limitations of current quantum hardware.
 The experimental results described were obtained by simulating quantum circuits using SURFsara's computing systems~(\cite{surfsara}).
 Simulations were done using the PennyLane~(\cite{bergholm2018pennylane}) framework.
-For performance reasons, a PennyLane back-end for the Qulacs quantum circuit simulator~(\cite{qulacs}) was implemented, effectively speeding up simulations by a factor of 2 and providing GPU support.
+For performance reasons, a PennyLane back-end for the Qulacs quantum circuit simulator~(\cite{qulacs}) was implemented, effectively speeding up simulations by a factor of 2 and providing GPU support.\footnote{Available at \url{https://github.com/soudy/pennylane-qulacs/}.}
 
 \subsection{Quantum Neural Network}
-A quantum neural network (QNN) inspired by the work of~\textcite{qnn-near-term} was implemented for classifying handwritten digits.
+A quantum neural network (QNN) inspired by the work of~\textcite{qnn-near-term} and~\textcite{perez2019data} was implemented for classifying handwritten digits.
 The MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}).
 This data set is often used in introductions to machine learning, so it seems natural to use this data set to test our QNN.
 For the initial experiment, the images were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
@@ -535,8 +546,8 @@ The variational QNN classifier works as follows:
 	\end{equation}
 	where \ket{i} represents the $i$'th computational basis state.
 	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})$\ket{x}, where $\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
-	\item Measure expectation value $\expval{\sigma_z} = \bra{x}\mathcal{U}(\vec{\theta})^\dagger \sigma_z\, \mathcal{U}(\vec{\theta})\ket{x}$ of last qubit.
-	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{\sigma_z})$ through a classical optimization algorithm.
+	\item Measure expectation value $\expval{Z} = \bra{x}\mathcal{U}(\vec{\theta})^\dagger Z\, \mathcal{U}(\vec{\theta})\ket{x}$ of last qubit.
+	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
@@ -547,16 +558,17 @@ The variational QNN classifier works as follows:
 		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
 		\lstick{\ket{x}~~} & & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
 		& ~~\vdots & & & ~~\hdots & & & \vdots \\
-		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{\sigma_z}} \cw
+		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{\sigma_z}$ of the last qubit is measured and the predicted class is given by $\sign(\expval{\sigma_z})$. The decomposition of a layer is shown in Figure~\ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the last qubit is measured and the predicted class is given by $\sign(\expval{Z})$. The decomposition of a layer is shown in Figure~\ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 
 We trained a QNN using a training set of 3148 images and a test set of 843 images.
 As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.05$ and a batch size of $32$.
+Due to computational limits, we restricted the initial experiment to 20 epochs.
 After training for 20 epochs with 2 layers, it reached 97.2\% test accuracy without any hyperparameter tuning or circuit optimization.
 The goal of this experiment is not to compete with classical state-of-the-art neural networks, which are capable of achieving an error percentage of only 0.23\% on multiclass classification of all the digits~(\cite{cirecsan2012multi}).\footnote{Which is not to say quantum neural networks can't compete with classical neural networks. In fact, \textcite{perez2019data} show a quantum classifier with two qubits to be at least comparable with classical methods by using data re-uploading techniques.}
 Rather, it is meant to demonstrate the possibility of using quantum computers for machine learning problems and to hint that the universal approximation theorem~(\cite{csaji2001approximation}) applies to quantum neural networks.
@@ -587,6 +599,7 @@ We also compare the performance with 2, 4 and 8 layers to see what impact increa
 We trained the network for 30 epochs with a batch size of 32.
 The training and testing data set consisted of 710 and 1372 images respectively.
 Some hyperparameter tuning was done to find the optimal learning rate, but more tuning can be done to possibly increase performance.
+
 The results of the experiment are shown in Figure~\ref{fig:ovr_results}.
 In general, the performance of the classifiers seems to improve as we increase the number of layers, but ultimately it does not seem to benefit from more than 4 layers.
 Adaptive learning rate methods RMSprop and Adam convergence faster and find a better optimum compared to vanilla SGD.
@@ -629,8 +642,8 @@ The network was shown the training data set consisting of 27,009 samples once an
 The results are shown in Table~\ref{table:multiclass_results}.
 All optimizers seem to perform relatively equal, with the adaptive optimizers finding a slightly better optimum with 10 layers.
 We see a bigger performance increase when increasing the number of layers than before, likely due to the task at hand being more complex.
-Due to the computational limits of quantum circuit simulation, the network was shown the dataset only once.
-We predict the QNN's performance can be improved with more epochs and by using data re-uploading techniques as suggested by~\textcite{vidal2019input}~and~\textcite{perez2019data}.
+Due to the computational limits of quantum circuit simulation, the network was shown the dataset for only one epoch.
+We predict the QNN's performance can be improved with more epochs, redundantly encoding data and by using data re-uploading techniques as suggested by~\textcite{vidal2019input}~and~\textcite{perez2019data}.
 
 \begin{table}[ht]
 	\centering
@@ -718,7 +731,7 @@ We predict the QNN's performance can be improved with more epochs and by using d
 
 We have described and implemented a variational QNN capable of classifying classical data, exploiting the exponential Hilbert space of quantum states to encode classical data in a logarithmic amount of qubits.
 By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of solving real-world problems.
-We do further experiments with the QNN in the appendices: in Appendix~\ref{sec:classification-other} we apply the classifier on other data sets to show its ability to adapt to various problems, and in Appendix~\ref{sec:qnn-regression} we demonstrate the QNN's capability of doing regression.
+We do further experiments with the QNN in the appendices; in Appendix~\ref{sec:classification-other} we apply the classifier on other data sets to show its ability to adapt to various problems, and in Appendix~\ref{sec:qnn-regression} we demonstrate the QNN's capability of doing regression.
 
 Further work can be done by using more quantum-specific optimization methods~(\cite{stokes2019quantum}), optimizing the measuring of expectation values~(\cite{sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
 Improvements can be made to the encoding of classical data into a quantum Hilbert space by experimenting with different feature maps (\cite{schuld2019quantum}).
@@ -752,7 +765,7 @@ The data sets consist of 300 entries, of which 75\% was used as training data an
 A data point is two-dimensional with values in $[-1.5, 1.5]$ and has a binary label 0 or 1.
 It is encoded into a quantum state by single-qubit rotations instead of amplitude encoding.
 Because of the low dimensional data, we redundantly encode it once in an extra qubit, resulting in a two-qubit classifier.
-A data point $\{x_1, x_2\}$ is encoded as $\prod_{i=0}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
+A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded as $\prod_{i=0}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
 We also use the data re-uploading technique described by \textcite{perez2019data} to achieve generalization with just two qubits.
 
 The results are plotted in Figure~\ref{fig:classification_decision_regions}.
@@ -762,15 +775,15 @@ Note that due to the non-linear behavior of rotation gates, the QNN has an easy 
 
 \begin{figure}[ht]
 	\centering
-	\begin{subfigure}{.945\textwidth}
+	\begin{subfigure}{.9458\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_moons_classification.pdf}
 	\end{subfigure}
-	\begin{subfigure}{.945\textwidth}
+	\begin{subfigure}{.9458\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_circles_classification.pdf}
 	\end{subfigure}
-	\begin{subfigure}{.945\textwidth}
+	\begin{subfigure}{.9458\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_linear_classification.pdf}
 	\end{subfigure}
@@ -780,25 +793,25 @@ Note that due to the non-linear behavior of rotation gates, the QNN has an easy 
 
 \section{Regression Results} \label{sec:qnn-regression}
 To perform regression, we need to make our QNN output a real number.
-We do this by multiplying the expectation value $\expval{\sigma_z}$ by a trainable parameter $\alpha$, which is initialized to 1.
-So at the end of the circuit, instead of taking the sign of $\expval{\sigma_z}$, we take $\expval{\sigma_z} \cdot \alpha$ as the output of the QNN.
+We do this by multiplying the expectation value $\expval{Z}$ by a trainable parameter $\gamma$, which is initialized to 1.
+So at the end of the circuit, instead of taking $\sign(\expval{Z}) \in \{-1, 1\}$, we take $\gamma \cdot \expval{Z} \in \mathbb{R}$ as the output of the QNN.
 We also need to change the cost function to some measure of the difference between the estimated values and the actual values.
 For this purpose we use the mean squared error loss.
-Similarly to Appendix~\ref{sec:classification-other}, a data point $x$ is encoded in $n$ qubits as $\prod_{i=0}^{n}R_x^{(i)}(x)R_y^{(i)}(x)$.
 We take on the problem of learning the functions $-x^2$, $\sin(\pi x)$, $|x|$ and $e^x$ to demonstrate its ability of representing non-linear functions.
 The network is shown 50 samples of the functions in the range $[-1, 1]$ and is tested on 100 evenly spaced numbers over the same interval.
+A data point $x$ is encoded in $n$ qubits as $\prod_{i=0}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x)$.
 
 The results are shown in Figure~\ref{fig:qnn_regression_results}.
-We see again that the QNN has an easy time learning trigonometric functions due to the encoding method.
+We see again that the QNN has an easy time learning circular functions due to the encoding method.
 Other functions are approximated well, but leaves room for improvement.
-Possible improvement can be made by employing better encoding techniques specific to the input data.
+Possible improvement can be made by employing better encoding techniques.
 We have demonstrated a naive approach to doing regression tasks using our QNN.
 Nonetheless, we managed to train models that approximates basic functions reasonably well.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.65\linewidth]{figures/qnn_regression.pdf}
-	\caption{Performance of our QNN learning continuous functions. The QNNs were trained for 100 epochs with 3 layers and RMSprop as optimizer with learning rate 0.02. Input data was encoded redundantly four times, resulting in five qubits total. The blue points represent the teacher data shown to the network, and the red line represents the learned function.}
+	\caption{Performance of our QNN learning continuous functions. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.02, momentum 0.8, and smoothing constant 0.999. Input data was encoded redundantly four times, resulting in five qubits total. The blue points represent the teacher data shown to the network, and the red line represents the learned function.}
 	\label{fig:qnn_regression_results}
 \end{figure}
 
