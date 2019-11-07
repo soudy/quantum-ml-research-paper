@@ -466,7 +466,7 @@ In the years since, HHL has been proposed for multiple machine learning applicat
 HHL-based algorithms require quantum computers capable of executing high-depth circuits, which we will not have access to any time soon.
 To circumvent this requirement, variational QML algorithms have become a main focus area of research.
 Variational QML algorithms have shown the ability to perform machine learning tasks on NISQ devices while providing a means to deal with high dimensional data, which has been unpractical on classical computers~(\cite{mitarai2018quantum}).
-Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, fanizza2019optimal, grant2018hierarchical}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum, ghobadi2019power}), clustering~(\cite{otterbach2017unsupervised}) and quantum Boltzmann machines~(\cite{verdon2017quantum, anschuetz2019realizing}).
+Promising results have been shown with quantum neural networks~(\cite{qnn-near-term, schuld2018circuit, grant2018hierarchical}), quantum generative adversarial networks~(\cite{romero2019variational, benedetti2019adversarial}), quantum support vector machines~(\cite{havlivcek2019supervised, schuld2019quantum, ghobadi2019power}), clustering~(\cite{otterbach2017unsupervised}) and quantum Boltzmann machines~(\cite{verdon2017quantum, anschuetz2019realizing}).
 
 Quantum machine learning can help us process the huge amounts of data we keep creating.
 Furthermore, they can potentially speed up certain computational heavy parts used in machine learning algorithms by a large factor.
@@ -538,7 +538,7 @@ A simple example that we will tackle in this section is recognizing if a handwri
 We implement a variational QNN to classify $8 \times 8$ images of handwritten digits (Figure~\ref{fig:mnist_8x8}).
 It uses a quantum circuit together with a classical optimization algorithm to find the optimal parameters for the quantum circuit.
 An overview of the quantum circuit used in the experiment can be found in Figure~\ref{fig:bdc-circuit}.
-The variational QNN classifier works as follows:
+The variational QNN classifier learns as follows:
 \begin{enumerate}
 	\item Prepare data sample $\vec{x}$ in the amplitudes of a quantum state \ket{x}:
 	\begin{equation}
@@ -546,7 +546,7 @@ The variational QNN classifier works as follows:
 	\end{equation}
 	where \ket{i} represents the $i$'th computational basis state.
 	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})$\ket{x}, where $\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
-	\item Measure expectation value $\expval{Z} = \bra{x}\mathcal{U}(\vec{\theta})^\dagger Z\, \mathcal{U}(\vec{\theta})\ket{x}$ of last qubit.
+	\item Measure expectation value $\expval{Z} = \bra{x}\mathcal{U}(\vec{\theta})^\dagger Z_n\, \mathcal{U}(\vec{\theta})\ket{x}$ of last qubit.
 	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
@@ -565,6 +565,10 @@ The variational QNN classifier works as follows:
 	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the last qubit is measured and the predicted class is given by $\sign(\expval{Z})$. The decomposition of a layer is shown in Figure~\ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
+Predicting the label $y$ for input $\vec{x}$ is done by taking the sign of the $Z$ expectation value of the last qubit:
+\begin{equation}
+y(\vec{x}) = \sign \left(\bra{x}\mathcal{U}(\vec{\theta})^\dagger Z_n\, \mathcal{U}(\vec{\theta})\ket{x}\right).
+\end{equation}
 
 We trained a QNN using a training set of 3148 images and a test set of 843 images.
 As optimizer, we used mini-batch stochastic gradient descent (SGD) with a learning rate of $0.05$ and a batch size of $32$.
@@ -634,6 +638,7 @@ We define the fidelity cost function as following:
 \mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d} \rvert^2\right),
 \end{equation}
 where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
+To make a prediction, we measure the fidelities between the output and all the label states, and choose the label with the highest fidelity.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
@@ -643,7 +648,7 @@ The results are shown in Table~\ref{table:multiclass_results}.
 All optimizers seem to perform relatively equal, with the adaptive optimizers finding a slightly better optimum with 10 layers.
 We see a bigger performance increase when increasing the number of layers than before, likely due to the task at hand being more complex.
 Due to the computational limits of quantum circuit simulation, the network was shown the dataset for only one epoch.
-We predict the QNN's performance can be improved with more epochs, redundantly encoding data and by using data re-uploading techniques as suggested by~\textcite{vidal2019input}~and~\textcite{perez2019data}.
+We predict the QNN's performance can be improved with more epochs, by redundantly encoding data and by using data re-uploading techniques as suggested by~\textcite{vidal2019input}~and~\textcite{perez2019data}.
 
 \begin{table}[ht]
 	\centering
@@ -765,7 +770,7 @@ The data sets consist of 300 entries, of which 75\% was used as training data an
 A data point is two-dimensional with values in $[-1.5, 1.5]$ and has a binary label 0 or 1.
 It is encoded into a quantum state by single-qubit rotations instead of amplitude encoding.
 Because of the low dimensional data, we redundantly encode it once in an extra qubit, resulting in a two-qubit classifier.
-A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded as $\prod_{i=0}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
+A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded in the two qubits as $\prod_{i=0}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
 We also use the data re-uploading technique described by \textcite{perez2019data} to achieve generalization with just two qubits.
 
 The results are plotted in Figure~\ref{fig:classification_decision_regions}.
@@ -797,21 +802,21 @@ We do this by multiplying the expectation value $\expval{Z}$ by a trainable para
 So at the end of the circuit, instead of taking $\sign(\expval{Z}) \in \{-1, 1\}$, we take $\gamma \cdot \expval{Z} \in \mathbb{R}$ as the output of the QNN.
 We also need to change the cost function to some measure of the difference between the estimated values and the actual values.
 For this purpose we use the mean squared error loss.
-We take on the problem of learning the functions $-x^2$, $\sin(\pi x)$, $|x|$ and $e^x$ to demonstrate its ability of representing non-linear functions.
+We take on the problem of learning the functions $x^3$, $\cos(\pi x)\sin(2\pi x + 2)$, $|x|$ and $e^x$ to demonstrate its ability of representing non-linear functions.
 The network is shown 50 samples of the functions in the range $[-1, 1]$ and is tested on 100 evenly spaced numbers over the same interval.
 A data point $x$ is encoded in $n$ qubits as $\prod_{i=0}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x)$.
 
 The results are shown in Figure~\ref{fig:qnn_regression_results}.
-We see again that the QNN has an easy time learning circular functions due to the encoding method.
+We see again that the QNN has an easy time learning wave-like functions due to the encoding method.
 Other functions are approximated well, but leaves room for improvement.
-Possible improvement can be made by employing better encoding techniques.
+Possible improvement can be made by employing better encoding techniques and more hyperparameter tuning.
 We have demonstrated a naive approach to doing regression tasks using our QNN.
-Nonetheless, we managed to train models that approximates basic functions reasonably well.
+Nevertheless, we managed to train models that approximates basic functions reasonably well.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=.65\linewidth]{figures/qnn_regression.pdf}
-	\caption{Performance of our QNN learning continuous functions. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.02, momentum 0.8, and smoothing constant 0.999. Input data was encoded redundantly four times, resulting in five qubits total. The blue points represent the teacher data shown to the network, and the red line represents the learned function.}
+	\includegraphics[width=.825\linewidth]{figures/qnn_regression.pdf}
+	\caption{Performance of our QNN learning continuous functions. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.02, momentum 0.8, and smoothing constant 0.999. Input data was encoded redundantly four times, resulting in five qubits total. The red points represent the teacher data shown to the network, and the green line represents the learned function.}
 	\label{fig:qnn_regression_results}
 \end{figure}
 
