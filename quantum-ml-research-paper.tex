@@ -142,7 +142,7 @@ The state of a qubit (the so-called wave function) can be described as following
 \end{equation}
 Quantum states are denoted using Dirac notation \ket{\,\cdotp\,} (also called a ket), which is a column vector in $\mathbb{C}^n$.
 Here the coefficients $\{c_0, c_1\}$ are complex-valued numbers called probability amplitudes.
-The computational basis states $\{\ket{0}, \ket{1}\}$ are defined as the column vectors $(\begin{matrix}1 & 0\end{matrix})^T$ and $(\begin{matrix}0 & 1\end{matrix})^T$ respectively.
+The computational basis states \ket{0} and \ket{1} are defined as the column vectors $(\begin{matrix}1 & 0\end{matrix})^T$ and $(\begin{matrix}0 & 1\end{matrix})^T$ respectively.
 When we measure a quantum state, it collapses probabilistically to one of the basis states.
 The absolute square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
 As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|c_i|^2 = 1$.
@@ -808,15 +808,25 @@ A data point $x$ is encoded in $n$ qubits as $\prod_{i=0}^{n}R_x^{(i)}(\arccos x
 
 The results are shown in Figure~\ref{fig:qnn_regression_results}.
 We see again that the QNN has an easy time learning wave-like functions due to the encoding method.
-Other functions are approximated well, but leaves room for improvement.
+Other functions like $|x|$ and $e^x$ are approximated well, but leave room for improvement.
 Possible improvement can be made by employing better encoding techniques and more hyperparameter tuning.
 We have demonstrated a naive approach to doing regression tasks using our QNN.
-Nevertheless, we managed to train models that approximates basic functions reasonably well.
+Nevertheless, we managed to train QNN models that approximates these basic functions well.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=.825\linewidth]{figures/qnn_regression.pdf}
-	\caption{Performance of our QNN learning continuous functions. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.02, momentum 0.8, and smoothing constant 0.999. Input data was encoded redundantly four times, resulting in five qubits total. The red points represent the teacher data shown to the network, and the green line represents the learned function.}
+	\begin{subfigure}{.4875\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/qnn_regression.pdf}
+		\caption{Teacher data vs. learned function. The red points represent the teacher data shown to the network, and the green line represents the learned function.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{.4875\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/qnn_regression_mse.pdf}
+		\caption{Landscapes of mean squared error loss function. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.01 and momentum 0.85.}
+	\end{subfigure}
+	\caption{Performance of our QNN learning continuous functions. Input data was encoded redundantly four times, resulting in five qubits total.}
 	\label{fig:qnn_regression_results}
 \end{figure}
 
