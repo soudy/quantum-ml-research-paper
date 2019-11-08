@@ -425,7 +425,7 @@ These variational algorithms typically involve a small quantum subroutine run in
 
 So far we have been talking about so-called universal gate model quantum computers.
 There exist special-purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
-These quantum annealers are restricted to solving optimization problems, of which its promised speedup is not widely agreed upon~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
+These quantum annealers are restricted to solving optimization problems, of which its promised speedup has not been clearly demonstrated~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
 This research is focused on universal gate model quantum computers, as its usefulness and applications appear more evident.
 
 \section{Classical Machine Learning} \label{sec:classical-ml}
@@ -506,6 +506,7 @@ While we would eventually want to run algorithms on actual quantum hardware, we 
 The experimental results described were obtained by simulating quantum circuits using SURFsara's computing systems~(\cite{surfsara}).
 Simulations were done using the PennyLane~(\cite{bergholm2018pennylane}) framework.
 For performance reasons, a PennyLane back-end for the Qulacs quantum circuit simulator~(\cite{qulacs}) was implemented, effectively speeding up simulations by a factor of 2 and providing GPU support.\footnote{Available at \url{https://github.com/soudy/pennylane-qulacs/}.}
+We benchmark and compare CPU and GPU simulation in Appendix~\ref{sec:cpu-gpu-benchmark}.
 
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\textcite{qnn-near-term} and~\textcite{perez2019data} was implemented for classifying handwritten digits.
@@ -811,7 +812,7 @@ We see again that the QNN has an easy time learning wave-like functions due to t
 Other functions like $|x|$ and $e^x$ are approximated well, but leave room for improvement.
 Possible improvement can be made by employing better encoding techniques and more hyperparameter tuning.
 We have demonstrated a naive approach to doing regression tasks using our QNN.
-Nevertheless, we managed to train QNN models that approximates these basic functions well.
+Nevertheless, we managed to train QNN models that approximates these non-linear functions well.
 
 \begin{figure}[ht]
 	\centering
@@ -829,6 +830,57 @@ Nevertheless, we managed to train QNN models that approximates these basic funct
 	\caption{Performance of our QNN learning continuous functions. Input data was encoded redundantly four times, resulting in five qubits total.}
 	\label{fig:qnn_regression_results}
 \end{figure}
+
+\section{CPU and GPU Simulation Benchmarks} \label{sec:cpu-gpu-benchmark}
+Quantum circuit simulation is known to be exponentially hard on classical computers.
+The state space of a quantum system grows exponentially with the amount of qubits, making simulation of higher amount of qubits intractable.
+To make our simulations as efficient as possible, we compare the performance of the Qulacs simulator on CPU and GPU.
+We run the benchmarks on the Lisa system of SURFsara.
+The node used has Intel Xeon Gold 5118 CPUs and an NVIDIA TITAN RTX GPU.
+
+We measure how the execution time increases as the amount of qubits increases.
+The measure we test is 50 executions of 8 layers of the circuit described in Figure~\ref{fig:parametrized_unitary}.
+The parameters are randomly generated from a uniform distribution.
+We also measure $\expval{Z}$ every iteration and compare the results of the GPU simulation with the CPU simulation to make sure they agree.
+The results are visualized in Figure~\ref{fig:qulacs_benchmark}.
+We can see that increasing the amount of cores improves simulation times for higher number of qubits.
+For qubit counts from 18 and higher, GPU simulation is much more efficient.
+If we look at Table~\ref{table:qulacs_benchmark_results}, we see that single core CPU simulation is most efficient up to 12 qubits.
+While GPU always seems to beat CPU with 24 cores, running on a large amount of cores is a good alternative if there is no GPU available.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\linewidth]{figures/qnn_cpu_vs_gpu.pdf}
+	\captionof{figure}{Comparison of quantum simulation runtime between CPU and GPU.}
+	\label{fig:qulacs_benchmark}
+\end{figure}
+
+\begin{table}[ht]
+	\centering
+	{\renewcommand{\arraystretch}{1.1}
+		\begin{tabular}{ c|c|c|c|c } 
+			\hline
+			$n$ qubits & GPU & CPU (1 core) & CPU (8 cores) &  CPU (24 cores) \\
+			\hline
+			2 & 0.201s & \textbf{0.143s} & 0.223s & 0.466s \\
+			4 & 0.353s & \textbf{0.278s} & 0.310s & 0.320s \\
+			6 & 0.465s & \textbf{0.376s} & 0.408s & 0.479s \\
+			8 & 0.612s & \textbf{0.511s} & 0.549s & 0.664s \\
+			10 & 0.758s & \textbf{0.636s} & 0.677s & 0.787s \\
+			12 & 1.039s & \textbf{0.784s} & 0.837s & 1.021s \\
+			14 & 1.064s & 1.024s & \textbf{1.016s} & 1.369s \\
+			16 & 1.244s & 1.695s & \textbf{1.242s} & 1.463s \\
+			18 & \textbf{1.518s} & 4.558s & 1.830s & 1.895s \\
+			20 & \textbf{2.319s} & 19.176s & 3.961s & 3.081s \\
+			22 & \textbf{4.983s} & 104.811s & 18.318s & 10.014s \\
+			24 & \textbf{16.353s} & 466.285s & 93.447s & 57.340s \\
+			26 & \textbf{64.594s} & 2058.394s & 634.003s & 395.665s \\
+			\hline
+		\end{tabular}
+	}
+	\caption{Qulacs quantum circuit simulator benchmark results. The fastest result per $n$ qubits is shown in bold.}
+	\label{table:qulacs_benchmark_results}
+\end{table}
 
 \end{appendices}
 
