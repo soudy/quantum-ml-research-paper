@@ -411,10 +411,11 @@ For example, the highest number factored by using Shor's algorithm on an actual 
 Experimentally proving that quantum computers can do something that classical computers cannot do efficiently is an important milestone to reach.
 The term quantum supremacy was coined by \textcite{preskill-qc} to describe this achievement.
 It was estimated that current or near-future quantum computers---often referred to as noisy intermediate-scale quantum (NISQ) devices~(\cite{preskill-nisq})---which have about 50-100 qubits, may be able to achieve quantum supremacy~(\cite{boixo2018characterizing}).
+
 Very recently Google claimed to have achieved quantum supremacy with 53 qubits by doing random circuit sampling many times faster on a quantum computer than a classical computer~(\cite{arute2019quantum}).
 They claim to be able to perform the computation in 200 seconds on a quantum computer and determined it would take the world's fastest supercomputer 10,000 years to perform a similar computation.
 IBM responded to Google's results by claiming they could simulate the Google experiment in 2.5 days, rather than the 10,000 years that Google estimated~(\cite{pednault2019leveraging}).
-While this seems like it would diminish Google's claim of quantum supremacy, 200 seconds versus 2.5 days is still a speedup by a factor of more than 1000.
+While this seems like it would diminish Google's claim of quantum supremacy, 200 seconds versus 2.5 days is still a speedup by a factor of more than a thousand.
 Even more, increasing the number of qubits from 53 to 55 would be enough to refute IBM's response, as it would exceed the world's most powerful supercomputer's storage capacity~(\cite{aaronson2019supremacy}).
 Either way, Google has made great progress by developing a high-fidelity 53 qubit quantum computer, which will further stimulate the development of NISQ devices.
 
@@ -425,7 +426,7 @@ These variational algorithms typically involve a small quantum subroutine run in
 
 So far we have been talking about so-called universal gate model quantum computers.
 There exist special-purpose quantum computers called quantum annealers, which have achieved qubit counts up to 2000~(\cite{dwave-2000}).
-These quantum annealers are restricted to solving optimization problems, of which its promised speedup has not been clearly demonstrated~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
+These quantum annealers are restricted to solving optimization problems, of which its promised speedup has not been clearly shown~(\cite{how-quantum-dwave, aaronson-dwave, detecting-quantum-speedup}).
 This research is focused on universal gate model quantum computers, as its usefulness and applications appear more evident.
 
 \section{Classical Machine Learning} \label{sec:classical-ml}
@@ -437,7 +438,7 @@ Machine learning algorithms can be broadly divided into three categories: \emph{
 In supervised learning, we have a predefined set of training data in which data points are correctly labeled.
 Its goal is then to predict the correct label for new data it has not seen.
 In unsupervised learning, we do not have labeled data points, and instead, we try to find previously unknown patterns in the data set.
-Finally, in reinforcement learning, an agent learns how to behave in an environment by interacting with it and receiving feedback based on these actions.
+Finally, in reinforcement learning, an agent learns how to behave in an environment by interacting with it and receiving feedback based on these interactions.
 
 Artificial neural networks (ANN) are ubiquitous in the field of supervised machine learning.
 They are inspired by the biological neural networks found in our brains and have developed into a wide range of methods that have advanced the state of the art in various fields.
@@ -762,7 +763,7 @@ Quantum computing may very well solve some of the computational problems we are 
 \clearpage
 
 \begin{appendices}
-\section{Classification Results On Other Data} \label{sec:classification-other}
+\section{Classification Results on Other Data} \label{sec:classification-other}
 We showed that our QNN classifier is capable of classifying handwritten digits.
 Here, we apply the QNN described in Section~\ref{sec:multiclass_classifier} to more data sets to see its performance on other problems.
 With this, we aim to show that the classifier is able to adapt to a broad variety of problems.
