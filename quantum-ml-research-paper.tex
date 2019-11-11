@@ -394,8 +394,8 @@ Certain quantum algorithms promise to provide a speedup over classical algorithm
 They usually offer an exponential or polynomial speedup over their classical counterpart.
 Scott Aaronson probably described it best:
 \say{The goal in quantum computing is to choreograph a computation so that the amplitudes leading to wrong answers cancel each other out, while the amplitudes leading to right answers reinforce.}~(\cite{scott-aaronson-qc}).
-It is far from obvious how to design a quantum algorithm, especially one that provides a speed up over classical algorithms.
-Quantum algorithm design requires a completely different way of thinking compared to classical algorithm design and requires interdisciplinary knowledge of mathematics, computer science and physics.
+It is far from obvious how to design a quantum algorithm, especially one that provides a speedup over classical algorithms.
+Quantum algorithm design requires a completely different way of thinking compared to classical algorithm design and requires interdisciplinary knowledge of mathematics, computer science, and physics.
 
 The most famous example of a quantum speedup is probably Shor's algorithm for factoring integers and computing discrete logarithms, which was introduced in 1994.
 Its implications are huge for modern cryptography algorithms such as RSA, which depend on the fact that factoring integers is a hard problem on classical computers.
@@ -511,7 +511,7 @@ We benchmark and compare CPU and GPU simulation run times with Qulacs in Appendi
 
 \subsection{Quantum Neural Network}
 A quantum neural network (QNN) inspired by the work of~\textcite{qnn-near-term} and~\textcite{perez2019data} was implemented.
-The MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}) to demonstrate its ability of doing classification.
+The MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}) to demonstrate its ability to do classification.
 This data set is often used in introductions to machine learning, so it seems natural to use this data set to test our QNN.
 For the initial experiment, the images were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
 After a successful initial experiment, the experiment was extended to one-vs-rest classification of the original $28 \times 28$ data set, and finally generalized to multi-class classification of the original data set.
@@ -641,7 +641,7 @@ We define the fidelity cost function as following:
 \mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d} \rvert^2\right),
 \end{equation}
 where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized layer unitaries.
-To make a prediction, we measure the fidelities between the output and all the label states, and choose the label with the highest fidelity.
+To make a prediction, we measure the fidelities between the output and all the label states and choose the label with the highest fidelity.
 
 We conduct a similar experiment to that from the previous section.
 The problem at hand is to distinguish between the handwritten digits 1 through 6 including, giving six classes.
@@ -741,7 +741,7 @@ We predict the QNN's performance can be improved with more epochs, by redundantl
 \subsubsection{Regression Results} \label{sec:qnn-regression}
 We take on the problem of learning the functions $x^3$, $\cos(\pi x)\sin(2\pi x + 2)$, $|x|$ and $e^x$ to demonstrate the QNN's ability of representing non-linear real functions.
 The network is shown 50 samples of the functions in the range $[-1, 1]$ and is tested on 100 evenly spaced numbers over the same interval.
-The data of the functions are one-dimensional, and we employ a data re-uploading technique described by \textcite{perez2019data} to achieve generalization with a small amount of qubits (Figure~\ref{fig:data-reuploading-circuit}).
+The data of the functions are one-dimensional, and we employ a data re-uploading technique described by \textcite{perez2019data} to achieve generalization with a small number of qubits (Figure~\ref{fig:data-reuploading-circuit}).
 \begin{figure}[ht]
 	\[
 	\Large
@@ -752,7 +752,7 @@ The data of the functions are one-dimensional, and we employ a data re-uploading
 		\lstick{\ket{0}} & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
 	}
 	\]
-	\caption{Data re-uploading QNN circuit used to achieve generalization with a small amount of qubits. $U_\ell$ represents a layer as before in Section~\ref{sec:bdc}, and $U_x$ encodes the data into a quantum state. In our example we use one-dimensional data, but $U_x$ can be extended to encode a high-dimensional vector.}
+	\caption{Data re-uploading QNN circuit used to achieve generalization with a small amount of qubits. $U_\ell$ represents a layer as before in Section~\ref{sec:bdc}, and $U_x$ represents the unitary that encodes the input data in the quantum state. In our example we use one-dimensional data, but $U_x$ can be extended to encode a high-dimensional vector.}
 	\label{fig:data-reuploading-circuit}
 \end{figure}
 
@@ -861,7 +861,7 @@ Note that due to the non-linear behavior of rotation gates, the QNN has an easy 
 
 \section{CPU and GPU Simulation Benchmarks} \label{sec:cpu-gpu-benchmark}
 Quantum circuit simulation is known to be exponentially hard on classical computers.
-The state space of a quantum system grows exponentially with the amount of particles, making simulation of higher amount of particles intractable on a classical computer.
+The state space of a quantum system grows exponentially with the number of particles, making simulation of higher amount of particles intractable on a classical computer.
 To make our simulations as efficient as possible, we compare the performance of the Qulacs simulator on CPU and GPU.
 We run the benchmarks on the Lisa system of SURFsara.
 The node used has Intel Xeon Gold 5118 CPUs and an NVIDIA TITAN RTX GPU.
@@ -871,10 +871,10 @@ The measure we test is 50 executions of 8 layers of the circuit described in Fig
 The parameters are randomly generated from a uniform distribution.
 We also measure $\expval{Z}$ every iteration and compare the results of the GPU simulation with the CPU simulation to make sure they agree.
 The results are visualized in Figure~\ref{fig:qulacs_benchmark}.
-We can see that increasing the amount of cores improves simulation times for higher number of qubits.
+We can see that increasing the number of cores improves simulation times for higher number of qubits.
 For qubit counts from 18 and higher, GPU simulation is much more efficient.
-If we look at Table~\ref{table:qulacs_benchmark_results}, we see that single core CPU simulation is most efficient up to 12 qubits.
-While GPU always seems to beat CPU with 24 cores, running on a large amount of cores is a good alternative if there is no GPU available.
+If we look at Table~\ref{table:qulacs_benchmark_results}, we see that single-core CPU simulation is most efficient up to 12 qubits.
+While GPU always seems to beat CPU with 24 cores, running on a large number of cores is a good alternative if there is no GPU available.
 
 \begin{figure}[ht]
 	\centering
