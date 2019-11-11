@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenx}
 \usepackage[style=apa,backend=biber,alldates=iso8601,doi=false]{biblatex}
 \usepackage[nottoc,notlot,notlof]{tocbibind}
-\usepackage[font={it}, labelfont=bf]{caption}
+\usepackage[font=small, labelfont=bf]{caption}
 \usepackage[toc, page]{appendix}
 \usepackage{hyperref}
 \usepackage[braket, qm]{qcircuit}
@@ -787,10 +787,11 @@ We use the mean squared error as cost function.
 	\caption{Performance of our QNN learning continuous functions. Input data was encoded in five qubits according to Equation~\ref{eq:regression_encode}.}
 	\label{fig:qnn_regression_results}
 \end{figure}
+
 The results are shown in Figure~\ref{fig:qnn_regression_results}.
-We see that the QNN has an easy time learning wave-like functions due to the encoding method.
+We see that the QNN has an easy time learning the wavelike functions $x^3$ and $\cos(\pi x)\sin(2\pi x + 2)$ due to the encoding method.
 The other functions $|x|$ and $e^x$ are approximated well, but leave room for improvement.
-Possible improvement can be made by employing better encoding techniques and more hyperparameter tuning.
+Possible improvement can be made by employing better (problem specific) encoding techniques and more hyperparameter tuning.
 We have demonstrated a naive approach to doing regression tasks using our QNN.
 Nevertheless, we managed to train models that approximate these non-linear functions well.
 
@@ -798,8 +799,8 @@ Nevertheless, we managed to train models that approximate these non-linear funct
 We have described and implemented a variational QNN capable of classifying classical data and doing simple regression tasks.
 By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of solving real-world problems.
 Our QNN exploits the exponential Hilbert space of quantum states to encode classical data in an amount of qubits logarithmic to the input data's dimension.
-This demonstrates the ability to process high dimensional (quantum) data that is intractable for classical computers to process.
-In Appendix~\ref{sec:classification-other} we apply the classifier on other data sets to show its ability to adapt to various problems.
+This demonstrates the possibility to process high dimensional (quantum) data that is intractable for classical computers to process.
+In Appendix~\ref{sec:classification-other} we apply the QNN classifier on other data sets to show its ability to adapt to various problems.
 
 Further work can be done by using more quantum-specific optimization methods~(\cite{stokes2019quantum}), optimizing the measuring of expectation values~(\cite{sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, defining useful benchmarks and experimenting with real quantum hardware.
 Improvements can also be made to the encoding of classical data into a quantum Hilbert space by experimenting with different feature maps (\cite{schuld2019quantum}).
@@ -839,7 +840,7 @@ We also use the data re-uploading technique described in Section~\ref{sec:qnn-re
 The results are plotted in Figure~\ref{fig:classification_decision_regions}.
 In all cases, the QNN approximates the function well.
 We can see that increasing the number of layers allows the network to learn more complex shapes, but even with 2 layers it finds the desired shape.
-Note that due to the non-linear behavior of rotation gates, the QNN has an easy time finding wave-like patterns in data.
+Note that due to the encoding method and the non-linear behavior of rotation gates, the QNN has an easy time finding wavelike patterns in data.
 
 \begin{figure}[ht]
 	\centering
