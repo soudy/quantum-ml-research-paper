@@ -138,14 +138,14 @@ A qubit is a two-state quantum-mechanical system, which can be represented for e
 A qubit can be in a state of an orthonormal basis $\{\ket{0}, \ket{1}\}$ (corresponding to spin up and spin down for the electron example), but it can also be in a linear combination, or superposition of states.
 The state of a qubit (the so-called wave function) can be described as following:
 \begin{equation}
-\ket{\psi} = c_0\ket{0} + c_1\ket{1}.
+\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}.
 \end{equation}
 Quantum states are denoted using Dirac notation \ket{\,\cdotp\,} (also called a ket), which is a column vector in $\mathbb{C}^n$.
-Here the coefficients $\{c_0, c_1\}$ are complex-valued numbers called probability amplitudes.
+Here the coefficients $\{\alpha_0, \alpha_1\}$ are complex-valued numbers called probability amplitudes.
 The computational basis states \ket{0} and \ket{1} are defined as the column vectors $(\begin{matrix}1 & 0\end{matrix})^T$ and $(\begin{matrix}0 & 1\end{matrix})^T$ respectively.
 When we measure a quantum state, it collapses probabilistically to one of the basis states.
-The absolute square $|c_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|c_1|^2$ gives us the probability of finding the particle in state \ket{1}.
-As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|c_i|^2 = 1$.
+The absolute square $|\alpha_0|^2$ gives us the probability of finding the particle in state \ket{0}, and $|\alpha_1|^2$ gives us the probability of finding the particle in state \ket{1}.
+As we are dealing with probabilities, the quantum state should be normalized: $\sum_{i=0}|\alpha_i|^2 = 1$.
 For example, consider the following arbitrary state:
 \begin{equation} \label{eq:arbitary_state_example}
 \ket{\psi} = \dfrac{1}{\sqrt2}\ket{0} - \dfrac{i}{\sqrt2}\ket{1}.
@@ -154,7 +154,7 @@ After measuring this state, we have a $\lvert1/\sqrt2\rvert^2 = 1/2$ chance of t
 
 The laws of quantum mechanics greatly restrict our access to information stored in quantum states.
 We cannot access the amplitudes of a state, other than by preparing and sampling a state many times to get an approximation. 
-When we measure a state, it collapses to a basis state \ket{j} with probability $|c_j|^2$.
+When we measure a state, it collapses to a basis state \ket{j} with probability $|\alpha_j|^2$.
 If we measure again immediately after the first measure, we get the same result.
 So if we measure \ket{1} and measure again immediately after, we will see \ket{1} again.
 Measuring a quantum state collapses the wave function and destroys state information.
@@ -167,8 +167,8 @@ resulting in a $N = 2^n$ dimensional state \ket{\Psi}.
 For example, a three qubit state lives in a  $2^3$-dimensional Hilbert space spanned by computational basis states $\{\ket{000}, \ket{001}, \ket{010}, \ldots, \ket{111}\}$:
 \begin{equation}
 \begin{aligned}
-\ket{\Psi} &= c_0\ket{000} + c_1\ket{001} + c_2\ket{010} + \dotsm + c_{N-1}\ket{111} \\
-&= c_0\begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_1\begin{pmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0\end{pmatrix} + c_2\begin{pmatrix}0 \\ 0 \\ 1 \\ \vdots \\ 0\end{pmatrix} + \dotsm + c_{N-1}\begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 1\end{pmatrix} = \begin{pmatrix}c_0 \\ c_1 \\ c_2 \\ \vdots \\ c_{N-1}\end{pmatrix}.
+\ket{\Psi} &= \alpha_0\ket{000} + \alpha_1\ket{001} + \alpha_2\ket{010} + \dotsm + \alpha_{N-1}\ket{111} \\
+&= \alpha_0\begin{pmatrix}1 \\ 0 \\ 0 \\ \vdots \\ 0\end{pmatrix} + \alpha_1\begin{pmatrix}0 \\ 1 \\ 0 \\ \vdots \\ 0\end{pmatrix} + \alpha_2\begin{pmatrix}0 \\ 0 \\ 1 \\ \vdots \\ 0\end{pmatrix} + \dotsm + \alpha_{N-1}\begin{pmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 1\end{pmatrix} = \begin{pmatrix}\alpha_0 \\ \alpha_1 \\ \alpha_2 \\ \vdots \\ \alpha_{N-1}\end{pmatrix}.
 \end{aligned}
 \end{equation}
 Note that the state space of a quantum state grows exponentially with the number of qubits.
@@ -343,9 +343,9 @@ The probability of finding a state \ket{\psi} in state \ket{\varphi} after measu
 \lvert\ip{\varphi}{\psi}\rvert^2,
 \end{equation}
 where the notation $\bra{\varphi}$, called a bra, represents the conjugate transpose of $\ket{\varphi}$.
-For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}c_0 & c_1\end{matrix})^T$, then 
+For example, given a generic quantum state $\ket{\varphi} = (\begin{matrix}\alpha_0 & \alpha_1\end{matrix})^T$, then 
 \begin{equation}
-\bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}c_0 \\ c_1\end{pmatrix}^\dagger =  \begin{pmatrix}c_0^* & c_1^*\end{pmatrix}.
+\bra{\varphi} = \ket{\varphi}^\dagger = \begin{pmatrix}\alpha_0 \\ \alpha_1\end{pmatrix}^\dagger =  \begin{pmatrix}\alpha_0^* & \alpha_1^*\end{pmatrix}.
 \end{equation}
 The bra-ket notation $\ip{\varphi}{\psi}$ can then be thought of as the inner product between the vectors \ket{\varphi} and \ket{\psi}.
 Recall the example state from Equation~\ref{eq:arbitary_state_example}: $\ket{\psi} = 1/\sqrt2\ket{0} - i/\sqrt2\ket{1}$.
@@ -380,10 +380,10 @@ It can be calculated as following:
 \begin{equation}
 \begin{aligned}
 \expval{O} &= \bra{\psi}O\ket{\psi} \\
-&= \big(c_0^*\bra{\lambda_0} + \ldots + c_{N-1}^*\bra{\lambda_{N-1}}\big) \big(c_0O\ket{\lambda_0} + \ldots + c_{N-1}O\ket{\lambda_{N-1}}\big) \\
-&= \big(c_0^*\bra{\lambda_0} + \ldots + c_{N-1}^*\bra{\lambda_{N-1}}\big) \big(c_0\lambda_0\ket{\lambda_0} + \ldots + c_{N-1}\lambda_{N-1}\ket{\lambda_{N-1}}\big) \\
-&=  \left\lvert c_0\right\rvert^2\lambda_0 + \ldots + \left\lvert c_{N-1}\right\rvert^2 \lambda_{N-1} \\
-&= \sum_{i=0}^{N-1} \left\lvert c_i\right\rvert^2\lambda_i.
+&= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0O\ket{\lambda_0} + \ldots + \alpha_{N-1}O\ket{\lambda_{N-1}}\big) \\
+&= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0\lambda_0\ket{\lambda_0} + \ldots + \alpha_{N-1}\lambda_{N-1}\ket{\lambda_{N-1}}\big) \\
+&=  \left\lvert \alpha_0\right\rvert^2\lambda_0 + \ldots + \left\lvert \alpha_{N-1}\right\rvert^2 \lambda_{N-1} \\
+&= \sum_{i=0}^{N-1} \left\lvert \alpha_i\right\rvert^2\lambda_i.
 \end{aligned}
 \end{equation}
 Experimentally, this would mean doing repeated measurements until we get a good approximation of $\expval{O}$.
@@ -507,14 +507,15 @@ While we would eventually want to run algorithms on actual quantum hardware, we 
 The experimental results described were obtained by simulating quantum circuits using SURFsara's computing systems~(\cite{surfsara}).
 Simulations were done using the PennyLane~(\cite{bergholm2018pennylane}) framework.
 For performance reasons, a PennyLane back-end for the Qulacs quantum circuit simulator~(\cite{qulacs}) was implemented, effectively speeding up simulations by a factor of 2 and providing GPU support.\footnote{Available at \url{https://github.com/soudy/pennylane-qulacs/}.}
-We benchmark and compare CPU and GPU simulation in Appendix~\ref{sec:cpu-gpu-benchmark}.
+We benchmark and compare CPU and GPU simulation run times with Qulacs in Appendix~\ref{sec:cpu-gpu-benchmark}.
 
 \subsection{Quantum Neural Network}
-A quantum neural network (QNN) inspired by the work of~\textcite{qnn-near-term} and~\textcite{perez2019data} was implemented for classifying handwritten digits.
-The MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}).
+A quantum neural network (QNN) inspired by the work of~\textcite{qnn-near-term} and~\textcite{perez2019data} was implemented.
+The MNIST database of handwritten digits~(\cite{mnist-digits}) was used as data set (Figure~\ref{fig:mnist}) to demonstrate its ability of doing classification.
 This data set is often used in introductions to machine learning, so it seems natural to use this data set to test our QNN.
 For the initial experiment, the images were downsampled to a lower dimension and the task at hand was limited to binary classification of digits 1 and 8 to simplify the problem and reduce resource requirements.
 After a successful initial experiment, the experiment was extended to one-vs-rest classification of the original $28 \times 28$ data set, and finally generalized to multi-class classification of the original data set.
+In Section~\ref{sec:qnn-regression} we also demonstrate the QNN's ability to do simple regression tasks.
 \begin{figure}[ht]
 	\centering
 	\begin{subfigure}{.5\textwidth}
@@ -547,7 +548,7 @@ The variational QNN classifier learns as follows:
 	 \ket{x} = \dfrac{1}{\lVert\vec{x}\rVert}\sum_{i=0}^{N-1} x_i\ket{i},
 	\end{equation}
 	where \ket{i} represents the $i$'th computational basis state.
-	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})$\ket{x}, where $\mathcal{U}(\vec{\theta}) = U(\vec{\theta}_L) U(\vec{\theta}_{L-1}) \ldots U(\vec{\theta}_1)$.
+	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})$\ket{x}, where $\mathcal{U}(\vec{\theta}) = U_\ell(\vec{\theta}_L) U_\ell(\vec{\theta}_{L-1}) \ldots U_\ell(\vec{\theta}_1)$.
 	\item Measure expectation value $\expval{Z} = \bra{x}\mathcal{U}(\vec{\theta})^\dagger Z_n\, \mathcal{U}(\vec{\theta})\ket{x}$ of last qubit.
 	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
@@ -556,15 +557,15 @@ The variational QNN classifier learns as follows:
 	\[
 	\Large
 	\Qcircuit @C=1em @R=0.6em @!R {
-		& & \multigate{4}{U(\vec{\theta}_1)} & \multigate{4}{U(\vec{\theta}_2)} & \qw & & \multigate{4}{U(\vec{\theta}_L)} & \qw & \qw \\
-		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
-		\lstick{\ket{x}~~} & & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \qw & \qw \\
+		& & \multigate{4}{U_\ell(\vec{\theta}_1)} & \multigate{4}{U_\ell(\vec{\theta}_2)} & \qw & & \multigate{4}{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
+		& & \ghost{U_\ell(\vec{\theta}_1)} & \ghost{U_\ell(\vec{\theta}_2)} & \qw & & \ghost{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
+		\lstick{\ket{x}~~} & & \ghost{U_\ell(\vec{\theta}_1)} & \ghost{U_\ell(\vec{\theta}_2)} & \qw & & \ghost{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
 		& ~~\vdots & & & ~~\hdots & & & \vdots \\
-		& & \ghost{U(\vec{\theta}_1)} & \ghost{U(\vec{\theta}_2)} & \qw & & \ghost{U(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
+		& & \ghost{U_\ell(\vec{\theta}_1)} & \ghost{U_\ell(\vec{\theta}_2)} & \qw & & \ghost{U_\ell(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
 		\gategroup{1}{1}{5}{1}{.7em}{\{}
 	}
 	\]
-	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. At the end of the circuit, the expectation value $\expval{Z}$ of the last qubit is measured and the predicted class is given by $\sign(\expval{Z})$. The decomposition of a layer is shown in Figure~\ref{fig:parametrized_unitary}.}
+	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U_\ell(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. The decomposition of a layer is shown in Figure~\ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
 Predicting the label $y$ for input $\vec{x}$ is done by taking the sign of the $Z$ expectation value of the last qubit:
@@ -584,15 +585,15 @@ It shows the potential to use quantum computers to process (quantum) data that c
 	\[
 	\Large
 	\Qcircuit @C=0.7em @R=0.4em @!R {
-		& & \multigate{5}{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \targ & \qw \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw \\
+		& & \multigate{5}{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \targ & \qw \\
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw \\
 		& & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw  \\
-		& & \ghost{U(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \ctrl{-5} & \qw
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw  \\
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \ctrl{-5} & \qw
 	}
 	\]
-	\caption{Decomposition of a layer $U(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The number of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil = 6$ qubits.}
+	\caption{Decomposition of a layer $U_\ell(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The number of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil = 6$ qubits.}
 	\label{fig:parametrized_unitary}
 \end{figure}
 
@@ -630,7 +631,7 @@ In contrast, a classical neural network has at least $28 \cdot 28 = 784$ paramet
 \end{figure}
 
 \subsubsection{Multiclass Classifier} \label{sec:multiclass_classifier}
-Finally we generalize the QNN to a multiclass classifier by implementing a fidelity loss function as proposed by~\textcite{perez2019data}.
+Finally we generalize the QNN classifier to a multiclass classifier by implementing a fidelity loss function as proposed by~\textcite{perez2019data}.
 To implement this we need to make some changes to the QNN described in Section~\ref{sec:bdc}.
 First, we introduce $C$ maximally orthogonal label states, where $C$ is the number of classes (Figure~\ref{fig:orthanogal_label_states}).
 Then, instead of using the square loss function on the expectation value as cost, we measure the fidelity of the final state of the last qubit and the label state.
@@ -639,7 +640,7 @@ We define the fidelity cost function as following:
 \begin{equation}
 \mathcal{F}(\vec{\theta}) = - \dfrac{1}{D} \sum_{d=1}^{D} \log \left( \lvert \bra{y_d}\mathcal{U}(\vec{\theta})\ket{x_d} \rvert^2\right),
 \end{equation}
-where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized circuit unitaries.
+where $D$ is the number of training samples, $\ket{y_d}$ the correct label state of input $\ket{x_d}$, and $\mathcal{U}(\vec{\theta})$ the parameterized layer unitaries.
 To make a prediction, we measure the fidelities between the output and all the label states, and choose the label with the highest fidelity.
 
 We conduct a similar experiment to that from the previous section.
@@ -657,7 +658,7 @@ We predict the QNN's performance can be improved with more epochs, by redundantl
 	\begin{minipage}{.49\textwidth}
 		\centering
 		\contourlength{1.25pt}
-		\begin{blochsphere}[radius=1.5cm, tilt=15, rotation=-20, opacity=0.1, color=white]
+		\begin{blochsphere}[radius=1.75cm, tilt=15, rotation=-20, opacity=0.1, color=white]
 			\drawBallGrid[style={opacity=0.05}]{30}{30};
 			
 			\labelLatLon{zero}{90}{0};
@@ -736,12 +737,72 @@ We predict the QNN's performance can be improved with more epochs, by redundantl
 	\end{minipage}
 \end{table}
 
-We have described and implemented a variational QNN capable of classifying classical data, exploiting the exponential Hilbert space of quantum states to encode classical data in a logarithmic amount of qubits.
-By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of solving real-world problems.
-We do further experiments with the QNN in the appendices; in Appendix~\ref{sec:classification-other} we apply the classifier on other data sets to show its ability to adapt to various problems, and in Appendix~\ref{sec:qnn-regression} we demonstrate the QNN's capability of doing regression.
 
-Further work can be done by using more quantum-specific optimization methods~(\cite{stokes2019quantum}), optimizing the measuring of expectation values~(\cite{sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, and experimenting with real quantum hardware.
-Improvements can be made to the encoding of classical data into a quantum Hilbert space by experimenting with different feature maps (\cite{schuld2019quantum}).
+\subsubsection{Regression Results} \label{sec:qnn-regression}
+We take on the problem of learning the functions $x^3$, $\cos(\pi x)\sin(2\pi x + 2)$, $|x|$ and $e^x$ to demonstrate the QNN's ability of representing non-linear real functions.
+The network is shown 50 samples of the functions in the range $[-1, 1]$ and is tested on 100 evenly spaced numbers over the same interval.
+The data of the functions are one-dimensional, and we employ a data re-uploading technique described by \textcite{perez2019data} to achieve generalization with a small amount of qubits (Figure~\ref{fig:data-reuploading-circuit}).
+\begin{figure}[ht]
+	\[
+	\Large
+	\Qcircuit @C=1em @R=0.55em @!R {
+		\lstick{\ket{0}} & \multigate{3}{U_x(x)} & \multigate{3}{U_\ell(\vec{\theta}_1)} & \qw & & \multigate{3}{U_x(x)} & \multigate{3}{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
+		\lstick{\ket{0}} & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
+		~~\vdots & & & ~~\hdots & & & & \vdots \\
+		\lstick{\ket{0}} & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
+	}
+	\]
+	\caption{Data re-uploading QNN circuit used to achieve generalization with a small amount of qubits. $U_\ell$ represents a layer as before in Section~\ref{sec:bdc}, and $U_x$ encodes the data into a quantum state. In our example we use one-dimensional data, but $U_x$ can be extended to encode a high-dimensional vector.}
+	\label{fig:data-reuploading-circuit}
+\end{figure}
+
+\noindent
+Every layer before applying a parameterized unitary $U_\ell(\vec{\theta})$, we encode a data point $x$ in $n$ qubits as follows:
+\begin{equation} \label{eq:regression_encode}
+U_x(x) = \prod_{i=1}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x).
+\end{equation}
+The whole circuit can then be described as
+\begin{equation}
+\mathcal{U}(\vec{\theta}, x) = U_\ell(\vec{\theta}_L)U_x(x) U_\ell(\vec{\theta}_{L-1})U_x(x) \ldots U_\ell(\vec{\theta}_1)U_x(x),
+\end{equation}
+and the network's output is given by
+\begin{equation}
+y(x) = \gamma \cdot \bra{0}\mathcal{U}(\vec{\theta}, x)^\dagger Z_n\, \mathcal{U}(\vec{\theta}, x)\ket{0}.
+\end{equation}
+Here, $\gamma$ is a trainable parameter initialized to 1.
+We use the mean squared error as cost function.
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}{.4875\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/qnn_regression.pdf}
+		\caption{Teacher data vs. learned function. The red points represent the teacher data shown to the network, and the green line represents the learned function.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{.4875\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/qnn_regression_mse.pdf}
+		\caption{Landscapes of mean squared error cost function. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.01 and momentum 0.85.}
+	\end{subfigure}
+	\caption{Performance of our QNN learning continuous functions. Input data was encoded in five qubits according to Equation~\ref{eq:regression_encode}.}
+	\label{fig:qnn_regression_results}
+\end{figure}
+The results are shown in Figure~\ref{fig:qnn_regression_results}.
+We see that the QNN has an easy time learning wave-like functions due to the encoding method.
+The other functions $|x|$ and $e^x$ are approximated well, but leave room for improvement.
+Possible improvement can be made by employing better encoding techniques and more hyperparameter tuning.
+We have demonstrated a naive approach to doing regression tasks using our QNN.
+Nevertheless, we managed to train models that approximate these non-linear functions well.
+
+\subsubsection{Discussion and Further Work}
+We have described and implemented a variational QNN capable of classifying classical data and doing simple regression tasks.
+By applying the QNN to the problem of handwriting recognition, we have demonstrated its capability of solving real-world problems.
+Our QNN exploits the exponential Hilbert space of quantum states to encode classical data in an amount of qubits logarithmic to the input data's dimension.
+This demonstrates the ability to process high dimensional (quantum) data that is intractable for classical computers to process.
+In Appendix~\ref{sec:classification-other} we apply the classifier on other data sets to show its ability to adapt to various problems.
+
+Further work can be done by using more quantum-specific optimization methods~(\cite{stokes2019quantum}), optimizing the measuring of expectation values~(\cite{sweke2019stochastic}), improving the circuit initialization strategy~(\cite{mcclean2018barren}), conducting more experiments on quantum and classical data, defining useful benchmarks and experimenting with real quantum hardware.
+Improvements can also be made to the encoding of classical data into a quantum Hilbert space by experimenting with different feature maps (\cite{schuld2019quantum}).
 
 \section{Conclusion} \label{sec:conclusion}
 Machine learning algorithms are widely used to perform complex tasks such as image recognition, playing games, recognizing speech and more.
@@ -772,13 +833,13 @@ The data sets consist of 300 entries, of which 75\% was used as training data an
 A data point is two-dimensional with values in $[-1.5, 1.5]$ and has a binary label 0 or 1.
 It is encoded into a quantum state by single-qubit rotations instead of amplitude encoding.
 Because of the low dimensional data, we redundantly encode it once in an extra qubit, resulting in a two-qubit classifier.
-A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded in the two qubits as $\prod_{i=0}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
-We also use the data re-uploading technique described by \textcite{perez2019data} to achieve generalization with just two qubits.
+A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded in the two qubits as $\prod_{i=1}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
+We also use the data re-uploading technique described in Section~\ref{sec:qnn-regression} to achieve generalization with just two qubits.
 
 The results are plotted in Figure~\ref{fig:classification_decision_regions}.
 In all cases, the QNN approximates the function well.
 We can see that increasing the number of layers allows the network to learn more complex shapes, but even with 2 layers it finds the desired shape.
-Note that due to the non-linear behavior of rotation gates, the QNN has an easy time finding circular patterns in data.
+Note that due to the non-linear behavior of rotation gates, the QNN has an easy time finding wave-like patterns in data.
 
 \begin{figure}[ht]
 	\centering
@@ -798,43 +859,9 @@ Note that due to the non-linear behavior of rotation gates, the QNN has an easy 
 	\label{fig:classification_decision_regions}
 \end{figure}
 
-\section{Regression Results} \label{sec:qnn-regression}
-To perform regression, we need to make our QNN output a real number.
-We do this by multiplying the expectation value $\expval{Z}$ by a trainable parameter $\gamma$, which is initialized to 1.
-So at the end of the circuit, instead of taking $\sign(\expval{Z}) \in \{-1, 1\}$, we take $\gamma \cdot \expval{Z} \in \mathbb{R}$ as the output of the QNN.
-We also need to change the cost function to some measure of the difference between the estimated values and the actual values.
-For this purpose we use the mean squared error loss.
-We take on the problem of learning the functions $x^3$, $\cos(\pi x)\sin(2\pi x + 2)$, $|x|$ and $e^x$ to demonstrate its ability of representing non-linear functions.
-The network is shown 50 samples of the functions in the range $[-1, 1]$ and is tested on 100 evenly spaced numbers over the same interval.
-A data point $x$ is encoded in $n$ qubits as $\prod_{i=0}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x)$.
-
-The results are shown in Figure~\ref{fig:qnn_regression_results}.
-We see again that the QNN has an easy time learning wave-like functions due to the encoding method.
-Other functions like $|x|$ and $e^x$ are approximated well, but leave room for improvement.
-Possible improvement can be made by employing better encoding techniques and more hyperparameter tuning.
-We have demonstrated a naive approach to doing regression tasks using our QNN.
-Nevertheless, we managed to train QNN models that approximates these non-linear functions well.
-
-\begin{figure}[ht]
-	\centering
-	\begin{subfigure}{.4875\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{figures/qnn_regression.pdf}
-		\caption{Teacher data vs. learned function. The red points represent the teacher data shown to the network, and the green line represents the learned function.}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}{.4875\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{figures/qnn_regression_mse.pdf}
-		\caption{Landscapes of mean squared error loss function. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.01 and momentum 0.85.}
-	\end{subfigure}
-	\caption{Performance of our QNN learning continuous functions. Input data was encoded redundantly four times, resulting in five qubits total.}
-	\label{fig:qnn_regression_results}
-\end{figure}
-
 \section{CPU and GPU Simulation Benchmarks} \label{sec:cpu-gpu-benchmark}
 Quantum circuit simulation is known to be exponentially hard on classical computers.
-The state space of a quantum system grows exponentially with the amount of qubits, making simulation of higher amount of qubits intractable.
+The state space of a quantum system grows exponentially with the amount of particles, making simulation of higher amount of particles intractable on a classical computer.
 To make our simulations as efficient as possible, we compare the performance of the Qulacs simulator on CPU and GPU.
 We run the benchmarks on the Lisa system of SURFsara.
 The node used has Intel Xeon Gold 5118 CPUs and an NVIDIA TITAN RTX GPU.
