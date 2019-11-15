@@ -585,12 +585,12 @@ It shows the potential to use quantum computers to process (quantum) data that c
 	\[
 	\Large
 	\Qcircuit @C=0.7em @R=0.4em @!R {
-		& & \multigate{5}{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \targ & \qw \\
-		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
-		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw \\
+		& & \multigate{5}{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \targ & \qw \\
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw \\
 		& & & ~~= & & \vdots & \vdots & \vdots & & \vdots & & & & & \\
-		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw  \\
-		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_x(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \ctrl{-5} & \qw
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{n-1, 1})} & \gate{R_y(\theta_{n-1, 2})} & \gate{R_z(\theta_{n-1, 3})} & \qw & \qw & \ctrl{1} & \qw & \qw  \\
+		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{n, 1})} & \gate{R_y(\theta_{n, 2})} & \gate{R_z(\theta_{n, 3})} & \qw & \qw & \targ & \ctrl{-5} & \qw
 	}
 	\]
 	\caption{Decomposition of a layer $U_\ell(\vec{\theta})$. The amount of trainable parameters for a QNN with $n$ qubits and $L$ layers is $3n \cdot L$. The number of qubits required is decided by the dimension of the data: $n = \lceil \log_2N \rceil$, where $N$ is the input dimension. The downsampled MNIST classifier requires $\lceil \log_2(8 \cdot 8) \rceil = 6$ qubits.}
