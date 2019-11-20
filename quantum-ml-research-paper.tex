@@ -716,24 +716,24 @@ We predict the QNN's performance can be improved with more epochs, by redundantl
 	\begin{minipage}{.475\textwidth}
 		\centering
 		{\renewcommand{\arraystretch}{1.2}
-		\begin{tabular}{ c|c|c|c } 
+		\begin{tabular}{ c|c|c } 
 			\hline
-			Optimizer & Layers & Test accuracy & $\sigma$ \\
+			Optimizer & Layers & Test accuracy \\
 			\hline
-			\multirow{4}{5em}{SGD ($\eta = 0.4$)} & 2 & 44.6\% & 0.019 \\ 
-			& 4 & 67.8\% & 0.026 \\ 
-			& 8 & 70.7\% & 0.009 \\
-			& 10 & 72.6\% & 0.026 \\
+			\multirow{4}{5em}{SGD ($\eta = 0.4$)} & 2 & $44.6\% \pm 0.019$ \\ 
+			& 4 & $67.8\% \pm 0.026$ \\ 
+			& 8 & $70.7\% \pm 0.009$ \\
+			& 10 & $72.6\% \pm 0.026$ \\
 			\hline
-			\multirow{4}{5em}{RMSprop ($\eta = 0.01$)} & 2 & 49.5\% & 0.039 \\ 
-			& 4 & 66.8\% & 0.023 \\ 
-			& 8 & 70.8\% & 0.038 \\
-			& 10 & 74.9\% & 0.012 \\
+			\multirow{4}{5em}{RMSprop ($\eta = 0.01$)} & 2 & $49.5\% \pm 0.039$ \\ 
+			& 4 & $66.8\% \pm 0.023$ \\ 
+			& 8 & $70.8\% \pm 0.038$ \\
+			& 10 & $74.9\% \pm 0.012$ \\
 			\hline
-			\multirow{4}{5em}{Adam ($\eta = 0.02$)} & 2 & 45.9\% & 0.025 \\ 
-			& 4 & 68.9\% & 0.012 \\ 
-			& 8 & 71.6\% & 0.030 \\
-			& 10 & 74.4\% & 0.022 \\
+			\multirow{4}{5em}{Adam ($\eta = 0.02$)} & 2 & $45.9\% \pm 0.025$ \\ 
+			& 4 & $68.9\% \pm 0.012$ \\ 
+			& 8 & $71.6\% \pm 0.030$ \\
+			& 10 & $74.4\% \pm 0.022$ \\
 			\hline
 		\end{tabular}
 		}
