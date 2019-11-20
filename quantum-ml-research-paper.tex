@@ -550,12 +550,12 @@ The variational QNN classifier learns as follows:
 	where \ket{i} represents the $i$'th computational basis state.
 	\item Apply $L$ layers of parameterized unitaries: $\mathcal{U}(\vec{\theta})$\ket{x}, where $\mathcal{U}(\vec{\theta}) = U_\ell(\vec{\theta}_L) U_\ell(\vec{\theta}_{L-1}) \ldots U_\ell(\vec{\theta}_1)$.
 	\item Measure expectation value $\expval{Z} = \bra{x}\mathcal{U}(\vec{\theta})^\dagger Z_n\, \mathcal{U}(\vec{\theta})\ket{x}$ of last qubit.
-	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta}, \expval{Z})$ through a classical optimization algorithm.
+	\item Calculate and minimize loss $\mathcal{L}(\vec{\theta})$ through a classical optimization algorithm.
 	\item Repeat until convergence.
 \end{enumerate}
 \begin{figure}[ht]
 	\[
-	\Large
+	\large
 	\Qcircuit @C=1em @R=0.6em @!R {
 		& & \multigate{4}{U_\ell(\vec{\theta}_1)} & \multigate{4}{U_\ell(\vec{\theta}_2)} & \qw & & \multigate{4}{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
 		& & \ghost{U_\ell(\vec{\theta}_1)} & \ghost{U_\ell(\vec{\theta}_2)} & \qw & & \ghost{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
@@ -568,6 +568,11 @@ The variational QNN classifier learns as follows:
 	\caption{General circuit of the QNN\@. The network consists of $L$ layers with each layer implementing a parameterized unitary $U_\ell(\vec{\theta})$ whose parameters are optimized using a classical optimization algorithm. The decomposition of a layer is shown in Figure~\ref{fig:parametrized_unitary}.}
 	\label{fig:bdc-circuit}
 \end{figure}
+For the binary classifier we use the square loss cost function:
+\begin{equation}
+\mathcal{L}(\vec{\theta}) = \sum_{i=1}^{D} \left(y_d - \bra{x_d}\mathcal{U}(\vec{\theta})^\dagger Z_n\, \mathcal{U}(\vec{\theta})\ket{x_d}\right)^2,
+\end{equation}
+where $D$ is the number of training samples and $y_d$ the correct label for input $x_d$.
 Predicting the label $y$ for input $\vec{x}$ is done by taking the sign of the $Z$ expectation value of the last qubit:
 \begin{equation}
 y(\vec{x}) = \sign \left(\bra{x}\mathcal{U}(\vec{\theta})^\dagger Z_n\, \mathcal{U}(\vec{\theta})\ket{x}\right).
@@ -583,8 +588,8 @@ It shows the potential to use quantum computers to process (quantum) data that c
 
 \begin{figure}[ht]
 	\[
-	\Large
-	\Qcircuit @C=0.7em @R=0.4em @!R {
+	\large
+	\Qcircuit @C=1em @R=0.6em @!R {
 		& & \multigate{5}{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{1, 1})} & \gate{R_y(\theta_{1, 2})} & \gate{R_z(\theta_{1, 3})} & \ctrl{1} & \qw & \qw & \targ & \qw \\
 		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{2, 1})} & \gate{R_y(\theta_{2, 2})} & \gate{R_z(\theta_{2, 3})} & \targ & \ctrl{1} & \qw & \qw & \qw \\
 		& & \ghost{U_\ell(\vec{\theta})} & \qw & & \gate{R_z(\theta_{3, 1})} & \gate{R_y(\theta_{3, 2})} & \gate{R_z(\theta_{3, 3})} & \qw & \targ & \qw & \qw & \qw \\
@@ -744,8 +749,8 @@ The network is shown 75 samples of the functions in the range $[-1, 1]$ from a u
 The data of the functions are one-dimensional, and we employ a data re-uploading technique described by \textcite{perez2019data} to achieve generalization with a small number of qubits (Figure~\ref{fig:data-reuploading-circuit}).
 \begin{figure}[ht]
 	\[
-	\Large
-	\Qcircuit @C=1em @R=0.55em @!R {
+	\large
+	\Qcircuit @C=1em @R=0.6em @!R {
 		\lstick{\ket{0}} & \multigate{3}{U_x(x)} & \multigate{3}{U_\ell(\vec{\theta}_1)} & \qw & & \multigate{3}{U_x(x)} & \multigate{3}{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
 		\lstick{\ket{0}} & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
 		~~\vdots & & & ~~\hdots & & & & \vdots \\
