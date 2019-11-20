@@ -856,7 +856,7 @@ Note that due to the encoding method and the non-linear behavior of rotation gat
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_linear_classification.pdf}
 	\end{subfigure}
-	\cprotect\caption{Classification results of a two-qubit QNN on the \verb|make_moons| (top row), \verb|make_circles| (middle row) and \verb|make_classification| (bottom row) data sets. All networks were trained for 10 epochs using SGD as optimizer with learning rate 0.4. The red and blue contours represent the certainty of classifying 0 and 1 respectively.}
+	\cprotect\caption{Classification results of a two-qubit QNN on the \verb|make_moons| (top row), \verb|make_circles| (middle row) and \verb|make_classification| (bottom row) data sets. All networks were trained for 10 epochs using RMSprop as optimizer with learning rate 0.05 and momentum 0.5. The red and blue contours represent the certainty of classifying 0 and 1 respectively.}
 	\label{fig:classification_decision_regions}
 \end{figure}
 
