@@ -740,7 +740,7 @@ We predict the QNN's performance can be improved with more epochs, by redundantl
 
 \subsubsection{Regression Results} \label{sec:qnn-regression}
 We take on the problem of learning the functions $x^3$, $\cos(\pi x)\sin(2\pi x + 2)$, $|x|$ and $e^x$ to demonstrate the QNN's ability of representing non-linear real functions.
-The network is shown 50 samples of the functions in the range $[-1, 1]$ and is tested on 100 evenly spaced numbers over the same interval.
+The network is shown 75 samples of the functions in the range $[-1, 1]$ from a uniform distribution and is tested on 100 evenly spaced numbers over the same interval.
 The data of the functions are one-dimensional, and we employ a data re-uploading technique described by \textcite{perez2019data} to achieve generalization with a small number of qubits (Figure~\ref{fig:data-reuploading-circuit}).
 \begin{figure}[ht]
 	\[
@@ -782,9 +782,9 @@ We use the mean squared error as cost function.
 	\begin{subfigure}{.4875\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{figures/qnn_regression_mse.pdf}
-		\caption{Landscapes of mean squared error cost function. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.01 and momentum 0.85.}
+		\caption{Landscapes of mean squared error cost function. The QNNs were trained for 100 epochs with 3 layers. RMSprop was used as optimizer with learning rate 0.01 and momentum 0.9.}
 	\end{subfigure}
-	\caption{Performance of our QNN learning continuous functions. Input data was encoded in five qubits according to Equation~\ref{eq:regression_encode}.}
+	\caption{Performance of our QNN learning continuous functions. Input data was encoded in three qubits according to Equation~\ref{eq:regression_encode}.}
 	\label{fig:qnn_regression_results}
 \end{figure}
 
