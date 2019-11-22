@@ -751,24 +751,24 @@ The data of the functions are one-dimensional, and we employ a data re-uploading
 	\[
 	\large
 	\Qcircuit @C=1em @R=0.6em @!R {
-		\lstick{\ket{0}} & \multigate{3}{U_x(x)} & \multigate{3}{U_\ell(\vec{\theta}_1)} & \qw & & \multigate{3}{U_x(x)} & \multigate{3}{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
-		\lstick{\ket{0}} & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
+		\lstick{\ket{0}} & \multigate{3}{U_\Phi(x)} & \multigate{3}{U_\ell(\vec{\theta}_1)} & \qw & & \multigate{3}{U_\Phi(x)} & \multigate{3}{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
+		\lstick{\ket{0}} & \ghost{U_\Phi(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_\Phi(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \qw & \qw \\
 		~~\vdots & & & ~~\hdots & & & & \vdots \\
-		\lstick{\ket{0}} & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_x(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
+		\lstick{\ket{0}} & \ghost{U_\Phi(x)} & \ghost{U_\ell(\vec{\theta}_1)} & \qw & & \ghost{U_\Phi(x)} & \ghost{U_\ell(\vec{\theta}_L)} & \meter & \rstick{\expval{Z}} \cw
 	}
 	\]
-	\caption{Data re-uploading QNN circuit used to achieve generalization with a small amount of qubits. $U_\ell$ represents a layer as before in Section~\ref{sec:bdc}, and $U_x$ represents the unitary that encodes the input data in the quantum state. In our example we use one-dimensional data, but $U_x$ can be extended to encode a high-dimensional vector.}
+	\caption{Data re-uploading QNN circuit used to achieve generalization with a small amount of qubits. $U_\ell$ represents a layer as before in Section~\ref{sec:bdc}, and $U_\Phi$ represents the unitary that encodes the input data in the quantum state. In our example we use one-dimensional data, but $U_\Phi$ can be extended to encode a high-dimensional vector.}
 	\label{fig:data-reuploading-circuit}
 \end{figure}
 
 \noindent
 Every layer before applying a parameterized unitary $U_\ell(\vec{\theta})$, we encode a data point $x$ in $n$ qubits as follows:
 \begin{equation} \label{eq:regression_encode}
-U_x(x) = \bigotimes_{i=1}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x).
+U_\Phi(x) = \bigotimes_{i=1}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x).
 \end{equation}
 The whole circuit can then be described as
 \begin{equation}
-\mathcal{U}(\vec{\theta}, x) = U_\ell(\vec{\theta}_L)U_x(x) U_\ell(\vec{\theta}_{L-1})U_x(x) \ldots U_\ell(\vec{\theta}_1)U_x(x),
+\mathcal{U}(\vec{\theta}, x) = U_\ell(\vec{\theta}_L)U_\Phi(x) U_\ell(\vec{\theta}_{L-1})U_\Phi(x) \ldots U_\ell(\vec{\theta}_1)U_\Phi(x),
 \end{equation}
 and the network's output is given by
 \begin{equation}
