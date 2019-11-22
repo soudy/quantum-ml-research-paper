@@ -764,7 +764,7 @@ The data of the functions are one-dimensional, and we employ a data re-uploading
 \noindent
 Every layer before applying a parameterized unitary $U_\ell(\vec{\theta})$, we encode a data point $x$ in $n$ qubits as follows:
 \begin{equation} \label{eq:regression_encode}
-U_x(x) = \prod_{i=1}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x).
+U_x(x) = \bigotimes_{i=1}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x).
 \end{equation}
 The whole circuit can then be described as
 \begin{equation}
@@ -839,7 +839,7 @@ The data sets consist of 300 entries, of which 75\% was used as training data an
 A data point is two-dimensional with values in $[-1.5, 1.5]$ and has a binary label 0 or 1.
 It is encoded into a quantum state by single-qubit rotations instead of amplitude encoding.
 Because of the low dimensional data, we redundantly encode it once in an extra qubit, resulting in a two-qubit classifier.
-A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded in the two qubits as $\prod_{i=1}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
+A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded in the two qubits as $\bigotimes_{i=1}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
 We also use the data re-uploading technique described in Section~\ref{sec:qnn-regression} to achieve generalization with just two qubits.
 
 The results are plotted in Figure~\ref{fig:classification_decision_regions}.
