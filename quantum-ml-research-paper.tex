@@ -431,7 +431,7 @@ This research is focused on universal gate model quantum computers, as its usefu
 
 \section{Classical Machine Learning} \label{sec:classical-ml}
 Before looking at quantum machine learning, we first explore the field of classical machine learning, which quantum machine learning is largely built upon.
-Instead of being explicitly programmed to perform a certain task, machine learning algorithms learns by analyzing large amounts of data.
+Instead of being explicitly programmed to perform a certain task, machine learning algorithms learn by analyzing large amounts of data.
 As a subfield of artificial intelligence, machine learning is used to perform complex tasks that come naturally to us humans, such as image recognition, spam detection, and recommendation.
 
 Machine learning algorithms can be broadly divided into three categories: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement learning}.
@@ -764,7 +764,7 @@ The data of the functions are one-dimensional, and we employ a data re-uploading
 \noindent
 Every layer before applying a parameterized unitary $U_\ell(\vec{\theta})$, we encode a data point $x$ in $n$ qubits as follows:
 \begin{equation} \label{eq:regression_encode}
-U_\Phi(x) = \bigotimes_{i=1}^{n}R_x^{(i)}(\arccos x)R_y^{(i)}(\arcsin x).
+U_\Phi(x) = \bigotimes_{i=1}^{n}R_y^{(i)}(\arccos x)R_y^{(i)}(\arcsin x).
 \end{equation}
 The whole circuit can then be described as
 \begin{equation}
@@ -839,7 +839,7 @@ The data sets consist of 300 entries, of which 75\% was used as training data an
 A data point is two-dimensional with values in $[-1.5, 1.5]$ and has a binary label 0 or 1.
 It is encoded into a quantum state by single-qubit rotations instead of amplitude encoding.
 Because of the low dimensional data, we redundantly encode it once in an extra qubit, resulting in a two-qubit classifier.
-A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded in the two qubits as $\bigotimes_{i=1}^{n}R_x^{(i)}(x_1)R_y^{(i)}(x_2)$.
+A data point $(\begin{matrix}x_1 & x_2\end{matrix})$ is encoded in the two qubits as $\bigotimes_{i=1}^{n}R_y^{(i)}(x_1)R_z^{(i)}(x_2)$.
 We also use the data re-uploading technique described in Section~\ref{sec:qnn-regression} to achieve generalization with just two qubits.
 
 The results are plotted in Figure~\ref{fig:classification_decision_regions}.
@@ -870,21 +870,21 @@ Quantum circuit simulation is known to be exponentially hard on classical comput
 The state space of a quantum system grows exponentially with the number of particles, making simulation of higher amount of particles intractable on a classical computer.
 To make our simulations as efficient as possible, we compare the performance of the Qulacs simulator on CPU and GPU.
 We run the benchmarks on the Lisa system of SURFsara.
-The node used has Intel Xeon Gold 5118 CPUs and an NVIDIA TITAN RTX GPU.
+The node used has Intel Xeon Gold 6126 CPUs at 2.60GHz and an NVIDIA TITAN RTX GPU.
 
 We measure how the execution time increases as the amount of qubits increases.
-The measure we test is 50 executions of 8 layers of the circuit described in Figure~\ref{fig:parametrized_unitary}.
+The measure we test is 100 executions of 4 layers of the circuit described in Figure~\ref{fig:parametrized_unitary}.
 The parameters are randomly generated from a uniform distribution.
 We also measure $\expval{Z}$ every iteration and compare the results of the GPU simulation with the CPU simulation to make sure they agree.
 The results are visualized in Figure~\ref{fig:qulacs_benchmark}.
 We can see that increasing the number of cores improves simulation times for higher number of qubits.
 For qubit counts from 18 and higher, GPU simulation is much more efficient.
 If we look at Table~\ref{table:qulacs_benchmark_results}, we see that single-core CPU simulation is most efficient up to 12 qubits.
-While GPU always seems to beat CPU with 24 cores, running on a large number of cores is a good alternative if there is no GPU available.
+While GPU always seems to beat multiple cores, running on a large number of cores is a good alternative if there is no GPU available.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.6\linewidth]{figures/qnn_cpu_vs_gpu.pdf}
+	\includegraphics[width=0.625\linewidth]{figures/qnn_cpu_vs_gpu.pdf}
 	\captionof{figure}{Comparison of quantum simulation runtime between CPU and GPU.}
 	\label{fig:qulacs_benchmark}
 \end{figure}
@@ -892,23 +892,23 @@ While GPU always seems to beat CPU with 24 cores, running on a large number of c
 \begin{table}[ht]
 	\centering
 	{\renewcommand{\arraystretch}{1.1}
-		\begin{tabular}{ c|c|c|c|c } 
+		\begin{tabular}{ c|c|c|c|c|c } 
 			\hline
-			$n$ qubits & GPU & CPU (1 core) & CPU (8 cores) &  CPU (24 cores) \\
+			$n$ qubits & GPU & CPU (1 core) & CPU (8 cores) &  CPU (24 cores) & CPU (48 cores) \\
 			\hline
-			2 & 0.201s & \textbf{0.143s} & 0.223s & 0.466s \\
-			4 & 0.353s & \textbf{0.278s} & 0.310s & 0.320s \\
-			6 & 0.465s & \textbf{0.376s} & 0.408s & 0.479s \\
-			8 & 0.612s & \textbf{0.511s} & 0.549s & 0.664s \\
-			10 & 0.758s & \textbf{0.636s} & 0.677s & 0.787s \\
-			12 & 1.039s & \textbf{0.784s} & 0.837s & 1.021s \\
-			14 & 1.064s & 1.024s & \textbf{1.016s} & 1.369s \\
-			16 & 1.244s & 1.695s & \textbf{1.242s} & 1.463s \\
-			18 & \textbf{1.518s} & 4.558s & 1.830s & 1.895s \\
-			20 & \textbf{2.319s} & 19.176s & 3.961s & 3.081s \\
-			22 & \textbf{4.983s} & 104.811s & 18.318s & 10.014s \\
-			24 & \textbf{16.353s} & 466.285s & 93.447s & 57.340s \\
-			26 & \textbf{64.594s} & 2058.394s & 634.003s & 395.665s \\
+			2 & 0.292s & \textbf{0.145s} & 0.161s & 0.223s & 0.236s \\
+			4 & 0.435s & \textbf{0.253s} & 0.258s & 0.279s & 0.297s \\
+			6 & 0.605s & \textbf{0.389s} & 0.393s & 0.428s & 0.458s \\
+			8 & 0.750s & \textbf{0.492s} & 0.497s & 0.544s & 0.578s \\
+			10 & 0.914s & \textbf{0.615s} & 0.616s & 0.667s & 0.716s \\
+			12 & 1.087s & \textbf{0.742s} & 0.762s & 0.834s & 0.926s \\
+			14 & 1.261s & 0.975s & \textbf{0.958s} & 1.041s & 1.135s \\
+			16 & 1.534s & 1.595s & \textbf{1.218s} & 1.238s & 1.292s \\
+			18 & \textbf{1.746s} & 4.111s & 2.030s & 1.763s & 1.762s \\
+			20 & \textbf{2.610s} & 18.232s & 4.836s & 3.357s & 3.011s \\
+			22 & \textbf{5.208s} & 125.588s & 19.282s & 11.283s & 9.023s \\
+			24 & \textbf{16.689s} & 640.009s & 99.339s & 84.670s & 71.659s \\
+			26 & \textbf{65.671s} & 3245.341s & 444.671s & 359.843s & 399.357s \\
 			\hline
 		\end{tabular}
 	}
